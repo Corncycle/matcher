@@ -7,6 +7,7 @@ export default class CameraControls {
   active: boolean
   horizontalNormal: THREE.Vector3
   movementVector: THREE.Vector3
+  currentlyPressedDirection: BooleanDirection
   VERTICAL_RANGE: number
   panMultiplier: number
 
@@ -21,6 +22,12 @@ export default class CameraControls {
     this.active = false
     this.horizontalNormal = new THREE.Vector3()
     this.movementVector = new THREE.Vector3()
+    this.currentlyPressedDirection = {
+      left: false,
+      right: false,
+      forward: false,
+      back: false,
+    }
     this.VERTICAL_RANGE = VERTICAL_RANGE
     this.panMultiplier = panMultiplier
     this.camera.rotation.order = 'YXZ'
@@ -33,8 +40,49 @@ export default class CameraControls {
       this.handlePointerLockEvent(e)
     })
 
+    window.addEventListener('keydown', (e) => {
+      switch (e.key.toLowerCase()) {
+        case 'arrowleft':
+        case 'a':
+          this.currentlyPressedDirection.left = true
+          break
+        case 'arrowright':
+        case 'd':
+          this.currentlyPressedDirection.right = true
+          break
+        case 'arrowup':
+        case 'w':
+          this.currentlyPressedDirection.forward = true
+          break
+        case 'arrowdown':
+        case 's':
+          this.currentlyPressedDirection.back = true
+          break
+      }
+    })
+
+    window.addEventListener('keyup', (e) => {
+      switch (e.key.toLowerCase()) {
+        case 'arrowleft':
+        case 'a':
+          this.currentlyPressedDirection.left = false
+          break
+        case 'arrowright':
+        case 'd':
+          this.currentlyPressedDirection.right = false
+          break
+        case 'arrowup':
+        case 'w':
+          this.currentlyPressedDirection.forward = false
+          break
+        case 'arrowdown':
+        case 's':
+          this.currentlyPressedDirection.back = false
+          break
+      }
+    })
+
     window.addEventListener('pointerlockchange', () => {
-      console.log('pointerlock changed: ')
       this.active = document.pointerLockElement === canvas
     })
   }
@@ -61,6 +109,10 @@ export default class CameraControls {
     this.camera.getWorldDirection(this.horizontalNormal)
     this.horizontalNormal.y = 0
     this.horizontalNormal.normalize()
+  }
+
+  processKeyboardInput() {
+    this.move(this.currentlyPressedDirection)
   }
 
   move(dir: BooleanDirection) {

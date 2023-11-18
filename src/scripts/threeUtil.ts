@@ -5,10 +5,10 @@ const cubeMaterial = new THREE.MeshNormalMaterial()
 
 export const createBasicBoxMesh = (
   xStart: number,
-  xEnd: number,
   yStart: number,
-  yEnd: number,
   zStart: number,
+  xEnd: number,
+  yEnd: number,
   zEnd: number
 ) => {
   const mesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
