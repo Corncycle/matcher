@@ -1,7 +1,11 @@
 import * as THREE from 'three'
-import { createBasicBoxMesh } from '../threeUtil'
+import * as CANNON from 'cannon-es'
+import { createBasicBox } from '../util/worldUtil'
 
-export const createEmptyLevel = () => {
+export const createEmptyLevel = (
+  threeScene: THREE.Scene,
+  cannonWorld: CANNON.World
+) => {
   const interiorWidth = 8
   const interiorLength = 8
 
@@ -18,12 +22,15 @@ export const createEmptyLevel = () => {
 
   const room = new THREE.Object3D()
   for (const coords of levelData) {
-    room.add(
-      createBasicBoxMesh(
-        ...(coords as [number, number, number, number, number, number])
-      )
+    const { mesh, body } = createBasicBox(
+      ...(coords as [number, number, number, number, number, number])
     )
+    cannonWorld.addBody(body)
+
+    room.add(mesh)
   }
+
+  threeScene.add(room)
 
   return room
 }

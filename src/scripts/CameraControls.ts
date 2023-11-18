@@ -1,5 +1,7 @@
 import * as THREE from 'three'
-import { clamp, BooleanDirection } from './util'
+import * as CANNON from 'cannon-es'
+import { clamp, BooleanDirection } from './util/util'
+import { SLIPPERY_MATERIAL, createBasicBox } from './util/worldUtil'
 
 export default class CameraControls {
   canvas: HTMLElement
@@ -10,12 +12,13 @@ export default class CameraControls {
   currentlyPressedDirection: BooleanDirection
   VERTICAL_RANGE: number
   panMultiplier: number
+  body: CANNON.Body
 
   constructor(
     canvas: HTMLElement,
     camera: THREE.Camera,
-    VERTICAL_RANGE: number = 0.9 * (Math.PI / 2),
-    panMultiplier: number = 0.001
+    scene: THREE.Scene,
+    world: CANNON.World
   ) {
     this.canvas = canvas
     this.camera = camera
@@ -28,9 +31,17 @@ export default class CameraControls {
       forward: false,
       back: false,
     }
-    this.VERTICAL_RANGE = VERTICAL_RANGE
-    this.panMultiplier = panMultiplier
+    this.VERTICAL_RANGE = 0.9 * (Math.PI / 2)
+    this.panMultiplier = 0.001
     this.camera.rotation.order = 'YXZ'
+
+    const { body } = createBasicBox(2, 1.5, 2, 3, 2.5, 3, 1, SLIPPERY_MATERIAL)
+    body.fixedRotation = true
+    body.sleepSpeedLimit = 3
+    body.updateMassProperties()
+    console.log(body)
+    this.body = body
+    world.addBody(body)
 
     canvas.addEventListener('click', () => {
       canvas.requestPointerLock()
@@ -95,6 +106,14 @@ export default class CameraControls {
     )
   }
 
+  moveToBody() {
+    this.camera.position.set(
+      this.body.position.x,
+      this.body.position.y,
+      this.body.position.z
+    )
+  }
+
   handlePointerLockEvent(e: MouseEvent) {
     if (!this.active) {
       return
@@ -112,6 +131,9 @@ export default class CameraControls {
   }
 
   processKeyboardInput() {
+    if (!this.active) {
+      return
+    }
     this.move(this.currentlyPressedDirection)
   }
 
@@ -122,6 +144,7 @@ export default class CameraControls {
     let fb = (dir.back ? -1 : 0) + (dir.forward ? 1 : 0)
 
     if (lr === 0 && fb === 0) {
+      this.body.velocity.set(0, this.body.velocity.y, 0)
       return
     }
 
@@ -132,6 +155,11 @@ export default class CameraControls {
 
     this.movementVector.normalize()
 
-    this.camera.position.add(this.movementVector.multiplyScalar(0.05))
+    this.body.velocity.set(
+      this.movementVector.x * 3,
+      this.body.velocity.y,
+      this.movementVector.z * 3
+    )
+    // this.camera.position.add(this.movementVector.multiplyScalar(0.05))
   }
 }
