@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
-import { BooleanDirection, clamp } from './util/util'
-import { basicMaterial } from './util/materials'
+import { BooleanDirection, clamp } from '../util/util'
+import { basicMaterial } from '../util/materials'
 
 export default class CameraControls {
   camera: THREE.Camera
@@ -152,5 +152,13 @@ export default class CameraControls {
     proposedVelocity.y = this.body.velocity.y
 
     this.body.velocity = proposedVelocity
+  }
+
+  moveCameraToBody() {
+    this.camera.position.set(
+      this.body.position.x,
+      this.body.position.y,
+      this.body.position.z
+    )
   }
 }
