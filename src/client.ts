@@ -70,8 +70,7 @@ world.addBody(cubeBody)
 
 // !!!!!!!! TEMPORARY OBJECT SETUP !!!!!!!!
 
-let i = 0
-
+const fidelity = 3
 function animate() {
   requestAnimationFrame(animate)
 
@@ -79,7 +78,9 @@ function animate() {
 
   cameraControls.setVelocityFromCurrentInput()
   delta = Math.min(clock.getDelta(), 0.1)
-  world.step(delta)
+  for (let i = 0; i < fidelity; i++) {
+    world.step(delta / fidelity)
+  }
 
   cameraControls.camera.position.set(
     cameraControls.body.position.x,
@@ -87,7 +88,7 @@ function animate() {
     cameraControls.body.position.z
   )
 
-  cannonDebugRenderer.update()
+  //cannonDebugRenderer.update()
 
   renderer.render(scene, camera)
 }

@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
-import { BooleanDirection } from './util/util'
+import { BooleanDirection, clamp } from './util/util'
 import { basicMaterial } from './util/materials'
 
 export default class CameraControls {
@@ -8,12 +8,17 @@ export default class CameraControls {
   active: boolean
   currentInput: BooleanDirection
   body: CANNON.Body
+  horizontalNormal: THREE.Vector3
+
+  VERTICAL_RANGE: number
+  PAN_MULTIPLIER: number
 
   constructor(
     canvas: HTMLElement,
     camera: THREE.Camera,
     scene: THREE.Scene,
-    world: CANNON.World
+    world: CANNON.World,
+    bodyRadius: number = 0.2
   ) {
     this.camera = camera
     this.active = false
@@ -23,8 +28,16 @@ export default class CameraControls {
       forward: false,
       back: false,
     }
+    this.horizontalNormal = new THREE.Vector3(1, 0, 0)
 
-    const bodyShape = new CANNON.Cylinder(0.5, 0.5, 1.5, 10)
+    // 90% of the full extent of vertical rotation
+    this.VERTICAL_RANGE = 0.9 * (Math.PI / 2)
+    this.PAN_MULTIPLIER = 0.001
+
+    // rotation gets WACKY if we don't do this
+    this.camera.rotation.order = 'YXZ'
+
+    const bodyShape = new CANNON.Cylinder(bodyRadius, bodyRadius, 1.5, 10)
     const body = new CANNON.Body({ mass: 10, material: basicMaterial })
     body.addShape(bodyShape)
     body.position.y = 2
@@ -53,8 +66,24 @@ export default class CameraControls {
     })
   }
 
+  clampView() {
+    this.camera.rotation.x = clamp(
+      this.camera.rotation.x,
+      -this.VERTICAL_RANGE,
+      this.VERTICAL_RANGE
+    )
+  }
+
   handleMouseMove(e: MouseEvent) {
     // use e.movementX and e.movementY
+    if (!this.active) {
+      return
+    }
+    this.camera.rotation.y -= this.PAN_MULTIPLIER * e.movementX
+    this.camera.rotation.x -= this.PAN_MULTIPLIER * e.movementY
+
+    this.clampView()
+    this.updateHorizontal()
   }
 
   handleKeyDown(e: KeyboardEvent) {
@@ -91,12 +120,33 @@ export default class CameraControls {
     }
   }
 
+  updateHorizontal() {
+    this.camera.getWorldDirection(this.horizontalNormal)
+    this.horizontalNormal.y = 0
+    this.horizontalNormal.normalize()
+  }
+
   setVelocityFromCurrentInput() {
-    const x =
+    if (!this.active) {
+      this.body.velocity.set(0, this.body.velocity.y, 0)
+      return
+    }
+
+    const lr =
       (this.currentInput.left ? -1 : 0) + (this.currentInput.right ? 1 : 0)
-    const z =
-      (this.currentInput.forward ? -1 : 0) + (this.currentInput.back ? 1 : 0)
-    let proposedVelocity = new CANNON.Vec3(x, 0, z)
+    const fb =
+      (this.currentInput.forward ? 1 : 0) + (this.currentInput.back ? -1 : 0)
+
+    if (lr === 0 && fb === 0) {
+      this.body.velocity.set(0, this.body.velocity.y, 0)
+      return
+    }
+
+    let proposedVelocity = new CANNON.Vec3(
+      fb * this.horizontalNormal.x - lr * this.horizontalNormal.z,
+      0,
+      fb * this.horizontalNormal.z + lr * this.horizontalNormal.x
+    )
     proposedVelocity.normalize()
     proposedVelocity = proposedVelocity.scale(3)
     proposedVelocity.y = this.body.velocity.y
