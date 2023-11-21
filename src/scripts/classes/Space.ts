@@ -36,7 +36,7 @@ export default class SpaceManager {
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     document.body.appendChild(this.renderer.domElement)
 
-    this.world = new CANNON.World({ gravity: new CANNON.Vec3(0, -2, 0) })
+    this.world = new CANNON.World({ gravity: new CANNON.Vec3(0, -6, 0) })
     this.world.quatNormalizeSkip = 0
     this.world.addContactMaterial(playerBasicContactMaterial)
 

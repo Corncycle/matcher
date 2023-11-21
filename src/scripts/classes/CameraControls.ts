@@ -9,6 +9,9 @@ export default class CameraControls {
   currentInput: BooleanDirection
   body: CANNON.Body
   horizontalNormal: THREE.Vector3
+  up: CANNON.Vec3
+  contactNormal: CANNON.Vec3
+  canJump: boolean
 
   VERTICAL_RANGE: number
   PAN_MULTIPLIER: number
@@ -28,6 +31,9 @@ export default class CameraControls {
       forward: false,
       back: false,
     }
+    this.up = new CANNON.Vec3(0, 1, 0)
+    this.contactNormal = new CANNON.Vec3()
+    this.canJump = true
     this.horizontalNormal = new THREE.Vector3(1, 0, 0)
 
     // 90% of the full extent of vertical rotation
@@ -46,6 +52,19 @@ export default class CameraControls {
     body.updateMassProperties()
     world.addBody(body)
     this.body = body
+
+    body.addEventListener('collide', (e: { contact: any }) => {
+      const { contact } = e
+      if (contact.bi.id === this.body.id) {
+        contact.ni.negate(this.contactNormal)
+      } else {
+        this.contactNormal.copy(contact.ni)
+      }
+
+      if (this.contactNormal.dot(this.up) > 0.5) {
+        this.canJump = true
+      }
+    })
 
     canvas.addEventListener('click', () => {
       canvas.requestPointerLock()
@@ -100,6 +119,8 @@ export default class CameraControls {
       case 's':
         this.currentInput.back = true
         break
+      case ' ':
+        this.attemptJump()
     }
   }
 
@@ -118,6 +139,14 @@ export default class CameraControls {
         this.currentInput.back = false
         break
     }
+  }
+
+  attemptJump() {
+    if (!this.canJump) {
+      return
+    }
+    this.body.velocity.set(this.body.velocity.x, 2, this.body.velocity.z)
+    this.canJump = false
   }
 
   updateHorizontal() {
