@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import { BooleanDirection, clamp } from '../util/util'
-import { basicMaterial } from '../util/materials'
+import { playerMaterial } from '../util/materials'
 
 export default class CameraControls {
   camera: THREE.Camera
@@ -38,7 +38,7 @@ export default class CameraControls {
     this.camera.rotation.order = 'YXZ'
 
     const bodyShape = new CANNON.Cylinder(bodyRadius, bodyRadius, 1.5, 10)
-    const body = new CANNON.Body({ mass: 10, material: basicMaterial })
+    const body = new CANNON.Body({ mass: 10, material: playerMaterial })
     body.addShape(bodyShape)
     body.position.y = 2
     body.position.z = 2

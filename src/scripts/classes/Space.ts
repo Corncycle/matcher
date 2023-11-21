@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
-import { basicContactMaterial } from '../util/materials'
+import { playerBasicContactMaterial } from '../util/materials'
 import CameraControls from './CameraControls'
 
 // A space manager holds graphical + physical data for a world
@@ -13,6 +13,11 @@ export default class SpaceManager {
   cameraControls: CameraControls
   renderer: THREE.Renderer
   world: CANNON.World
+  // `dynamicObjects` must be stored so that after the physics simulation is ran,
+  // we can sync up all meshes with their associated bodies. only need
+  // to store dynamic objects that are in both the three scene and cannon
+  // world, otherwise three and cannon handle everything themselves
+  dynamicObjects: Array<{ mesh: THREE.Mesh; body: CANNON.Body }>
 
   constructor() {
     this.clock = new THREE.Clock()
@@ -33,7 +38,7 @@ export default class SpaceManager {
 
     this.world = new CANNON.World({ gravity: new CANNON.Vec3(0, -2, 0) })
     this.world.quatNormalizeSkip = 0
-    this.world.addContactMaterial(basicContactMaterial)
+    this.world.addContactMaterial(playerBasicContactMaterial)
 
     this.cameraControls = new CameraControls(
       this.renderer.domElement,
@@ -41,6 +46,8 @@ export default class SpaceManager {
       this.scene,
       this.world
     )
+
+    this.dynamicObjects = []
   }
 
   updateCameraControls() {
@@ -58,7 +65,30 @@ export default class SpaceManager {
     }
   }
 
+  addStaticObject(obj: { mesh: THREE.Mesh; body: CANNON.Body }) {
+    this.world.addBody(obj.body)
+    this.scene.add(obj.mesh)
+  }
+
+  addDynamicObject(obj: { mesh: THREE.Mesh; body: CANNON.Body }) {
+    this.addStaticObject(obj)
+    this.dynamicObjects.push(obj)
+  }
+
   render() {
+    for (const object of this.dynamicObjects) {
+      const { mesh, body } = object
+
+      mesh.position.x = body.position.x
+      mesh.position.y = body.position.y
+      mesh.position.z = body.position.z
+
+      mesh.quaternion.x = body.quaternion.x
+      mesh.quaternion.y = body.quaternion.y
+      mesh.quaternion.z = body.quaternion.z
+      mesh.quaternion.w = body.quaternion.w
+    }
+
     this.renderer.render(this.scene, this.camera)
   }
 }
