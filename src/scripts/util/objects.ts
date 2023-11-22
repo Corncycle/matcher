@@ -51,7 +51,8 @@ export function createDynamicBall(
   mass: number = 1
 ) {
   const ballMesh = new THREE.Mesh(ballGeometry, normalMaterial)
-  const ballShape = new CANNON.Sphere(1)
+  ballMesh.scale.set(r, r, r)
+  const ballShape = new CANNON.Sphere(r)
   const ballBody = new CANNON.Body({ mass, material: basicMaterial })
   ballBody.position = new CANNON.Vec3(x, y, z)
   ballBody.addShape(ballShape)

@@ -53,6 +53,7 @@ export default class SpaceManager {
   updateCameraControls() {
     this.cameraControls.setVelocityFromCurrentInput()
     this.cameraControls.moveCameraToBody()
+    this.cameraControls.updateHeldObject()
   }
 
   physicsStep(deltaSubdivisions: number) {

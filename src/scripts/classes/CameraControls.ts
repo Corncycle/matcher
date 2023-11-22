@@ -2,16 +2,25 @@ import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import { BooleanDirection, clamp } from '../util/util'
 import { playerMaterial } from '../util/materials'
+import HeldObject from './HeldObject'
 
 export default class CameraControls {
   camera: THREE.Camera
+  scene: THREE.Scene
   active: boolean
   currentInput: BooleanDirection
   body: CANNON.Body
-  horizontalNormal: THREE.Vector3
   up: CANNON.Vec3
   contactNormal: CANNON.Vec3
   canJump: boolean
+
+  horizontalNormal: THREE.Vector3
+  heldObjectDestination: THREE.Vector3
+
+  worldDirection: THREE.Vector3
+  raycaster: THREE.Raycaster
+
+  heldObject: HeldObject | null
 
   VERTICAL_RANGE: number
   PAN_MULTIPLIER: number
@@ -24,6 +33,7 @@ export default class CameraControls {
     bodyRadius: number = 0.2
   ) {
     this.camera = camera
+    this.scene = scene
     this.active = false
     this.currentInput = {
       left: false,
@@ -34,7 +44,14 @@ export default class CameraControls {
     this.up = new CANNON.Vec3(0, 1, 0)
     this.contactNormal = new CANNON.Vec3()
     this.canJump = true
+
     this.horizontalNormal = new THREE.Vector3(1, 0, 0)
+    this.heldObjectDestination = new THREE.Vector3(0, 0, -1)
+
+    this.worldDirection = new THREE.Vector3(0, 0, 0)
+    this.raycaster = new THREE.Raycaster()
+
+    this.heldObject = null
 
     // 90% of the full extent of vertical rotation
     this.VERTICAL_RANGE = 0.9 * (Math.PI / 2)
@@ -121,6 +138,8 @@ export default class CameraControls {
         break
       case ' ':
         this.attemptJump()
+      case 'e':
+        this.interactWithObject()
     }
   }
 
@@ -149,10 +168,43 @@ export default class CameraControls {
     this.canJump = false
   }
 
+  interactWithObject() {
+    if (this.heldObject) {
+      this.heldObject = null
+      return
+    }
+
+    this.camera.getWorldDirection(this.worldDirection)
+    this.raycaster.set(this.camera.position, this.worldDirection)
+
+    const intersects = this.raycaster.intersectObjects(this.scene.children)
+  }
+
   updateHorizontal() {
     this.camera.getWorldDirection(this.horizontalNormal)
     this.horizontalNormal.y = 0
     this.horizontalNormal.normalize()
+  }
+
+  updateHeldObjectDestination() {
+    this.camera.getWorldDirection(this.heldObjectDestination)
+    this.heldObjectDestination = this.heldObjectDestination.multiplyScalar(1)
+    this.heldObjectDestination.add(this.camera.position)
+  }
+
+  updateHeldObject() {
+    if (!this.heldObject) {
+      return
+    }
+
+    this.updateHeldObjectDestination()
+
+    this.heldObject.body.velocity.x =
+      (this.heldObjectDestination.x - this.heldObject.body.position.x) * 10
+    this.heldObject.body.velocity.y =
+      (this.heldObjectDestination.y - this.heldObject.body.position.y) * 10
+    this.heldObject.body.velocity.z =
+      (this.heldObjectDestination.z - this.heldObject.body.position.z) * 10
   }
 
   setVelocityFromCurrentInput() {

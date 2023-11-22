@@ -9,6 +9,7 @@ import {
   createStaticGround,
 } from './scripts/util/objects'
 import Stats from 'three/examples/jsm/libs/stats.module'
+import HeldObject from './scripts/classes/HeldObject'
 
 // ***** BEGIN SETUP *****
 
@@ -24,14 +25,20 @@ space.addStaticObject(createStaticGround(0))
 space.addStaticObject(createStaticBox(1, 3, 1, -2, 1, -2))
 space.addStaticObject(createStaticBox(1, 2, 1, -1, 1, -2))
 
-for (let i = 0; i < 10; i++) {
-  const { mesh, body } = createDynamicBall(
-    Math.random() * 5 - 2,
-    Math.random() * 10 + 10,
-    Math.random() * 5 - 2
-  )
-  space.addDynamicObject({ mesh, body })
-}
+const { mesh: specialMesh, body: specialBody } = createDynamicBall(
+  0,
+  4,
+  -3,
+  0.2,
+  1000
+)
+space.addDynamicObject({ mesh: specialMesh, body: specialBody })
+const obj = new HeldObject(
+  specialMesh,
+  specialBody,
+  space.cameraControls.camera
+)
+space.cameraControls.heldObject = obj
 
 const stats = new Stats()
 document.body.appendChild(stats.dom)
