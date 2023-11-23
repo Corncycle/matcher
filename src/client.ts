@@ -1,15 +1,11 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import CannonDebugRenderer from './scripts/util/cannonDebugRenderer'
-import { c_basicMaterial } from './scripts/util/materials'
 import SpaceManager from './scripts/classes/Space'
 import {
-  createDynamicBall,
-  createStaticBox,
   createStaticGround,
 } from './scripts/util/objects'
 import Stats from 'three/examples/jsm/libs/stats.module'
-import HeldObject from './scripts/classes/HeldObject'
 import { loadLevel } from './scripts/util/level'
 
 // ***** BEGIN SETUP *****
@@ -20,26 +16,14 @@ const cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
 
 space.addStaticObject(createStaticGround(0))
 
-// space.addStaticObject(createStaticBox(1, 3, 1, -2, 1, -2))
-// space.addStaticObject(createStaticBox(1, 2, 1, -1, 1, -2))
-
-// const { mesh: specialMesh, body: specialBody } = createDynamicBall(
-//   0,
-//   4,
-//   -3,
-//   0.2,
-//   1000
-// )
-// space.addDynamicObject({ mesh: specialMesh, body: specialBody })
-// const obj = new HeldObject(
-//   specialMesh,
-//   specialBody
-// )
-
 const stats = new Stats()
 document.body.appendChild(stats.dom)
 
 loadLevel(space)
+
+const light = new THREE.PointLight(0xffffff, 1000)
+light.position.set(4, 10, 4)
+space.scene.add(light)
 
 // ****** END SETUP ******
 

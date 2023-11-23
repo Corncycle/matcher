@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
-import { c_basicMaterial, t_normalMaterial } from './materials'
+import { c_basicMaterial, t_lambertMaterial, t_normalMaterial } from './materials'
 
 const ballGeometry = new THREE.SphereGeometry(1)
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
@@ -27,7 +27,7 @@ export function createStaticBox(
   y: number,
   z: number
 ) {
-  const boxMesh = new THREE.Mesh(cubeGeometry, t_normalMaterial)
+  const boxMesh = new THREE.Mesh(cubeGeometry, t_lambertMaterial)
   boxMesh.scale.set(width, height, length)
   boxMesh.position.set(x, y, z)
   boxMesh.castShadow = true
@@ -50,7 +50,7 @@ export function createDynamicBall(
   r: number = 1,
   mass: number = 1
 ) {
-  const ballMesh = new THREE.Mesh(ballGeometry, t_normalMaterial)
+  const ballMesh = new THREE.Mesh(ballGeometry, t_lambertMaterial)
   ballMesh.scale.set(r, r, r)
   const ballShape = new CANNON.Sphere(r)
   const ballBody = new CANNON.Body({ mass, material: c_basicMaterial })
