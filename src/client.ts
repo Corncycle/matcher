@@ -14,6 +14,7 @@ import HeldObject from './scripts/classes/HeldObject'
 // ***** BEGIN SETUP *****
 
 const space = new SpaceManager()
+space.cameraControls.space = space
 const cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
 
 // ****** END SETUP ******
@@ -35,8 +36,7 @@ const { mesh: specialMesh, body: specialBody } = createDynamicBall(
 space.addDynamicObject({ mesh: specialMesh, body: specialBody })
 const obj = new HeldObject(
   specialMesh,
-  specialBody,
-  space.cameraControls.camera
+  specialBody
 )
 space.cameraControls.heldObject = obj
 

@@ -3,6 +3,7 @@ import * as CANNON from 'cannon-es'
 import { BooleanDirection, clamp } from '../util/util'
 import { playerMaterial } from '../util/materials'
 import HeldObject from './HeldObject'
+import SpaceManager from './Space'
 
 export default class CameraControls {
   camera: THREE.Camera
@@ -13,6 +14,10 @@ export default class CameraControls {
   up: CANNON.Vec3
   contactNormal: CANNON.Vec3
   canJump: boolean
+
+  // if cameracontrols should be able to interact (ie pick up and drop)
+  // objects in its associated space, `space` MUST be defined externally
+  space: SpaceManager | undefined
 
   horizontalNormal: THREE.Vector3
   heldObjectDestination: THREE.Vector3
@@ -174,10 +179,22 @@ export default class CameraControls {
       return
     }
 
+    if (!this.space) {
+      return
+    }
+
     this.camera.getWorldDirection(this.worldDirection)
     this.raycaster.set(this.camera.position, this.worldDirection)
 
     const intersects = this.raycaster.intersectObjects(this.scene.children)
+    const closestIntersection = intersects[0]
+
+    if (closestIntersection.distance > 2) {
+      return
+    }
+
+    this.heldObject = this.space.createHeldObjectByIntersection(intersects[0])
+
   }
 
   updateHorizontal() {
@@ -188,7 +205,7 @@ export default class CameraControls {
 
   updateHeldObjectDestination() {
     this.camera.getWorldDirection(this.heldObjectDestination)
-    this.heldObjectDestination = this.heldObjectDestination.multiplyScalar(1)
+    this.heldObjectDestination = this.heldObjectDestination.multiplyScalar(0.75)
     this.heldObjectDestination.add(this.camera.position)
   }
 

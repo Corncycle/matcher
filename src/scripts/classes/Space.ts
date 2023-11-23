@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import { playerBasicContactMaterial } from '../util/materials'
 import CameraControls from './CameraControls'
+import HeldObject from './HeldObject'
 
 // A space manager holds graphical + physical data for a world
 // ie a three scene + camera + renderer, cannon world, etc
@@ -74,6 +75,19 @@ export default class SpaceManager {
   addDynamicObject(obj: { mesh: THREE.Mesh; body: CANNON.Body }) {
     this.addStaticObject(obj)
     this.dynamicObjects.push(obj)
+  }
+
+  createHeldObjectByIntersection(intersection: THREE.Intersection | undefined) {
+    if (intersection === undefined) {
+      return null
+    }
+
+    for (const obj of this.dynamicObjects) {
+      if (obj.mesh === intersection.object) {
+        return new HeldObject(obj.mesh, obj.body)
+      }
+    }
+    return null
   }
 
   render() {
