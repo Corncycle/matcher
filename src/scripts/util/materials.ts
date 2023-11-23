@@ -1,13 +1,13 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 
-export const normalMaterial = new THREE.MeshNormalMaterial()
+export const t_normalMaterial = new THREE.MeshNormalMaterial()
 
-export const playerMaterial = new CANNON.Material()
-export const basicMaterial = new CANNON.Material()
-export const playerBasicContactMaterial = new CANNON.ContactMaterial(
-  playerMaterial,
-  basicMaterial,
+export const c_playerMaterial = new CANNON.Material()
+export const c_basicMaterial = new CANNON.Material()
+export const c_playerBasicContactMaterial = new CANNON.ContactMaterial(
+  c_playerMaterial,
+  c_basicMaterial,
   {
     friction: 0.0,
     restitution: 0,

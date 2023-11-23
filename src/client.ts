@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import CannonDebugRenderer from './scripts/util/cannonDebugRenderer'
-import { basicMaterial } from './scripts/util/materials'
+import { c_basicMaterial } from './scripts/util/materials'
 import SpaceManager from './scripts/classes/Space'
 import {
   createDynamicBall,

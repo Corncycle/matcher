@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
-import { playerBasicContactMaterial } from '../util/materials'
+import { c_playerBasicContactMaterial } from '../util/materials'
 import CameraControls from './CameraControls'
 import HeldObject from './HeldObject'
 
@@ -39,7 +39,7 @@ export default class SpaceManager {
 
     this.world = new CANNON.World({ gravity: new CANNON.Vec3(0, -6, 0) })
     this.world.quatNormalizeSkip = 0
-    this.world.addContactMaterial(playerBasicContactMaterial)
+    this.world.addContactMaterial(c_playerBasicContactMaterial)
 
     this.cameraControls = new CameraControls(
       this.renderer.domElement,
