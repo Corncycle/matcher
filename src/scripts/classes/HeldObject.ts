@@ -6,7 +6,10 @@ export default class HeldObject {
   body: CANNON.Body
   // parentCamera: THREE.Camera
 
-  constructor(mesh: THREE.Mesh, body: CANNON.Body, /* parentCamera: THREE.Camera */) {
+  constructor(
+    mesh: THREE.Mesh,
+    body: CANNON.Body /* parentCamera: THREE.Camera */
+  ) {
     this.mesh = mesh
     this.body = body
     // this.parentCamera = parentCamera

@@ -194,7 +194,6 @@ export default class CameraControls {
     }
 
     this.heldObject = this.space.createHeldObjectByIntersection(intersects[0])
-
   }
 
   updateHorizontal() {

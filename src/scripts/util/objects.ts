@@ -1,6 +1,10 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
-import { c_basicMaterial, t_lambertMaterial, t_normalMaterial } from './materials'
+import {
+  c_basicMaterial,
+  t_lambertMaterial,
+  t_normalMaterial,
+} from './materials'
 
 const ballGeometry = new THREE.SphereGeometry(1)
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)

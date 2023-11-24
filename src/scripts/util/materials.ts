@@ -3,7 +3,9 @@ import * as CANNON from 'cannon-es'
 
 // THREE MATERIALS
 export const t_normalMaterial = new THREE.MeshNormalMaterial()
-export const t_lambertMaterial = new THREE.MeshLambertMaterial({color: 0xFF0000})
+export const t_lambertMaterial = new THREE.MeshLambertMaterial({
+  color: 0xff0000,
+})
 
 // CANNON MATERIALS
 export const c_playerMaterial = new CANNON.Material()

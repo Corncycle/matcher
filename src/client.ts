@@ -2,9 +2,7 @@ import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import CannonDebugRenderer from './scripts/util/cannonDebugRenderer'
 import SpaceManager from './scripts/classes/Space'
-import {
-  createStaticGround,
-} from './scripts/util/objects'
+import { createStaticGround } from './scripts/util/objects'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { loadLevel } from './scripts/util/level'
 
