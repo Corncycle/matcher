@@ -19,9 +19,9 @@ document.body.appendChild(stats.dom)
 
 loadLevel(space)
 
-const light = new THREE.PointLight(0xffffff, 1000)
-light.position.set(4, 10, 4)
-space.scene.add(light)
+// const light = new THREE.PointLight(0xffffff, 1000)
+// light.position.set(4, 10, 4)
+// space.scene.add(light)
 
 // ****** END SETUP ******
 

@@ -143,8 +143,10 @@ export default class CameraControls {
         break
       case ' ':
         this.attemptJump()
+        break
       case 'e':
         this.interactWithObject()
+        break
     }
   }
 
@@ -175,7 +177,7 @@ export default class CameraControls {
 
   interactWithObject() {
     if (this.heldObject) {
-      this.heldObject = null
+      this.dropHeldObject()
       return
     }
 
@@ -196,6 +198,13 @@ export default class CameraControls {
     this.heldObject = this.space.createHeldObjectByIntersection(intersects[0])
   }
 
+  dropHeldObject() {
+    if (!this.heldObject) {
+      return
+    }
+    this.heldObject = null
+  }
+
   updateHorizontal() {
     this.camera.getWorldDirection(this.horizontalNormal)
     this.horizontalNormal.y = 0
@@ -206,6 +215,12 @@ export default class CameraControls {
     this.camera.getWorldDirection(this.heldObjectDestination)
     this.heldObjectDestination = this.heldObjectDestination.multiplyScalar(0.75)
     this.heldObjectDestination.add(this.camera.position)
+    this.heldObjectDestination.y =
+      clamp(
+        this.heldObjectDestination.y,
+        this.camera.position.y - 0.25,
+        this.camera.position.y + 0.25
+      ) - 0.05
   }
 
   updateHeldObject() {
@@ -221,6 +236,10 @@ export default class CameraControls {
       (this.heldObjectDestination.y - this.heldObject.body.position.y) * 10
     this.heldObject.body.velocity.z =
       (this.heldObjectDestination.z - this.heldObject.body.position.z) * 10
+
+    this.heldObject.body.angularVelocity.x = 0
+    this.heldObject.body.angularVelocity.y = 0
+    this.heldObject.body.angularVelocity.z = 0
   }
 
   setVelocityFromCurrentInput() {

@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
-import { createDynamicBall, createStaticBox } from './objects'
+import { createDynamicBall, createStaticBox, createStaticWall } from './objects'
 import SpaceManager from '../classes/Space'
 
 export function loadLevel(space: SpaceManager) {
@@ -15,7 +15,7 @@ export function loadLevel(space: SpaceManager) {
 
   const collection = new THREE.Object3D()
   for (const spec of roomSpecification) {
-    const { mesh, body } = createStaticBox(
+    const { mesh, body } = createStaticWall(
       ...(spec as [number, number, number, number, number, number])
     )
     space.addStaticObject({ mesh, body })

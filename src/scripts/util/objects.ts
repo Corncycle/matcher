@@ -4,6 +4,7 @@ import {
   c_basicMaterial,
   t_lambertMaterial,
   t_normalMaterial,
+  t_wallMaterial,
 } from './materials'
 
 const ballGeometry = new THREE.SphereGeometry(1)
@@ -32,6 +33,30 @@ export function createStaticBox(
   z: number
 ) {
   const boxMesh = new THREE.Mesh(cubeGeometry, t_lambertMaterial)
+  boxMesh.scale.set(width, height, length)
+  boxMesh.position.set(x, y, z)
+  boxMesh.castShadow = true
+  const cubeShape = new CANNON.Box(
+    new CANNON.Vec3(width / 2, height / 2, length / 2)
+  )
+  const boxBody = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  boxBody.addShape(cubeShape)
+  boxBody.position.x = x
+  boxBody.position.y = y
+  boxBody.position.z = z
+
+  return { mesh: boxMesh, body: boxBody }
+}
+
+export function createStaticWall(
+  width: number,
+  height: number,
+  length: number,
+  x: number,
+  y: number,
+  z: number
+) {
+  const boxMesh = new THREE.Mesh(cubeGeometry, t_wallMaterial)
   boxMesh.scale.set(width, height, length)
   boxMesh.position.set(x, y, z)
   boxMesh.castShadow = true
