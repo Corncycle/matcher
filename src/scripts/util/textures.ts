@@ -1,12 +1,11 @@
 import * as THREE from 'three'
 
-export const wallTexture = new THREE.TextureLoader().load(
-  '../../assets/textures/Brick/Brick_07-128x128.png'
+const loader = new THREE.TextureLoader()
+
+export const wallTexture = loader.load(
+  'assets/textures/Brick/Brick_07-128x128.png'
 )
 
-export const setTexture = (
-  material: THREE.MeshToonMaterial,
-  texture: THREE.Texture
-) => {
-  material.map = texture
-}
+wallTexture.wrapS = THREE.RepeatWrapping
+wallTexture.wrapT = THREE.RepeatWrapping
+wallTexture.repeat = new THREE.Vector2(4, 4)
