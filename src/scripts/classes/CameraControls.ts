@@ -4,9 +4,11 @@ import { BooleanDirection, clamp } from '../util/util'
 import { c_playerMaterial } from '../util/materials'
 import HeldObject from './HeldObject'
 import SpaceManager from './Space'
+import Reticle from './Reticle'
 
 export default class CameraControls {
   camera: THREE.Camera
+  reticle: Reticle
   scene: THREE.Scene
   active: boolean
   currentInput: BooleanDirection
@@ -38,6 +40,7 @@ export default class CameraControls {
     bodyRadius: number = 0.2
   ) {
     this.camera = camera
+    this.reticle = new Reticle(camera)
     this.scene = scene
     this.active = false
     this.currentInput = {
@@ -196,12 +199,17 @@ export default class CameraControls {
     }
 
     this.heldObject = this.space.createHeldObjectByIntersection(intersects[0])
+
+    if (this.heldObject) {
+      this.reticle.setMode('ACTIVE')
+    }
   }
 
   dropHeldObject() {
     if (!this.heldObject) {
       return
     }
+    this.reticle.setMode('INACTIVE')
     this.heldObject = null
   }
 

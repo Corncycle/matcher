@@ -29,6 +29,7 @@ export default class SpaceManager {
       0.1,
       1000
     )
+    this.scene.add(this.camera)
 
     this.camera.position.y = 2
     this.camera.position.z = 3
@@ -66,8 +67,8 @@ export default class SpaceManager {
     light.target = spotlightTarget
     light.power = 100
 
-    const helper = new THREE.SpotLightHelper(light)
-    this.scene.add(helper)
+    // const helper = new THREE.SpotLightHelper(light)
+    // this.scene.add(helper)
   }
 
   updateCameraControls() {
