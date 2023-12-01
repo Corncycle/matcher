@@ -4,6 +4,7 @@ import {
   createDynamicBall,
   createDynamicBox,
   createStaticBox,
+  createStaticFloor,
   createStaticTable,
   createStaticWall,
 } from './objects'
@@ -55,7 +56,17 @@ function createWalls(space: SpaceManager, levelNumber: number = 1) {
 }
 
 function createFloor(space: SpaceManager, levelNumber: number = 1) {
-  return null
+  const floorSpec = {
+    1: [1, 1, 7, 7],
+    2: [1, 1, 8, 8],
+  }
+
+  const { mesh, body } = createStaticFloor(
+    ...(floorSpec[levelNumber as 1] as [number, number, number, number])
+  )
+  space.addStaticObject({ mesh, body })
+
+  return [{ mesh, body }]
 }
 
 function createLights(space: SpaceManager, levelNumber: number = 1) {

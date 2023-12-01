@@ -55,7 +55,7 @@ export default class SpaceManager {
 
     this.dynamicObjects = []
 
-    this.scene.add(new THREE.AmbientLight(0xffffff, 0.2))
+    this.scene.add(new THREE.AmbientLight(0xffffff, 0.1))
 
     const light = new THREE.SpotLight(0xffffff, 2)
     light.position.x = 4
@@ -69,7 +69,7 @@ export default class SpaceManager {
     spotlightTarget.position.z = 4
     this.scene.add(spotlightTarget)
     light.target = spotlightTarget
-    light.power = 100
+    light.power = 70
 
     // const helper = new THREE.SpotLightHelper(light)
     // this.scene.add(helper)

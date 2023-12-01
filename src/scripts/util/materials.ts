@@ -1,6 +1,11 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
-import { wallTexture } from './textures'
+import {
+  floorTexture,
+  tableLegTexture,
+  tabletopTexture,
+  wallTexture,
+} from './textures'
 
 // THREE MATERIALS
 export const t_normalMaterial = new THREE.MeshNormalMaterial()
@@ -18,6 +23,15 @@ export const testColoredMaterials = {
 }
 
 export const t_wallMaterial = new THREE.MeshToonMaterial({ map: wallTexture })
+export const t_tabletopMaterial = new THREE.MeshToonMaterial({
+  map: tabletopTexture,
+})
+export const t_tableLegMaterial = new THREE.MeshToonMaterial({
+  map: tableLegTexture,
+})
+export const t_floorMaterial = new THREE.MeshToonMaterial({
+  map: floorTexture,
+})
 
 // CANNON MATERIALS
 export const c_playerMaterial = new CANNON.Material()

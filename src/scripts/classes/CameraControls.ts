@@ -69,7 +69,7 @@ export default class CameraControls {
     this.camera.rotation.order = 'YXZ'
 
     const bodyShape = new CANNON.Cylinder(bodyRadius, bodyRadius, 1.5, 10)
-    const body = new CANNON.Body({ mass: 10, material: c_playerMaterial })
+    const body = new CANNON.Body({ mass: 5, material: c_playerMaterial })
     body.addShape(bodyShape)
     body.position.y = 2
     body.position.z = 2
@@ -201,12 +201,12 @@ export default class CameraControls {
     this.heldObject = this.space.createHeldObjectByIntersection(intersects[0])
 
     if (this.heldObject) {
-      this.heldObject.mesh.material =
-        testColoredMaterials[
-          ['green', 'blue', 'yellow', 'magenta', 'cyan'][
-            Math.floor(Math.random() * 5)
-          ] as 'red'
-        ]
+      // this.heldObject.mesh.material =
+      //   testColoredMaterials[
+      //     ['green', 'blue', 'yellow', 'magenta', 'cyan'][
+      //       Math.floor(Math.random() * 5)
+      //     ] as 'red'
+      //   ]
       this.reticle.setMode('ACTIVE')
     }
   }
@@ -216,7 +216,7 @@ export default class CameraControls {
       return
     }
     this.reticle.setMode('INACTIVE')
-    this.heldObject.mesh.material = testColoredMaterials.red
+    // this.heldObject.mesh.material = testColoredMaterials.red
     this.heldObject = null
   }
 
