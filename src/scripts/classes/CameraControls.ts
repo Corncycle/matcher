@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import { BooleanDirection, clamp } from '../util/util'
-import { c_playerMaterial } from '../util/materials'
+import { c_playerMaterial, testColoredMaterials } from '../util/materials'
 import HeldObject from './HeldObject'
 import SpaceManager from './Space'
 import Reticle from './Reticle'
@@ -201,6 +201,12 @@ export default class CameraControls {
     this.heldObject = this.space.createHeldObjectByIntersection(intersects[0])
 
     if (this.heldObject) {
+      this.heldObject.mesh.material =
+        testColoredMaterials[
+          ['green', 'blue', 'yellow', 'magenta', 'cyan'][
+            Math.floor(Math.random() * 5)
+          ] as 'red'
+        ]
       this.reticle.setMode('ACTIVE')
     }
   }
@@ -210,6 +216,7 @@ export default class CameraControls {
       return
     }
     this.reticle.setMode('INACTIVE')
+    this.heldObject.mesh.material = testColoredMaterials.red
     this.heldObject = null
   }
 
@@ -223,12 +230,11 @@ export default class CameraControls {
     this.camera.getWorldDirection(this.heldObjectDestination)
     this.heldObjectDestination = this.heldObjectDestination.multiplyScalar(0.75)
     this.heldObjectDestination.add(this.camera.position)
-    this.heldObjectDestination.y =
-      clamp(
-        this.heldObjectDestination.y,
-        this.camera.position.y - 0.25,
-        this.camera.position.y + 0.25
-      ) - 0.05
+    this.heldObjectDestination.y = clamp(
+      this.heldObjectDestination.y,
+      this.camera.position.y - 0.25,
+      this.camera.position.y + 0.25
+    )
   }
 
   updateHeldObject() {
@@ -248,6 +254,11 @@ export default class CameraControls {
     this.heldObject.body.angularVelocity.x = 0
     this.heldObject.body.angularVelocity.y = 0
     this.heldObject.body.angularVelocity.z = 0
+
+    this.heldObject.body.quaternion.x = this.camera.quaternion.x
+    this.heldObject.body.quaternion.y = this.camera.quaternion.y
+    this.heldObject.body.quaternion.z = this.camera.quaternion.z
+    this.heldObject.body.quaternion.w = this.camera.quaternion.w
   }
 
   setVelocityFromCurrentInput() {

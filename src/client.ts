@@ -17,7 +17,7 @@ space.addStaticObject(createStaticGround(0))
 const stats = new Stats()
 document.body.appendChild(stats.dom)
 
-loadLevel(space)
+loadLevel(space, 1)
 
 // const light = new THREE.PointLight(0xffffff, 1000)
 // light.position.set(4, 10, 4)

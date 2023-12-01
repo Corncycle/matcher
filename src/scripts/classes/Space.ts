@@ -1,6 +1,9 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
-import { c_playerBasicContactMaterial } from '../util/materials'
+import {
+  c_basicBasicContactMaterial,
+  c_playerBasicContactMaterial,
+} from '../util/materials'
 import CameraControls from './CameraControls'
 import HeldObject from './HeldObject'
 
@@ -41,6 +44,7 @@ export default class SpaceManager {
     this.world = new CANNON.World({ gravity: new CANNON.Vec3(0, -6, 0) })
     this.world.quatNormalizeSkip = 0
     this.world.addContactMaterial(c_playerBasicContactMaterial)
+    this.world.addContactMaterial(c_basicBasicContactMaterial)
 
     this.cameraControls = new CameraControls(
       this.renderer.domElement,
@@ -87,9 +91,9 @@ export default class SpaceManager {
     }
   }
 
-  addStaticObject(obj: { mesh: THREE.Mesh; body: CANNON.Body }) {
-    this.world.addBody(obj.body)
+  addStaticObject(obj: { mesh: THREE.Mesh | THREE.Group; body: CANNON.Body }) {
     this.scene.add(obj.mesh)
+    this.world.addBody(obj.body)
   }
 
   addDynamicObject(obj: { mesh: THREE.Mesh; body: CANNON.Body }) {

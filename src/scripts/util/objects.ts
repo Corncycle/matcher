@@ -5,6 +5,7 @@ import {
   t_lambertMaterial,
   t_normalMaterial,
   t_wallMaterial,
+  testColoredMaterials,
 } from './materials'
 
 const ballGeometry = new THREE.SphereGeometry(1)
@@ -73,18 +74,109 @@ export function createStaticWall(
 }
 
 export function createDynamicBall(
+  r: number,
   x: number,
   y: number,
   z: number,
-  r: number = 1,
-  mass: number = 1
+  mass: number = 1,
+  color: string = 'green'
 ) {
-  const ballMesh = new THREE.Mesh(ballGeometry, t_lambertMaterial)
+  const ballMesh = new THREE.Mesh(
+    ballGeometry,
+    testColoredMaterials[color as 'green']
+  )
   ballMesh.scale.set(r, r, r)
   const ballShape = new CANNON.Sphere(r)
   const ballBody = new CANNON.Body({ mass, material: c_basicMaterial })
+
+  // balls need angular damping otherwise they roll forever without slowing down
+  // (they're modeled as ideal spheres which don't experience friction)
+  // this number was determined by. making it up.
+  ballBody.angularDamping = 0.96
+
   ballBody.position = new CANNON.Vec3(x, y, z)
   ballBody.addShape(ballShape)
 
   return { mesh: ballMesh, body: ballBody }
+}
+
+export function createDynamicBox(
+  width: number,
+  height: number,
+  length: number,
+  x: number,
+  y: number,
+  z: number,
+  mass: number = 1
+) {
+  const boxMesh = new THREE.Mesh(cubeGeometry, t_lambertMaterial)
+  boxMesh.scale.set(width, length, height)
+  const boxShape = new CANNON.Box(
+    new CANNON.Vec3(width / 2, height / 2, length / 2)
+  )
+  const boxBody = new CANNON.Body({ mass, material: c_basicMaterial })
+  boxBody.position = new CANNON.Vec3(x, y, z)
+  boxBody.addShape(boxShape)
+
+  return { mesh: boxMesh, body: boxBody }
+}
+
+export function createStaticTable(x: number, z: number, rotation: number) {
+  const t_axis = new THREE.Vector3(0, 1, 0)
+  const c_axis = new CANNON.Vec3(0, 1, 0)
+
+  const tableGroup = new THREE.Group()
+
+  const leg1 = new THREE.Mesh(cubeGeometry, testColoredMaterials.red)
+  leg1.scale.set(0.1, 0.4, 0.1)
+  leg1.position.set(-0.3, -0.25, -0.2)
+  tableGroup.add(leg1)
+
+  const leg2 = new THREE.Mesh(cubeGeometry, testColoredMaterials.red)
+  leg2.scale.set(0.1, 0.4, 0.1)
+  leg2.position.set(0.3, -0.25, -0.2)
+  tableGroup.add(leg2)
+
+  const leg3 = new THREE.Mesh(cubeGeometry, testColoredMaterials.red)
+  leg3.scale.set(0.1, 0.4, 0.1)
+  leg3.position.set(-0.3, -0.25, 0.2)
+  tableGroup.add(leg3)
+
+  const leg4 = new THREE.Mesh(cubeGeometry, testColoredMaterials.red)
+  leg4.scale.set(0.1, 0.4, 0.1)
+  leg4.position.set(0.3, -0.25, 0.2)
+  tableGroup.add(leg4)
+
+  const tabletop = new THREE.Mesh(cubeGeometry, testColoredMaterials.red)
+  tabletop.scale.set(0.8, 0.1, 0.6)
+  tableGroup.add(tabletop)
+
+  tableGroup.position.set(x, 0.45, z)
+  tableGroup.quaternion.setFromAxisAngle(t_axis, rotation)
+
+  const tableBody = new CANNON.Body({ material: c_basicMaterial })
+  tableBody.addShape(
+    new CANNON.Box(new CANNON.Vec3(0.05, 0.2, 0.05)),
+    new CANNON.Vec3(-0.3, -0.25, -0.2)
+  )
+  tableBody.addShape(
+    new CANNON.Box(new CANNON.Vec3(0.05, 0.2, 0.05)),
+    new CANNON.Vec3(0.3, -0.25, -0.2)
+  )
+  tableBody.addShape(
+    new CANNON.Box(new CANNON.Vec3(0.05, 0.2, 0.05)),
+    new CANNON.Vec3(-0.3, -0.25, 0.2)
+  )
+  tableBody.addShape(
+    new CANNON.Box(new CANNON.Vec3(0.05, 0.2, 0.05)),
+    new CANNON.Vec3(0.3, -0.25, 0.2)
+  )
+
+  tableBody.addShape(new CANNON.Box(new CANNON.Vec3(0.4, 0.05, 0.3)))
+
+  tableBody.quaternion.setFromAxisAngle(c_axis, rotation)
+
+  tableBody.position = new CANNON.Vec3(x, 0.45, z)
+
+  return { mesh: tableGroup, body: tableBody }
 }

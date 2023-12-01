@@ -22,14 +22,10 @@ export default class Reticle {
     this.activeMaterial.depthTest = false
 
     const inactivePoints = []
-    inactivePoints.push(new THREE.Vector3(0, -1.5, -DISTANCE_FROM_CAMERA))
-    inactivePoints.push(new THREE.Vector3(0, -0.5, -DISTANCE_FROM_CAMERA))
-    inactivePoints.push(new THREE.Vector3(0, 1.5, -DISTANCE_FROM_CAMERA))
-    inactivePoints.push(new THREE.Vector3(0, 0.5, -DISTANCE_FROM_CAMERA))
-    inactivePoints.push(new THREE.Vector3(-1.5, 0, -DISTANCE_FROM_CAMERA))
-    inactivePoints.push(new THREE.Vector3(-0.5, 0, -DISTANCE_FROM_CAMERA))
-    inactivePoints.push(new THREE.Vector3(1.5, 0, -DISTANCE_FROM_CAMERA))
-    inactivePoints.push(new THREE.Vector3(0.5, 0, -DISTANCE_FROM_CAMERA))
+    inactivePoints.push(new THREE.Vector3(0, -1, -DISTANCE_FROM_CAMERA))
+    inactivePoints.push(new THREE.Vector3(0, 1, -DISTANCE_FROM_CAMERA))
+    inactivePoints.push(new THREE.Vector3(-1, 0, -DISTANCE_FROM_CAMERA))
+    inactivePoints.push(new THREE.Vector3(1, 0, -DISTANCE_FROM_CAMERA))
 
     const inactiveGeometry = new THREE.BufferGeometry().setFromPoints(
       inactivePoints
@@ -41,14 +37,14 @@ export default class Reticle {
     // this.lines.renderOrder = 999
 
     const activePoints = []
-    activePoints.push(new THREE.Vector3(0, -1.25, -DISTANCE_FROM_CAMERA))
-    activePoints.push(new THREE.Vector3(0, -0.25, -DISTANCE_FROM_CAMERA))
-    activePoints.push(new THREE.Vector3(0, 1.25, -DISTANCE_FROM_CAMERA))
-    activePoints.push(new THREE.Vector3(0, 0.25, -DISTANCE_FROM_CAMERA))
-    activePoints.push(new THREE.Vector3(-1.25, 0, -DISTANCE_FROM_CAMERA))
-    activePoints.push(new THREE.Vector3(-0.25, 0, -DISTANCE_FROM_CAMERA))
-    activePoints.push(new THREE.Vector3(1.25, 0, -DISTANCE_FROM_CAMERA))
-    activePoints.push(new THREE.Vector3(0.25, 0, -DISTANCE_FROM_CAMERA))
+    activePoints.push(new THREE.Vector3(0, -1, -DISTANCE_FROM_CAMERA))
+    activePoints.push(new THREE.Vector3(0, -0.9, -DISTANCE_FROM_CAMERA))
+    activePoints.push(new THREE.Vector3(0, 1, -DISTANCE_FROM_CAMERA))
+    activePoints.push(new THREE.Vector3(0, 0.9, -DISTANCE_FROM_CAMERA))
+    activePoints.push(new THREE.Vector3(-1, 0, -DISTANCE_FROM_CAMERA))
+    activePoints.push(new THREE.Vector3(-0.9, 0, -DISTANCE_FROM_CAMERA))
+    activePoints.push(new THREE.Vector3(1, 0, -DISTANCE_FROM_CAMERA))
+    activePoints.push(new THREE.Vector3(0.9, 0, -DISTANCE_FROM_CAMERA))
 
     const activeGeometry = new THREE.BufferGeometry().setFromPoints(
       activePoints
