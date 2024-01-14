@@ -60,7 +60,7 @@ export default class Reticle {
     camera.add(this.lines)
   }
 
-  setMode(mode: string) {
+  setMode(mode: 'ACTIVE' | 'INACTIVE') {
     for (const l of [this.inactiveLines, this.activeLines]) {
       this.camera.remove(l)
     }
