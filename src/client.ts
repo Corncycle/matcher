@@ -11,21 +11,21 @@ import { roughSizeOfObject } from './scripts/util/util'
 
 const space = new SpaceManager()
 
-const cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
+// const cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
 
-const stats = new Stats()
-document.body.appendChild(stats.dom)
+// const stats = new Stats()
+// document.body.appendChild(stats.dom)
 
 loadLevel(space, 1)
 
 window.addEventListener('keydown', (e) => {
   // reload
-  if (e.key === 'r') {
+  if (e.key === '1' || e.key === '2' || e.key === '3') {
     space.reset()
-    loadLevel(space, 2)
+    loadLevel(space, parseInt(e.key))
     // memory profile
   } else if (e.key === 'm') {
-    console.log(roughSizeOfObject(document))
+    console.log(roughSizeOfObject(space))
   }
 })
 
@@ -42,9 +42,9 @@ function animate() {
   space.physicsStep(3)
   space.render()
 
-  stats.update()
+  // stats.update()
 
-  cannonDebugRenderer.update()
+  // cannonDebugRenderer.update()
 }
 
 animate()

@@ -282,4 +282,55 @@ export default class CameraControls {
       this.body.position.z
     )
   }
+
+  reset(
+    scene: THREE.Scene,
+    camera: THREE.Camera,
+    world: CANNON.World,
+    bodyRadius: number = 0.15
+  ) {
+    this.camera = camera
+    this.scene = scene
+    this.reticle = new Reticle(camera)
+
+    this.heldObjectDestination = new THREE.Vector3(0, 0, -1)
+
+    this.worldDirection = new THREE.Vector3(0, 0, 0)
+    this.raycaster = new THREE.Raycaster()
+
+    this.heldObject = null
+
+    // 92% of the full extent of vertical rotation
+    this.VERTICAL_RANGE = 0.92 * (Math.PI / 2)
+    this.PAN_MULTIPLIER = 0.001
+
+    // rotation gets WACKY if we don't do this
+    this.camera.rotation.order = 'YXZ'
+
+    const bodyShape = new CANNON.Cylinder(bodyRadius, bodyRadius, 1.5, 10)
+    const body = new CANNON.Body({
+      mass: this.defaultBodyMass,
+      material: c_playerMaterial,
+    })
+    body.addShape(bodyShape)
+    body.position.y = 2
+    body.position.z = 2
+    body.fixedRotation = true
+    body.updateMassProperties()
+    world.addBody(body)
+    this.body = body
+
+    body.addEventListener('collide', (e: { contact: any }) => {
+      const { contact } = e
+      if (contact.bi.id === this.body.id) {
+        contact.ni.negate(this.contactNormal)
+      } else {
+        this.contactNormal.copy(contact.ni)
+      }
+
+      if (this.contactNormal.dot(this.up) > 0.5) {
+        this.canJump = true
+      }
+    })
+  }
 }
