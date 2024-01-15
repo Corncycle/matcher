@@ -5,19 +5,29 @@ import SpaceManager from './scripts/classes/Space'
 import { createStaticGround } from './scripts/util/objects'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { loadLevel } from './scripts/util/level'
+import { roughSizeOfObject } from './scripts/util/util'
 
 // ***** BEGIN SETUP *****
 
 const space = new SpaceManager()
-space.cameraControls.space = space
-const cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
 
-space.addObject(createStaticGround(0))
+const cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
 
 const stats = new Stats()
 document.body.appendChild(stats.dom)
 
 loadLevel(space, 1)
+
+window.addEventListener('keydown', (e) => {
+  // reload
+  if (e.key === 'r') {
+    space.reset()
+    loadLevel(space, 2)
+    // memory profile
+  } else if (e.key === 'm') {
+    console.log(roughSizeOfObject(document))
+  }
+})
 
 // const light = new THREE.PointLight(0xffffff, 1000)
 // light.position.set(4, 10, 4)
@@ -34,7 +44,7 @@ function animate() {
 
   stats.update()
 
-  // cannonDebugRenderer.update()
+  cannonDebugRenderer.update()
 }
 
 animate()

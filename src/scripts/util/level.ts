@@ -7,6 +7,7 @@ import {
   createStaticFloor,
   createStaticTable,
   createStaticWall,
+  createTableWithTrigger,
 } from './objects'
 import SpaceManager from '../classes/Space'
 
@@ -90,10 +91,12 @@ function createTables(space: SpaceManager, levelNumber: number = 1) {
 
   const tables = []
   for (const table of tableSpec[levelNumber as 1]) {
-    const { mesh, body } = createStaticTable(
-      ...(table as [number, number, number])
+    const { mesh, body, trigger } = createTableWithTrigger(
+      ...(table as [number, number, number]),
+      1
     )
     space.addObject({ mesh, body })
+    space.addTrigger(trigger.body)
     tables.push({ mesh, body })
   }
 

@@ -12,6 +12,7 @@ import {
   testColoredMaterials,
 } from './materials'
 import DynamicObject from '../classes/DynamicObject'
+import PuzzleTrigger from '../classes/PuzzleTrigger'
 
 const ballGeometry = new THREE.SphereGeometry(1)
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
@@ -209,4 +210,15 @@ export function createStaticTable(x: number, z: number, rotation: number) {
   tableBody.position = new CANNON.Vec3(x, 0.45, z)
 
   return { mesh: tableGroup, body: tableBody }
+}
+
+export function createTableWithTrigger(
+  x: number,
+  z: number,
+  rotation: number,
+  id: number
+) {
+  const { mesh, body } = createStaticTable(x, z, rotation)
+  const trigger = new PuzzleTrigger(0.8, 0.1, 0.6, x, 1, z, rotation, -1)
+  return { mesh, body, trigger }
 }
