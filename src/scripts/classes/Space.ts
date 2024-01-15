@@ -5,7 +5,6 @@ import {
   c_playerBasicContactMaterial,
 } from '../util/materials'
 import CameraControls from './CameraControls'
-import HeldObject from './HeldObject'
 import DynamicObject from './DynamicObject'
 
 // A space manager holds graphical + physical data for a world

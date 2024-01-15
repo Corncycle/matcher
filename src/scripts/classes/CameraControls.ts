@@ -17,6 +17,8 @@ export default class CameraControls {
   contactNormal: CANNON.Vec3
   canJump: boolean
 
+  defaultBodyMass = 10
+
   // if cameracontrols should be able to interact (ie pick up and drop)
   // objects in its associated space, `space` MUST be defined externally
   space: SpaceManager | undefined
@@ -37,7 +39,7 @@ export default class CameraControls {
     camera: THREE.Camera,
     scene: THREE.Scene,
     world: CANNON.World,
-    bodyRadius: number = 0.2
+    bodyRadius: number = 0.15
   ) {
     this.camera = camera
     this.reticle = new Reticle(camera)
@@ -61,15 +63,18 @@ export default class CameraControls {
 
     this.heldObject = null
 
-    // 90% of the full extent of vertical rotation
-    this.VERTICAL_RANGE = 0.9 * (Math.PI / 2)
+    // 92% of the full extent of vertical rotation
+    this.VERTICAL_RANGE = 0.92 * (Math.PI / 2)
     this.PAN_MULTIPLIER = 0.001
 
     // rotation gets WACKY if we don't do this
     this.camera.rotation.order = 'YXZ'
 
     const bodyShape = new CANNON.Cylinder(bodyRadius, bodyRadius, 1.5, 10)
-    const body = new CANNON.Body({ mass: 1, material: c_playerMaterial })
+    const body = new CANNON.Body({
+      mass: this.defaultBodyMass,
+      material: c_playerMaterial,
+    })
     body.addShape(bodyShape)
     body.position.y = 2
     body.position.z = 2
@@ -180,6 +185,7 @@ export default class CameraControls {
 
   interactWithObject() {
     if (this.heldObject) {
+      this.body.mass = this.defaultBodyMass // reset player mass when dropping object
       this.dropHeldObject()
       return
     }
@@ -201,6 +207,7 @@ export default class CameraControls {
     this.heldObject = this.space.getDynamicObjectIfHoldable(intersects[0])
 
     if (this.heldObject) {
+      this.body.mass = 1000 // make the player more massive while holding object so the held object can't push the player
       this.reticle.setMode('ACTIVE')
       this.heldObject.setColor(TestColors.RED)
     }
@@ -223,13 +230,12 @@ export default class CameraControls {
 
   updateHeldObjectDestination() {
     this.camera.getWorldDirection(this.heldObjectDestination)
+    const height = this.heldObjectDestination.y
+    this.heldObjectDestination.y = 0
+    this.heldObjectDestination.normalize()
+    this.heldObjectDestination.y = clamp(height, -0.5, 0.5)
     this.heldObjectDestination = this.heldObjectDestination.multiplyScalar(0.75)
     this.heldObjectDestination.add(this.camera.position)
-    this.heldObjectDestination.y = clamp(
-      this.heldObjectDestination.y,
-      this.camera.position.y - 0.25,
-      this.camera.position.y + 0.25
-    )
   }
 
   updateHeldObject() {
