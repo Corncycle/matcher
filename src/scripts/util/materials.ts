@@ -13,6 +13,15 @@ export const t_lambertMaterial = new THREE.MeshLambertMaterial({
   color: 0xff0000,
 })
 
+export enum TestColors {
+  RED = 'red',
+  GREEN = 'green',
+  BLUE = 'blue',
+  YELLOW = 'yellow',
+  MAGENTA = 'magenta',
+  CYAN = 'cyan',
+}
+
 export const testColoredMaterials = {
   red: new THREE.MeshLambertMaterial({ color: 0xff0000 }),
   green: new THREE.MeshLambertMaterial({ color: 0x00ff00 }),

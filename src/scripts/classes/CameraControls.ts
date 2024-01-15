@@ -1,10 +1,10 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import { BooleanDirection, clamp } from '../util/util'
-import { c_playerMaterial, testColoredMaterials } from '../util/materials'
-import HeldObject from './HeldObject'
+import { TestColors, c_playerMaterial } from '../util/materials'
 import SpaceManager from './Space'
 import Reticle from './Reticle'
+import DynamicObject from './DynamicObject'
 
 export default class CameraControls {
   camera: THREE.Camera
@@ -27,7 +27,7 @@ export default class CameraControls {
   worldDirection: THREE.Vector3
   raycaster: THREE.Raycaster
 
-  heldObject: HeldObject | null
+  heldObject: DynamicObject | null
 
   VERTICAL_RANGE: number
   PAN_MULTIPLIER: number
@@ -69,7 +69,7 @@ export default class CameraControls {
     this.camera.rotation.order = 'YXZ'
 
     const bodyShape = new CANNON.Cylinder(bodyRadius, bodyRadius, 1.5, 10)
-    const body = new CANNON.Body({ mass: 5, material: c_playerMaterial })
+    const body = new CANNON.Body({ mass: 1, material: c_playerMaterial })
     body.addShape(bodyShape)
     body.position.y = 2
     body.position.z = 2
@@ -198,16 +198,11 @@ export default class CameraControls {
       return
     }
 
-    this.heldObject = this.space.createHeldObjectByIntersection(intersects[0])
+    this.heldObject = this.space.getDynamicObjectIfHoldable(intersects[0])
 
     if (this.heldObject) {
-      // this.heldObject.mesh.material =
-      //   testColoredMaterials[
-      //     ['green', 'blue', 'yellow', 'magenta', 'cyan'][
-      //       Math.floor(Math.random() * 5)
-      //     ] as 'red'
-      //   ]
       this.reticle.setMode('ACTIVE')
+      this.heldObject.setColor(TestColors.RED)
     }
   }
 
@@ -216,7 +211,7 @@ export default class CameraControls {
       return
     }
     this.reticle.setMode('INACTIVE')
-    // this.heldObject.mesh.material = testColoredMaterials.red
+    this.heldObject.setColor('native')
     this.heldObject = null
   }
 
@@ -243,22 +238,7 @@ export default class CameraControls {
     }
 
     this.updateHeldObjectDestination()
-
-    this.heldObject.body.velocity.x =
-      (this.heldObjectDestination.x - this.heldObject.body.position.x) * 10
-    this.heldObject.body.velocity.y =
-      (this.heldObjectDestination.y - this.heldObject.body.position.y) * 10
-    this.heldObject.body.velocity.z =
-      (this.heldObjectDestination.z - this.heldObject.body.position.z) * 10
-
-    this.heldObject.body.angularVelocity.x = 0
-    this.heldObject.body.angularVelocity.y = 0
-    this.heldObject.body.angularVelocity.z = 0
-
-    this.heldObject.body.quaternion.x = this.camera.quaternion.x
-    this.heldObject.body.quaternion.y = this.camera.quaternion.y
-    this.heldObject.body.quaternion.z = this.camera.quaternion.z
-    this.heldObject.body.quaternion.w = this.camera.quaternion.w
+    this.heldObject.updateAsHeldObject(this.camera, this.heldObjectDestination)
   }
 
   setVelocityFromCurrentInput() {

@@ -12,7 +12,7 @@ const space = new SpaceManager()
 space.cameraControls.space = space
 const cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
 
-space.addStaticObject(createStaticGround(0))
+space.addObject(createStaticGround(0))
 
 const stats = new Stats()
 document.body.appendChild(stats.dom)

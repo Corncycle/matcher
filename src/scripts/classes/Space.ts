@@ -6,6 +6,7 @@ import {
 } from '../util/materials'
 import CameraControls from './CameraControls'
 import HeldObject from './HeldObject'
+import DynamicObject from './DynamicObject'
 
 // A space manager holds graphical + physical data for a world
 // ie a three scene + camera + renderer, cannon world, etc
@@ -21,7 +22,7 @@ export default class SpaceManager {
   // we can sync up all meshes with their associated bodies. only need
   // to store dynamic objects that are in both the three scene and cannon
   // world, otherwise three and cannon handle everything themselves
-  dynamicObjects: Array<{ mesh: THREE.Mesh; body: CANNON.Body }>
+  dynamicObjects: DynamicObject[]
 
   constructor() {
     this.clock = new THREE.Clock()
@@ -91,24 +92,24 @@ export default class SpaceManager {
     }
   }
 
-  addStaticObject(obj: { mesh: THREE.Mesh | THREE.Group; body: CANNON.Body }) {
+  addObject(obj: { mesh: THREE.Mesh | THREE.Group; body: CANNON.Body }) {
     this.scene.add(obj.mesh)
     this.world.addBody(obj.body)
   }
 
-  addDynamicObject(obj: { mesh: THREE.Mesh; body: CANNON.Body }) {
-    this.addStaticObject(obj)
+  addDynamicObject(obj: DynamicObject) {
+    this.addObject(obj)
     this.dynamicObjects.push(obj)
   }
 
-  createHeldObjectByIntersection(intersection: THREE.Intersection | undefined) {
+  getDynamicObjectIfHoldable(intersection: THREE.Intersection | undefined) {
     if (intersection === undefined) {
       return null
     }
 
     for (const obj of this.dynamicObjects) {
       if (obj.mesh === intersection.object) {
-        return new HeldObject(obj.mesh, obj.body)
+        return obj
       }
     }
     return null
@@ -116,16 +117,7 @@ export default class SpaceManager {
 
   render() {
     for (const object of this.dynamicObjects) {
-      const { mesh, body } = object
-
-      mesh.position.x = body.position.x
-      mesh.position.y = body.position.y
-      mesh.position.z = body.position.z
-
-      mesh.quaternion.x = body.quaternion.x
-      mesh.quaternion.y = body.quaternion.y
-      mesh.quaternion.z = body.quaternion.z
-      mesh.quaternion.w = body.quaternion.w
+      object.updateMeshTransform()
     }
 
     this.renderer.render(this.scene, this.camera)

@@ -1,10 +1,10 @@
 import { loadLevel } from '../util/level'
-import PuzzleObject from './PuzzleObject'
+import DynamicObject from './DynamicObject'
 import SpaceManager from './Space'
 
 export default class LevelManager {
   levelNumber: number
-  puzzleObjects: Array<PuzzleObject>
+  puzzleObjects: DynamicObject[]
 
   constructor(space: SpaceManager, levelNumber: number) {
     this.levelNumber = levelNumber

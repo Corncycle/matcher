@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import {
+  TestColors,
   c_basicMaterial,
   t_floorMaterial,
   t_lambertMaterial,
@@ -10,6 +11,7 @@ import {
   t_wallMaterial,
   testColoredMaterials,
 } from './materials'
+import DynamicObject from '../classes/DynamicObject'
 
 const ballGeometry = new THREE.SphereGeometry(1)
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
@@ -103,7 +105,7 @@ export function createDynamicBall(
   y: number,
   z: number,
   mass: number = 1,
-  color: string = 'magenta'
+  color: TestColors = TestColors.MAGENTA
 ) {
   const ballMesh = new THREE.Mesh(
     ballGeometry,
@@ -121,7 +123,7 @@ export function createDynamicBall(
   ballBody.position = new CANNON.Vec3(x, y, z)
   ballBody.addShape(ballShape)
 
-  return { mesh: ballMesh, body: ballBody }
+  return new DynamicObject(ballMesh, ballBody, true, color)
 }
 
 export function createDynamicBox(
@@ -132,7 +134,7 @@ export function createDynamicBox(
   y: number,
   z: number,
   mass: number = 1,
-  color: string = 'cyan'
+  color: TestColors = TestColors.CYAN
 ) {
   const boxMesh = new THREE.Mesh(
     cubeGeometry,
@@ -146,7 +148,7 @@ export function createDynamicBox(
   boxBody.position = new CANNON.Vec3(x, y, z)
   boxBody.addShape(boxShape)
 
-  return { mesh: boxMesh, body: boxBody }
+  return new DynamicObject(boxMesh, boxBody, true, color)
 }
 
 export function createStaticTable(x: number, z: number, rotation: number) {

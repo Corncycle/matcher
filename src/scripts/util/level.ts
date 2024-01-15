@@ -48,7 +48,7 @@ function createWalls(space: SpaceManager, levelNumber: number = 1) {
     const { mesh, body } = createStaticWall(
       ...(wall as [number, number, number, number, number, number])
     )
-    space.addStaticObject({ mesh, body })
+    space.addObject({ mesh, body })
     walls.push({ mesh, body })
   }
 
@@ -64,7 +64,7 @@ function createFloor(space: SpaceManager, levelNumber: number = 1) {
   const { mesh, body } = createStaticFloor(
     ...(floorSpec[levelNumber as 1] as [number, number, number, number])
   )
-  space.addStaticObject({ mesh, body })
+  space.addObject({ mesh, body })
 
   return [{ mesh, body }]
 }
@@ -93,7 +93,7 @@ function createTables(space: SpaceManager, levelNumber: number = 1) {
     const { mesh, body } = createStaticTable(
       ...(table as [number, number, number])
     )
-    space.addStaticObject({ mesh, body })
+    space.addObject({ mesh, body })
     tables.push({ mesh, body })
   }
 
