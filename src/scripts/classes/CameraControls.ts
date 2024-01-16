@@ -3,7 +3,7 @@ import * as CANNON from 'cannon-es'
 import { BooleanDirection, clamp } from '../util/util'
 import { TestColors, c_playerMaterial } from '../util/materials'
 import SpaceManager from './Space'
-import Reticle from './Reticle'
+import Reticle, { ReticleDisplays } from './Reticle'
 import DynamicObject from './DynamicObject'
 
 export default class CameraControls {
@@ -29,7 +29,7 @@ export default class CameraControls {
   worldDirection: THREE.Vector3
   raycaster: THREE.Raycaster
 
-  heldObject: DynamicObject | null
+  heldObject: DynamicObject | null | undefined
 
   VERTICAL_RANGE: number
   PAN_MULTIPLIER: number
@@ -183,9 +183,28 @@ export default class CameraControls {
     this.canJump = false
   }
 
+  getInteractableObjectInSight() {
+    this.camera.getWorldDirection(this.worldDirection)
+    this.raycaster.set(this.camera.position, this.worldDirection)
+
+    const intersects = this.raycaster.intersectObjects(this.scene.children)
+    const closestIntersection = intersects[0]
+
+    if (!closestIntersection) {
+      return null
+    }
+
+    if (closestIntersection.distance > 2) {
+      return null
+    }
+
+    return this.space?.getDynamicObjectIfHoldable(intersects[0])
+  }
+
   interactWithObject() {
     if (this.heldObject) {
       this.body.mass = this.defaultBodyMass // reset player mass when dropping object
+      this.body.updateMassProperties()
       this.dropHeldObject()
       return
     }
@@ -194,31 +213,21 @@ export default class CameraControls {
       return
     }
 
-    this.camera.getWorldDirection(this.worldDirection)
-    this.raycaster.set(this.camera.position, this.worldDirection)
-
-    const intersects = this.raycaster.intersectObjects(this.scene.children)
-    const closestIntersection = intersects[0]
-
-    if (closestIntersection.distance > 2) {
-      return
-    }
-
-    this.heldObject = this.space.getDynamicObjectIfHoldable(intersects[0])
+    this.heldObject = this.getInteractableObjectInSight()
 
     if (this.heldObject) {
       this.body.mass = 1000 // make the player more massive while holding object so the held object can't push the player
-      this.reticle.setMode('ACTIVE')
+      this.body.updateMassProperties()
+      this.reticle.setMode(ReticleDisplays.ACTIVE)
       this.heldObject.setColor(TestColors.RED)
     }
   }
 
   dropHeldObject() {
-    if (!this.heldObject) {
-      return
+    if (this.heldObject) {
+      this.heldObject.setColor('native')
     }
-    this.reticle.setMode('INACTIVE')
-    this.heldObject.setColor('native')
+    this.reticle.setMode(ReticleDisplays.INACTIVE)
     this.heldObject = null
   }
 
@@ -245,6 +254,16 @@ export default class CameraControls {
 
     this.updateHeldObjectDestination()
     this.heldObject.updateAsHeldObject(this.camera, this.heldObjectDestination)
+  }
+
+  updateReticle() {
+    if (this.heldObject) {
+      this.reticle.setMode(ReticleDisplays.ACTIVE)
+    } else if (this.getInteractableObjectInSight()) {
+      this.reticle.setMode(ReticleDisplays.HOVER)
+    } else {
+      this.reticle.setMode(ReticleDisplays.INACTIVE)
+    }
   }
 
   setVelocityFromCurrentInput() {
@@ -292,6 +311,8 @@ export default class CameraControls {
     this.camera = camera
     this.scene = scene
     this.reticle = new Reticle(camera)
+
+    this.canJump = false
 
     this.heldObjectDestination = new THREE.Vector3(0, 0, -1)
 

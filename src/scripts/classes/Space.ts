@@ -79,6 +79,8 @@ export default class SpaceManager {
       object.updateMeshTransform()
     }
 
+    this.cameraControls.updateReticle()
+
     this.renderer.render(this.scene, this.camera)
   }
 

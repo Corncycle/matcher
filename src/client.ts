@@ -11,10 +11,10 @@ import { roughSizeOfObject } from './scripts/util/util'
 
 const space = new SpaceManager()
 
-// const cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
+const cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
 
-// const stats = new Stats()
-// document.body.appendChild(stats.dom)
+const stats = new Stats()
+document.body.appendChild(stats.dom)
 
 loadLevel(space, 1)
 
@@ -42,7 +42,7 @@ function animate() {
   space.physicsStep(3)
   space.render()
 
-  // stats.update()
+  stats.update()
 
   // cannonDebugRenderer.update()
 }
