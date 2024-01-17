@@ -6,6 +6,7 @@ import {
 } from '../util/materials'
 import CameraControls from './CameraControls'
 import DynamicObject from './DynamicObject'
+import LevelManager from './LevelManager'
 
 // A space manager holds graphical + physical data for a world
 // ie a three scene + camera + renderer, cannon world, etc
@@ -22,6 +23,7 @@ export default class SpaceManager {
   // to store dynamic objects that are in both the three scene and cannon
   // world, otherwise three and cannon handle everything themselves
   dynamicObjects!: DynamicObject[]
+  levelManager?: LevelManager
 
   constructor() {
     this.renderer = new THREE.WebGLRenderer()
@@ -61,6 +63,15 @@ export default class SpaceManager {
     this.world.addBody(body)
   }
 
+  getDynamicObjectByBody(body: CANNON.Body) {
+    for (const obj of this.dynamicObjects) {
+      if (obj.body === body) {
+        return obj
+      }
+    }
+    return null
+  }
+
   getDynamicObjectIfHoldable(intersection: THREE.Intersection | undefined) {
     if (intersection === undefined) {
       return null
@@ -77,6 +88,11 @@ export default class SpaceManager {
   render() {
     for (const object of this.dynamicObjects) {
       object.updateMeshTransform()
+      if (this.levelManager) {
+        if (object.mesh.children[0]) {
+          object.mesh.children[0].lookAt(this.camera.position)
+        }
+      }
     }
 
     this.cameraControls.updateReticle()

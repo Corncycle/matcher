@@ -31,7 +31,7 @@ export default class Reticle {
 
     this.inactiveMaterial = new THREE.LineBasicMaterial({
       color: 0xffffff,
-      opacity: 0.3,
+      opacity: 0.25,
       transparent: true,
     })
     this.inactiveMaterial.depthTest = false

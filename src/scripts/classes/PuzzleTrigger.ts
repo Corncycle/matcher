@@ -28,9 +28,10 @@ export default class PuzzleTrigger {
 
     this.body.quaternion.setFromAxisAngle(c_axis, rotation)
 
-    this.body.addEventListener('collide', () => {
-      console.log(`something entered trigger with id ${this.id}`)
-    })
+    // this.body.addEventListener('collide', () => {
+    //   console.log(`something entered trigger with id ${this.id}`)
+    // })
+    // handle listeners in LevelManager instead
 
     this.id = id
   }

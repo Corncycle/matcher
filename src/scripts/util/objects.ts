@@ -14,6 +14,11 @@ import {
 import DynamicObject from '../classes/DynamicObject'
 import PuzzleTrigger from '../classes/PuzzleTrigger'
 
+export enum TestShapes {
+  BALL = 'ball',
+  BOX = 'box',
+}
+
 const ballGeometry = new THREE.SphereGeometry(1)
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
 const planeGeometry = new THREE.PlaneGeometry(1, 1)
@@ -106,7 +111,8 @@ export function createDynamicBall(
   y: number,
   z: number,
   mass: number = 1,
-  color: TestColors = TestColors.MAGENTA
+  color: TestColors = TestColors.MAGENTA,
+  id: number = -1
 ) {
   const ballMesh = new THREE.Mesh(
     ballGeometry,
@@ -124,7 +130,7 @@ export function createDynamicBall(
   ballBody.position = new CANNON.Vec3(x, y, z)
   ballBody.addShape(ballShape)
 
-  return new DynamicObject(ballMesh, ballBody, true, color)
+  return new DynamicObject(ballMesh, ballBody, true, color, id)
 }
 
 export function createDynamicBox(
@@ -135,7 +141,8 @@ export function createDynamicBox(
   y: number,
   z: number,
   mass: number = 1,
-  color: TestColors = TestColors.CYAN
+  color: TestColors = TestColors.CYAN,
+  id: number = -1
 ) {
   const boxMesh = new THREE.Mesh(
     cubeGeometry,
@@ -149,7 +156,24 @@ export function createDynamicBox(
   boxBody.position = new CANNON.Vec3(x, y, z)
   boxBody.addShape(boxShape)
 
-  return new DynamicObject(boxMesh, boxBody, true, color)
+  return new DynamicObject(boxMesh, boxBody, true, color, id)
+}
+
+export function createDynamicObject(
+  x: number,
+  y: number,
+  z: number,
+  shape: TestShapes = TestShapes.BALL,
+  color: TestColors = TestColors.RED,
+  id: number = -1
+) {
+  switch (shape) {
+    case TestShapes.BALL:
+      return createDynamicBall(0.15, x, y, z, 1, color, id)
+    case TestShapes.BOX:
+    default:
+      return createDynamicBox(0.15, 0.15, 0.15, x, y, z, 1, color, id)
+  }
 }
 
 export function createStaticTable(x: number, z: number, rotation: number) {
@@ -216,9 +240,9 @@ export function createTableWithTrigger(
   x: number,
   z: number,
   rotation: number,
-  id: number
+  id: number = -1
 ) {
   const { mesh, body } = createStaticTable(x, z, rotation)
-  const trigger = new PuzzleTrigger(0.8, 0.1, 0.6, x, 1, z, rotation, -1)
+  const trigger = new PuzzleTrigger(0.7, 0.2, 0.5, x, 0.5, z, rotation, id)
   return { mesh, body, trigger }
 }

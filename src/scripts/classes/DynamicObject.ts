@@ -8,16 +8,41 @@ export default class DynamicObject {
   isHoldable: boolean
   nativeColor: TestColors | ''
 
+  id: number
+
+  checkerLines: THREE.LineSegments
+
   constructor(
     mesh: THREE.Mesh,
     body: CANNON.Body,
     isHoldable: boolean = true,
-    nativeColor: TestColors | ''
+    nativeColor: TestColors | '',
+    id: number = -1
   ) {
     this.mesh = mesh
     this.body = body
     this.isHoldable = isHoldable
     this.nativeColor = nativeColor
+    this.id = id
+
+    const checkerPoints = []
+    checkerPoints.push(new THREE.Vector3(0, -1, 0))
+    checkerPoints.push(new THREE.Vector3(0, 1, 0))
+    checkerPoints.push(new THREE.Vector3(-1, 0, 0))
+    checkerPoints.push(new THREE.Vector3(1, 0, 0))
+
+    const checkerGeometry = new THREE.BufferGeometry().setFromPoints(
+      checkerPoints
+    )
+
+    const material = new THREE.LineBasicMaterial({
+      color: 0xffffff,
+      opacity: 1,
+      transparent: true,
+    })
+    material.depthTest = false
+
+    this.checkerLines = new THREE.LineSegments(checkerGeometry, material)
   }
 
   updateAsHeldObject(parent: THREE.Object3D, destination: THREE.Vector3) {
@@ -56,5 +81,13 @@ export default class DynamicObject {
     } else {
       this.mesh.material = testColoredMaterials[color]
     }
+  }
+
+  showChecker() {
+    this.mesh.add(this.checkerLines)
+  }
+
+  hideChecker() {
+    this.mesh.remove(this.checkerLines)
   }
 }
