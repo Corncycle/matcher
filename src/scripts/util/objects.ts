@@ -243,6 +243,6 @@ export function createTableWithTrigger(
   id: number = -1
 ) {
   const { mesh, body } = createStaticTable(x, z, rotation)
-  const trigger = new PuzzleTrigger(0.7, 0.2, 0.5, x, 0.5, z, rotation, id)
+  const trigger = new PuzzleTrigger(0.7, 0.1, 0.5, x, 0.55, z, rotation, id)
   return { mesh, body, trigger }
 }

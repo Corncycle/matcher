@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import { TestColors, testColoredMaterials } from '../util/materials'
+import ObjectChecker, { CheckStates } from './ObjectChecker'
 
 export default class DynamicObject {
   mesh: THREE.Mesh
@@ -10,7 +11,7 @@ export default class DynamicObject {
 
   id: number
 
-  checkerLines: THREE.LineSegments
+  checker: ObjectChecker
 
   constructor(
     mesh: THREE.Mesh,
@@ -25,24 +26,7 @@ export default class DynamicObject {
     this.nativeColor = nativeColor
     this.id = id
 
-    const checkerPoints = []
-    checkerPoints.push(new THREE.Vector3(0, -1, 0))
-    checkerPoints.push(new THREE.Vector3(0, 1, 0))
-    checkerPoints.push(new THREE.Vector3(-1, 0, 0))
-    checkerPoints.push(new THREE.Vector3(1, 0, 0))
-
-    const checkerGeometry = new THREE.BufferGeometry().setFromPoints(
-      checkerPoints
-    )
-
-    const material = new THREE.LineBasicMaterial({
-      color: 0xffffff,
-      opacity: 1,
-      transparent: true,
-    })
-    material.depthTest = false
-
-    this.checkerLines = new THREE.LineSegments(checkerGeometry, material)
+    this.checker = new ObjectChecker(this)
   }
 
   updateAsHeldObject(parent: THREE.Object3D, destination: THREE.Vector3) {
@@ -83,11 +67,7 @@ export default class DynamicObject {
     }
   }
 
-  showChecker() {
-    this.mesh.add(this.checkerLines)
-  }
-
-  hideChecker() {
-    this.mesh.remove(this.checkerLines)
+  setCheckerState(state: CheckStates) {
+    this.checker.setState(state)
   }
 }
