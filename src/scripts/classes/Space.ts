@@ -78,7 +78,7 @@ export default class SpaceManager {
     }
 
     for (const obj of this.dynamicObjects) {
-      if (obj.mesh === intersection.object) {
+      if (obj.mesh === intersection.object && obj.isHoldable) {
         return obj
       }
     }

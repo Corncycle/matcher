@@ -112,7 +112,8 @@ export function createDynamicBall(
   z: number,
   mass: number = 1,
   color: TestColors = TestColors.MAGENTA,
-  id: number = -1
+  id: number = -1,
+  isHoldable: boolean = true
 ) {
   const ballMesh = new THREE.Mesh(
     ballGeometry,
@@ -130,7 +131,7 @@ export function createDynamicBall(
   ballBody.position = new CANNON.Vec3(x, y, z)
   ballBody.addShape(ballShape)
 
-  return new DynamicObject(ballMesh, ballBody, true, color, id)
+  return new DynamicObject(ballMesh, ballBody, isHoldable, color, id)
 }
 
 export function createDynamicBox(
@@ -142,7 +143,8 @@ export function createDynamicBox(
   z: number,
   mass: number = 1,
   color: TestColors = TestColors.CYAN,
-  id: number = -1
+  id: number = -1,
+  isHoldable: boolean = true
 ) {
   const boxMesh = new THREE.Mesh(
     cubeGeometry,
@@ -156,7 +158,7 @@ export function createDynamicBox(
   boxBody.position = new CANNON.Vec3(x, y, z)
   boxBody.addShape(boxShape)
 
-  return new DynamicObject(boxMesh, boxBody, true, color, id)
+  return new DynamicObject(boxMesh, boxBody, isHoldable, color, id)
 }
 
 export function createDynamicObject(
@@ -165,14 +167,26 @@ export function createDynamicObject(
   z: number,
   shape: TestShapes = TestShapes.BALL,
   color: TestColors = TestColors.RED,
-  id: number = -1
+  id: number = -1,
+  isHoldable: boolean = true
 ) {
   switch (shape) {
     case TestShapes.BALL:
-      return createDynamicBall(0.15, x, y, z, 1, color, id)
+      return createDynamicBall(0.15, x, y, z, 1, color, id, isHoldable)
     case TestShapes.BOX:
     default:
-      return createDynamicBox(0.15, 0.15, 0.15, x, y, z, 1, color, id)
+      return createDynamicBox(
+        0.15,
+        0.15,
+        0.15,
+        x,
+        y,
+        z,
+        1,
+        color,
+        id,
+        isHoldable
+      )
   }
 }
 

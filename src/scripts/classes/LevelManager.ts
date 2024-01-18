@@ -24,8 +24,13 @@ export default class LevelManager {
     this.triggers = []
   }
 
+  // load the preview on a timer, then load the main level
+  loadTwoStageLevel() {}
+
+  loadPreviewLevel(levelNumber: number) {}
+
   loadLevel(levelNumber: number) {
-    const { tables } = loadLevel(this.space, levelNumber)
+    const { tables } = loadLevel(this.space, levelNumber, true)
     this.triggers = tables.map((obj) => obj.trigger)
     this.triggerInventories = {}
     this.checkedInventories = {}

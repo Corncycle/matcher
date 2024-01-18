@@ -62,13 +62,16 @@ const objectSpec = {
 }
 
 // this function should only really be used by LevelManager, because it keeps track of triggers/objects
-export function loadLevel(space: SpaceManager, levelNumber: number = 1) {
+export function loadLevel(
+  space: SpaceManager,
+  levelNumber: number = 1,
+  isPreview: boolean = false
+) {
   const walls = createWalls(space, levelNumber)
   const floor = createFloor(space, levelNumber)
   const lights = createLights(space, levelNumber)
-  const tables = createTables(space, levelNumber)
-  const checkZones = createCheckZones(space, levelNumber)
-  const puzzleObjects = createPuzzleObjects(space, levelNumber)
+  const tables = createTables(space, levelNumber, isPreview)
+  const puzzleObjects = createPuzzleObjects(space, levelNumber, isPreview)
   for (const obj of puzzleObjects) {
     space.addDynamicObject(obj)
   }
@@ -76,7 +79,7 @@ export function loadLevel(space: SpaceManager, levelNumber: number = 1) {
 
   space.cameraControls.body.position = new CANNON.Vec3(4, 2, 6)
 
-  return { walls, floor, lights, tables, checkZones, puzzleObjects }
+  return { walls, floor, lights, tables, puzzleObjects }
 }
 
 function createWalls(space: SpaceManager, levelNumber: number = 1) {
@@ -110,7 +113,11 @@ function createLights(space: SpaceManager, levelNumber: number = 1) {
   return null
 }
 
-function createTables(space: SpaceManager, levelNumber: number = 1) {
+function createTables(
+  space: SpaceManager,
+  levelNumber: number = 1,
+  isPreview: boolean = false
+) {
   const tables = []
   for (const i in tableSpec[levelNumber as 1]) {
     const { mesh, body, trigger } = createTableWithTrigger(
@@ -118,23 +125,33 @@ function createTables(space: SpaceManager, levelNumber: number = 1) {
       parseInt(i) + 1
     )
     space.addObject({ mesh, body })
-    space.addTrigger(trigger.body)
+    if (!isPreview) {
+      space.addTrigger(trigger.body)
+    }
     tables.push({ mesh, body, trigger })
   }
 
   return tables
 }
 
-function createCheckZones(space: SpaceManager, levelNumber: number = 1) {
-  return null
-}
-
-function createPuzzleObjects(space: SpaceManager, levelNumber: number = 1) {
+function createPuzzleObjects(
+  space: SpaceManager,
+  levelNumber: number = 1,
+  isPreview: boolean = false
+) {
   const objects = []
   for (const i in objectSpec[levelNumber as 1]) {
     const { color, shape } = objectSpec[levelNumber as 1][i]
     objects.push(
-      createDynamicObject(4, 2 + parseInt(i), 4, shape, color, parseInt(i) + 1)
+      createDynamicObject(
+        4,
+        2 + parseInt(i),
+        4,
+        shape,
+        color,
+        parseInt(i) + 1,
+        !isPreview
+      )
     )
   }
   return objects

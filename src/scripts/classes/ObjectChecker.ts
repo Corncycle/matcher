@@ -36,7 +36,7 @@ export default class ObjectChecker {
 
     const ringGeometry = this.getRingGeometry(0)
     const validatingMaterial = new THREE.MeshBasicMaterial({
-      color: 0xffff00,
+      color: 0xffffff,
       side: THREE.DoubleSide,
       opacity: 0.5,
       transparent: true,
