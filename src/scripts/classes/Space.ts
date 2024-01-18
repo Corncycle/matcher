@@ -89,8 +89,10 @@ export default class SpaceManager {
     for (const object of this.dynamicObjects) {
       object.updateMeshTransform()
       if (this.levelManager) {
-        if (object.mesh.children[0]) {
-          object.mesh.children[0].lookAt(this.camera.position)
+        if (object.mesh.children) {
+          for (const child of object.mesh.children) {
+            child.lookAt(this.camera.position)
+          }
         }
       }
     }

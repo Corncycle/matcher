@@ -219,13 +219,13 @@ export default class CameraControls {
       this.body.mass = 1000 // make the player more massive while holding object so the held object can't push the player
       this.body.updateMassProperties()
       this.reticle.setMode(ReticleDisplays.ACTIVE)
-      this.heldObject.setColor(TestColors.RED)
+      // this.heldObject.setColor(TestColors.RED)
     }
   }
 
   dropHeldObject() {
     if (this.heldObject) {
-      this.heldObject.setColor('native')
+      // this.heldObject.setColor('native')
     }
     this.reticle.setMode(ReticleDisplays.INACTIVE)
     this.heldObject = null

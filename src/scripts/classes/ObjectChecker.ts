@@ -22,8 +22,8 @@ export default class ObjectChecker {
 
   state: CheckStates
   ringMesh: THREE.Mesh
-  checkMesh?: THREE.Mesh
-  xMesh?: THREE.Mesh
+  checkMesh: THREE.Mesh
+  xMesh: THREE.Mesh
 
   // a function to be run when the checker progress is completed
   // a LevelManager should assign this and pay attention to when the function is called
@@ -63,6 +63,42 @@ export default class ObjectChecker {
     validMaterial.depthTest = false
     invalidMaterial.depthTest = false
     this.ringMesh = new THREE.Mesh(ringGeometry, validatingMaterial)
+
+    // really nice, beautiful hard coded values here
+    const xShape = new THREE.Shape()
+    const [zero, small, big, full] = [0, 0.4, 0.5, 0.85]
+    xShape.setFromPoints([
+      new THREE.Vector2(small, zero),
+      new THREE.Vector2(full, -big),
+      new THREE.Vector2(big, -full),
+      new THREE.Vector2(zero, -small),
+      new THREE.Vector2(-big, -full),
+      new THREE.Vector2(-full, -big),
+      new THREE.Vector2(-small, zero),
+      new THREE.Vector2(-full, big),
+      new THREE.Vector2(-big, full),
+      new THREE.Vector2(zero, small),
+      new THREE.Vector2(big, full),
+      new THREE.Vector2(full, big),
+    ])
+    this.xMesh = new THREE.Mesh(
+      new THREE.ShapeGeometry(xShape),
+      invalidMaterial
+    )
+
+    const checkShape = new THREE.Shape()
+    checkShape.setFromPoints([
+      new THREE.Vector2(-0.25, -0.05),
+      new THREE.Vector2(0.55, 0.75),
+      new THREE.Vector2(0.85, 0.45),
+      new THREE.Vector2(-0.25, -0.65),
+      new THREE.Vector2(-0.85, -0.05),
+      new THREE.Vector2(-0.55, 0.25),
+    ])
+    this.checkMesh = new THREE.Mesh(
+      new THREE.ShapeGeometry(checkShape),
+      validMaterial
+    )
   }
 
   setState(state: CheckStates) {
@@ -82,7 +118,9 @@ export default class ObjectChecker {
         this.ringMesh.material = this.validatingMaterial
         this.parent.mesh.add(this.ringMesh)
         this.checkingIntervalId = setInterval(() => {
-          this.setRingProgress(this.checkingProgress + 0.01)
+          this.setRingProgress(
+            this.checkingProgress + 0.05 * (1.04 - this.checkingProgress)
+          )
           if (this.checkingProgress >= 1) {
             if (this.alertFunction) {
               this.alertFunction(this.parent.id)
@@ -95,11 +133,13 @@ export default class ObjectChecker {
       case CheckStates.INVALID:
         this.setRingProgress(1)
         this.ringMesh.material = this.invalidMaterial
+        this.parent.mesh.add(this.xMesh)
         this.parent.mesh.add(this.ringMesh)
         return
       case CheckStates.VALID:
         this.setRingProgress(1)
         this.ringMesh.material = this.validMaterial
+        this.parent.mesh.add(this.checkMesh)
         this.parent.mesh.add(this.ringMesh)
         return
       default:
@@ -109,7 +149,7 @@ export default class ObjectChecker {
 
   // 0 <= progress <= 1
   getRingGeometry(progress: number) {
-    return new THREE.RingGeometry(1.2, 1.6, 32, 1, 0, progress * 2 * Math.PI)
+    return new THREE.RingGeometry(1.2, 1.6, 50, 1, 0, progress * 2 * Math.PI)
   }
 
   setRingProgress(progress: number) {
