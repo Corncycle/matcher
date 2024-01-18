@@ -88,12 +88,12 @@ export default class ObjectChecker {
 
     const checkShape = new THREE.Shape()
     checkShape.setFromPoints([
-      new THREE.Vector2(-0.25, -0.05),
-      new THREE.Vector2(0.55, 0.75),
-      new THREE.Vector2(0.85, 0.45),
-      new THREE.Vector2(-0.25, -0.65),
-      new THREE.Vector2(-0.85, -0.05),
-      new THREE.Vector2(-0.55, 0.25),
+      new THREE.Vector2(-0.25, -0.1),
+      new THREE.Vector2(0.55, 0.7),
+      new THREE.Vector2(0.85, 0.4),
+      new THREE.Vector2(-0.25, -0.7),
+      new THREE.Vector2(-0.85, -0.1),
+      new THREE.Vector2(-0.55, 0.2),
     ])
     this.checkMesh = new THREE.Mesh(
       new THREE.ShapeGeometry(checkShape),

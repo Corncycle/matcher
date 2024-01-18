@@ -140,19 +140,36 @@ function createPuzzleObjects(
   isPreview: boolean = false
 ) {
   const objects = []
+
   for (const i in objectSpec[levelNumber as 1]) {
     const { color, shape } = objectSpec[levelNumber as 1][i]
-    objects.push(
-      createDynamicObject(
-        4,
-        2 + parseInt(i),
-        4,
-        shape,
-        color,
-        parseInt(i) + 1,
-        !isPreview
+    if (isPreview) {
+      let trigX = tableSpec[levelNumber as 1][i][0]
+      let trigZ = tableSpec[levelNumber as 1][i][1]
+      objects.push(
+        createDynamicObject(
+          trigX,
+          0.8,
+          trigZ,
+          shape,
+          color,
+          parseInt(i) + 1,
+          !isPreview
+        )
       )
-    )
+    } else {
+      objects.push(
+        createDynamicObject(
+          4,
+          2 + parseInt(i),
+          4,
+          shape,
+          color,
+          parseInt(i) + 1,
+          !isPreview
+        )
+      )
+    }
   }
   return objects
 }
