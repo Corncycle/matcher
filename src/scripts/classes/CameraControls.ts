@@ -39,7 +39,7 @@ export default class CameraControls {
     camera: THREE.Camera,
     scene: THREE.Scene,
     world: CANNON.World,
-    bodyRadius: number = 0.15
+    bodyRadius: number = 0.2
   ) {
     this.camera = camera
     this.reticle = new Reticle(camera)
@@ -306,7 +306,7 @@ export default class CameraControls {
     scene: THREE.Scene,
     camera: THREE.Camera,
     world: CANNON.World,
-    bodyRadius: number = 0.15,
+    bodyRadius: number = 0.2,
     spawnX: number = 2,
     spawnZ: number = 2
   ) {

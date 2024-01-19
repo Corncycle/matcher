@@ -63,7 +63,7 @@ const floorSpec = {
 }
 
 // specify the position/rotation of the tables in the level
-const tableSpec = {
+export const tableSpec = {
   1: [
     [1.5, 6.5 + TABLE_FIXER, 0],
     [2.5, 1.5 - TABLE_FIXER, Math.PI],
@@ -77,10 +77,10 @@ const tableSpec = {
   ],
   3: [
     [6.5, 8.5 + TABLE_FIXER, 0],
-    [4.5, 1.5 - TABLE_FIXER, Math.PI],
-    [8.5, 1.5 - TABLE_FIXER, Math.PI],
-    [1.5 - TABLE_FIXER, 4.5, -Math.PI / 2],
     [11.5 + TABLE_FIXER, 4.5, Math.PI / 2],
+    [8.5, 1.5 - TABLE_FIXER, Math.PI],
+    [4.5, 1.5 - TABLE_FIXER, Math.PI],
+    [1.5 - TABLE_FIXER, 4.5, -Math.PI / 2],
   ],
 }
 

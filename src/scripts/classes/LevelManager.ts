@@ -5,6 +5,7 @@ import PuzzleTrigger from './PuzzleTrigger'
 import SpaceManager from './Space'
 import * as CANNON from 'cannon-es'
 import OverlayManager, { OverlayModes } from './text/OverlayManager'
+import CheatManager from './CheatManager'
 
 export default class LevelManager {
   space: SpaceManager
@@ -18,6 +19,7 @@ export default class LevelManager {
   checkedInventories: { [key: number]: Set<number> }
 
   overlayManager: OverlayManager
+  cheatManager?: CheatManager
 
   constructor(space: SpaceManager) {
     space.levelManager = this
@@ -34,8 +36,8 @@ export default class LevelManager {
     this.loadPreviewLevel(levelNumber)
     this.overlayManager.setMode(OverlayModes.COUNTDOWN)
     setTimeout(() => {
-      this.loadLevel(levelNumber)
-      this.overlayManager.setMode(OverlayModes.INFO)
+      // this.loadLevel(levelNumber) // temporarily commented out
+      // this.overlayManager.setMode(OverlayModes.INFO)
       this.overlayManager.setText(
         this.overlayManager.headerElm,
         'Match the objects to their positions!'
@@ -49,6 +51,12 @@ export default class LevelManager {
       spawnSpec[levelNumber as 1][1]
     )
     loadLevel(this.space, levelNumber, true)
+
+    // CTEST: remove this eventually, only need in loadlevel
+    if (levelNumber === 3) {
+      console.log('we need to set up cheater tracking')
+      this.loadCheatingResources()
+    }
   }
 
   loadLevel(levelNumber: number) {
@@ -119,6 +127,25 @@ export default class LevelManager {
         }
       }
     )
+
+    if (levelNumber === 3) {
+      console.log('we need to set up cheater tracking')
+      this.loadCheatingResources()
+    }
+  }
+
+  loadCheatingResources() {
+    this.cheatManager = new CheatManager(this.space.cameraControls, this)
+  }
+
+  // this should be called by the render loop
+  updateCheatingResources() {
+    if (this.cheatManager) {
+      this.overlayManager.setText(
+        this.overlayManager.headerElm,
+        JSON.stringify(this.cheatManager.getGuaranteedNotVisibleTables())
+      )
+    }
   }
 
   logTriggerInventories() {

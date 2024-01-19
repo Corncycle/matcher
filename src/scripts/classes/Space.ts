@@ -97,6 +97,10 @@ export default class SpaceManager {
       }
     }
 
+    if (this.levelManager) {
+      this.levelManager.updateCheatingResources()
+    }
+
     this.cameraControls.updateReticle()
 
     this.renderer.render(this.scene, this.camera)
@@ -112,7 +116,7 @@ export default class SpaceManager {
     this.camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
-      0.1,
+      0.01,
       1000
     )
     window.addEventListener('resize', () => {
@@ -164,7 +168,7 @@ export default class SpaceManager {
     this.camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
-      0.1,
+      0.01,
       1000
     )
     this.scene.add(this.camera)
@@ -183,7 +187,7 @@ export default class SpaceManager {
       this.scene,
       this.camera,
       this.world,
-      0.15,
+      0.2,
       spawnX,
       spawnZ
     )
