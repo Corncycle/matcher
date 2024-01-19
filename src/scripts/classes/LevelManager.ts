@@ -4,6 +4,7 @@ import { CheckStates } from './ObjectChecker'
 import PuzzleTrigger from './PuzzleTrigger'
 import SpaceManager from './Space'
 import * as CANNON from 'cannon-es'
+import OverlayManager, { OverlayModes } from './text/OverlayManager'
 
 export default class LevelManager {
   space: SpaceManager
@@ -16,19 +17,29 @@ export default class LevelManager {
   // object has been checked (so updates upon checker completing, or body leaving)
   checkedInventories: { [key: number]: Set<number> }
 
+  overlayManager: OverlayManager
+
   constructor(space: SpaceManager) {
     space.levelManager = this
     this.space = space
     this.triggerInventories = {}
     this.checkedInventories = {}
     this.triggers = []
+
+    this.overlayManager = new OverlayManager()
   }
 
   // load the preview on a timer, then load the main level
   loadTwoStageLevel(levelNumber: number) {
     this.loadPreviewLevel(levelNumber)
+    this.overlayManager.setMode(OverlayModes.COUNTDOWN)
     setTimeout(() => {
       this.loadLevel(levelNumber)
+      this.overlayManager.setMode(OverlayModes.INFO)
+      this.overlayManager.setText(
+        this.overlayManager.headerElm,
+        'Match the objects to their positions!'
+      )
     }, 5 * 1000)
   }
 
@@ -55,6 +66,12 @@ export default class LevelManager {
             this.checkForLevelCompletion() ? '' : ' not'
           } completed`
         )
+        if (this.checkForLevelCompletion()) {
+          this.overlayManager.setText(
+            this.overlayManager.headerElm,
+            'Good job!'
+          )
+        }
       }
     }
 

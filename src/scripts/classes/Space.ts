@@ -14,7 +14,7 @@ import LevelManager from './LevelManager'
 export default class SpaceManager {
   clock!: THREE.Clock
   scene!: THREE.Scene
-  camera!: THREE.Camera
+  camera!: THREE.PerspectiveCamera
   cameraControls!: CameraControls
   renderer: THREE.Renderer
   world!: CANNON.World
@@ -115,6 +115,12 @@ export default class SpaceManager {
       0.1,
       1000
     )
+    window.addEventListener('resize', () => {
+      console.log('body update')
+      this.camera.aspect = window.innerWidth / window.innerHeight
+      this.camera.updateProjectionMatrix()
+      this.renderer.setSize(window.innerWidth, window.innerHeight)
+    })
     this.scene.add(this.camera)
 
     this.camera.position.y = 2
