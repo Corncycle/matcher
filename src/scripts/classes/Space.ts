@@ -45,7 +45,7 @@ export default class SpaceManager {
     // new delta of 0.1 each
     const delta = Math.min(this.clock.getDelta(), 0.1)
     for (let i = 0; i < deltaSubdivisions; i++) {
-      this.world.step(Math.max(0.0001, delta / deltaSubdivisions))
+      this.world.step(Math.max(0.0001, delta / deltaSubdivisions)) // if a value <= 0 is passed into this.world.step we can get NaN positions on bodies
     }
   }
 

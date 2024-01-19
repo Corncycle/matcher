@@ -18,7 +18,7 @@ const cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
 const stats = new Stats()
 document.body.appendChild(stats.dom)
 
-levelManager.loadLevel(3)
+levelManager.loadTwoStageLevel(1)
 
 window.addEventListener('keydown', (e) => {
   // reload

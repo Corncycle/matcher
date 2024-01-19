@@ -337,7 +337,7 @@ export default class CameraControls {
     })
     body.addShape(bodyShape)
     body.position.x = spawnX
-    body.position.y = 2
+    body.position.y = 0.8
     body.position.z = spawnZ
     body.fixedRotation = true
     body.updateMassProperties()

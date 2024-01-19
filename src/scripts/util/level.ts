@@ -14,10 +14,13 @@ import {
 import SpaceManager from '../classes/Space'
 import { TestColors } from './materials'
 
+// offset to make sure tables are pushed up against walls
+const TABLE_FIXER = 0.18
+
 // specify the spawn coordinates of the player
 export const spawnSpec = {
-  1: [4, 6],
-  2: [4, 6],
+  1: [3, 5],
+  2: [3, 5],
   3: [6.5, 4.5],
 }
 
@@ -62,22 +65,22 @@ const floorSpec = {
 // specify the position/rotation of the tables in the level
 const tableSpec = {
   1: [
-    [1.5, 6.5, 0],
-    [2.5, 1.5, Math.PI],
-    [6.5, 3.5, (3 * Math.PI) / 2],
+    [1.5, 6.5 + TABLE_FIXER, 0],
+    [2.5, 1.5 - TABLE_FIXER, Math.PI],
+    [6.5 + TABLE_FIXER, 3.5, (3 * Math.PI) / 2],
   ],
   2: [
-    [1.5, 7.5, 0],
-    [2.5, 1.5, Math.PI],
-    [7, 4.5, Math.PI],
-    [7.5, 1.5, (3 * Math.PI) / 2],
+    [1.5, 7.5 + TABLE_FIXER, 0],
+    [2.5, 1.5 - TABLE_FIXER, Math.PI],
+    [7, 4.5 + TABLE_FIXER, Math.PI],
+    [7.5 + TABLE_FIXER, 1.5, (3 * Math.PI) / 2],
   ],
   3: [
-    [6.5, 8.5, 0],
-    [4.5, 1.5, Math.PI],
-    [8.5, 1.5, Math.PI],
-    [1.5, 4.5, -Math.PI / 2],
-    [11.5, 4.5, Math.PI / 2],
+    [6.5, 8.5 + TABLE_FIXER, 0],
+    [4.5, 1.5 - TABLE_FIXER, Math.PI],
+    [8.5, 1.5 - TABLE_FIXER, Math.PI],
+    [1.5 - TABLE_FIXER, 4.5, -Math.PI / 2],
+    [11.5 + TABLE_FIXER, 4.5, Math.PI / 2],
   ],
 }
 
@@ -186,7 +189,7 @@ function createPuzzleObjects(
       objects.push(
         createDynamicObject(
           trigX,
-          0.8,
+          0.65,
           trigZ,
           shape,
           color,
@@ -195,11 +198,22 @@ function createPuzzleObjects(
         )
       )
     } else {
+      console.log('yeah')
       objects.push(
         createDynamicObject(
-          4,
-          2 + parseInt(i),
-          4,
+          spawnSpec[levelNumber as 1][0] +
+            Math.sin(
+              (0.3 * 2 * Math.PI * parseInt(i)) /
+                objectSpec[levelNumber as 1].length +
+                0.8 * Math.PI
+            ),
+          0.15,
+          spawnSpec[levelNumber as 1][1] +
+            Math.cos(
+              (0.3 * 2 * Math.PI * parseInt(i)) /
+                objectSpec[levelNumber as 1].length +
+                0.8 * Math.PI
+            ),
           shape,
           color,
           parseInt(i) + 1,

@@ -44,7 +44,10 @@ export default class LevelManager {
   }
 
   loadPreviewLevel(levelNumber: number) {
-    this.space.reset()
+    this.space.reset(
+      spawnSpec[levelNumber as 1][0],
+      spawnSpec[levelNumber as 1][1]
+    )
     loadLevel(this.space, levelNumber, true)
   }
 
