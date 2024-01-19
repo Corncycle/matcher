@@ -18,7 +18,7 @@ const cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
 const stats = new Stats()
 document.body.appendChild(stats.dom)
 
-levelManager.loadTwoStageLevel(1)
+levelManager.loadLevel(3)
 
 window.addEventListener('keydown', (e) => {
   // reload
@@ -36,6 +36,7 @@ window.addEventListener('keydown', (e) => {
         2
       )}, ${space.cameraControls.camera.position.z.toFixed(2)}`
     )
+    console.log(space.cameraControls)
   } else if (e.key === 'i') {
     levelManager.logTriggerInventories()
   }

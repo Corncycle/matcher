@@ -306,7 +306,9 @@ export default class CameraControls {
     scene: THREE.Scene,
     camera: THREE.Camera,
     world: CANNON.World,
-    bodyRadius: number = 0.15
+    bodyRadius: number = 0.15,
+    spawnX: number = 2,
+    spawnZ: number = 2
   ) {
     this.camera = camera
     this.scene = scene
@@ -334,8 +336,9 @@ export default class CameraControls {
       material: c_playerMaterial,
     })
     body.addShape(bodyShape)
+    body.position.x = spawnX
     body.position.y = 2
-    body.position.z = 2
+    body.position.z = spawnZ
     body.fixedRotation = true
     body.updateMassProperties()
     world.addBody(body)

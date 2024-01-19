@@ -1,4 +1,4 @@
-import { loadLevel } from '../util/level'
+import { loadLevel, spawnSpec } from '../util/level'
 import DynamicObject from './DynamicObject'
 import { CheckStates } from './ObjectChecker'
 import PuzzleTrigger from './PuzzleTrigger'
@@ -49,7 +49,10 @@ export default class LevelManager {
   }
 
   loadLevel(levelNumber: number) {
-    this.space.reset()
+    this.space.reset(
+      spawnSpec[levelNumber as 1][0],
+      spawnSpec[levelNumber as 1][1]
+    )
     const { tables } = loadLevel(this.space, levelNumber, false)
     this.triggers = tables.map((obj) => obj.trigger)
     this.triggerInventories = {}

@@ -14,6 +14,15 @@ import {
 import SpaceManager from '../classes/Space'
 import { TestColors } from './materials'
 
+// specify the spawn coordinates of the player
+export const spawnSpec = {
+  1: [4, 6],
+  2: [4, 6],
+  3: [6.5, 4.5],
+}
+
+// h = hall length in level 3
+const h = 4
 // specify the walls for the level
 const wallSpec = {
   1: [
@@ -29,6 +38,25 @@ const wallSpec = {
     [3, 3, 3, 6.5, 1.5, 6.5],
     [1, 3, 4, 8.5, 1.5, 3],
   ],
+  3: [
+    [3, 3, 3, 2.5, 1.5, 2.5],
+    [1, 3, 1, 0.5, 1.5, 4.5],
+    [3, 3, 1, 2.5, 1.5, 5.5],
+    [2, 3, 3, 5, 1.5, 7.5],
+    [1, 3, 1, 6.5, 1.5, 9.5],
+    [2, 3, 3, 8, 1.5, 7.5],
+    [3, 3, 1, 10.5, 1.5, 5.5],
+    [1, 3, 1, 12.5, 1.5, 4.5],
+    [3, 3, 3, 10.5, 1.5, 2.5],
+    [5, 3, 1, 6.5, 1.5, 0.5],
+    [3, 3, 1, 6.5, 1.5, 1.5],
+  ],
+}
+
+const floorSpec = {
+  1: [1, 1, 7, 7],
+  2: [1, 1, 8, 8],
+  3: [1, 1, 12, 9],
 }
 
 // specify the position/rotation of the tables in the level
@@ -44,6 +72,13 @@ const tableSpec = {
     [7, 4.5, Math.PI],
     [7.5, 1.5, (3 * Math.PI) / 2],
   ],
+  3: [
+    [6.5, 8.5, 0],
+    [4.5, 1.5, Math.PI],
+    [8.5, 1.5, Math.PI],
+    [1.5, 4.5, -Math.PI / 2],
+    [11.5, 4.5, Math.PI / 2],
+  ],
 }
 
 // specify the objects to be used in the level. must have the same length as the corresponding tableSpec
@@ -58,6 +93,13 @@ const objectSpec = {
     { color: TestColors.CYAN, shape: TestShapes.BOX },
     { color: TestColors.GREEN, shape: TestShapes.BOX },
     { color: TestColors.BLUE, shape: TestShapes.BALL },
+  ],
+  3: [
+    { color: TestColors.MAGENTA, shape: TestShapes.BALL },
+    { color: TestColors.CYAN, shape: TestShapes.BOX },
+    { color: TestColors.GREEN, shape: TestShapes.BOX },
+    { color: TestColors.BLUE, shape: TestShapes.BALL },
+    { color: TestColors.RED, shape: TestShapes.BOX },
   ],
 }
 
@@ -77,7 +119,7 @@ export function loadLevel(
   }
   setCameraPosition(space, levelNumber)
 
-  space.cameraControls.body.position = new CANNON.Vec3(4, 2, 6)
+  // space.cameraControls.body.position = new CANNON.Vec3(4, 2, 6)
 
   return { walls, floor, lights, tables, puzzleObjects }
 }
@@ -96,11 +138,6 @@ function createWalls(space: SpaceManager, levelNumber: number = 1) {
 }
 
 function createFloor(space: SpaceManager, levelNumber: number = 1) {
-  const floorSpec = {
-    1: [1, 1, 7, 7],
-    2: [1, 1, 8, 8],
-  }
-
   const { mesh, body } = createStaticFloor(
     ...(floorSpec[levelNumber as 1] as [number, number, number, number])
   )
