@@ -37,6 +37,7 @@ export default class LevelManager {
     this.overlayManager.setMode(OverlayModes.COUNTDOWN)
     setTimeout(() => {
       // this.loadLevel(levelNumber) // temporarily commented out
+      // MAKE SURE TO DO ONE LAST CHEATMANAGER UPDATE BEFORE CANCELLING
       // this.overlayManager.setMode(OverlayModes.INFO)
       this.overlayManager.setText(
         this.overlayManager.headerElm,
@@ -135,16 +136,20 @@ export default class LevelManager {
   }
 
   loadCheatingResources() {
-    this.cheatManager = new CheatManager(this.space.cameraControls, this)
+    this.cheatManager = new CheatManager(
+      this.space.cameraControls,
+      this,
+      this.space
+    )
   }
 
   // this should be called by the render loop
   updateCheatingResources() {
     if (this.cheatManager) {
-      this.overlayManager.setText(
-        this.overlayManager.headerElm,
-        JSON.stringify(this.cheatManager.getGuaranteedNotVisibleTables())
-      )
+      this.cheatManager.updateNotVisibleToTableIdsWithBuffer()
+      if (this.cheatManager.foundChange) {
+        this.cheatManager.doNotVisibleSwap()
+      }
     }
   }
 
