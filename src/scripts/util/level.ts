@@ -162,7 +162,7 @@ function createTables(
   for (const i in tableSpec[levelNumber as 1]) {
     const { mesh, body, trigger } = createTableWithTrigger(
       ...(tableSpec[levelNumber as 1][i] as [number, number, number]),
-      parseInt(i) + 1
+      parseInt(i)
     )
     space.addObject({ mesh, body })
     if (!isPreview) {
@@ -193,7 +193,7 @@ function createPuzzleObjects(
           trigZ,
           shape,
           color,
-          parseInt(i) + 1,
+          parseInt(i),
           !isPreview
         )
       )
@@ -215,7 +215,7 @@ function createPuzzleObjects(
             ),
           shape,
           color,
-          parseInt(i) + 1,
+          parseInt(i),
           !isPreview
         )
       )

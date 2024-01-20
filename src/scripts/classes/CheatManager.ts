@@ -1,9 +1,7 @@
 import * as THREE from 'three'
-import * as CANNON from 'cannon-es'
 import CameraControls from './CameraControls'
 import { tableSpec } from '../util/level'
 import LevelManager from './LevelManager'
-import { CheckStates } from './ObjectChecker'
 import SpaceManager from './Space'
 import DynamicObject from './DynamicObject'
 

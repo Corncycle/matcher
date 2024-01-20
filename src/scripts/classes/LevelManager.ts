@@ -6,8 +6,13 @@ import SpaceManager from './Space'
 import * as CANNON from 'cannon-es'
 import OverlayManager, { OverlayModes } from './text/OverlayManager'
 import CheatManager from './CheatManager'
+import CheatRecord from './CheatRecord'
 
 export default class LevelManager {
+  // currentLevel is mostly used to detect level 3 so we can override functionality
+  // default to -1
+  currentLevel: number
+
   space: SpaceManager
   triggers: PuzzleTrigger[]
   // triggerInventories is the real-time inventory of trigger ids, containing the
@@ -20,8 +25,10 @@ export default class LevelManager {
 
   overlayManager: OverlayManager
   cheatManager?: CheatManager
+  cheatRecord?: CheatRecord
 
   constructor(space: SpaceManager) {
+    this.currentLevel = -1
     space.levelManager = this
     this.space = space
     this.triggerInventories = {}
@@ -36,9 +43,11 @@ export default class LevelManager {
     this.loadPreviewLevel(levelNumber)
     this.overlayManager.setMode(OverlayModes.COUNTDOWN)
     setTimeout(() => {
-      // this.loadLevel(levelNumber) // temporarily commented out
-      // MAKE SURE TO DO ONE LAST CHEATMANAGER UPDATE BEFORE CANCELLING
-      // this.overlayManager.setMode(OverlayModes.INFO)
+      this.updateCheatingResources()
+      const record = this.createCheatRecord()
+      this.loadLevel(levelNumber)
+      this.cheatRecord = record
+      this.overlayManager.setMode(OverlayModes.INFO)
       this.overlayManager.setText(
         this.overlayManager.headerElm,
         'Match the objects to their positions!'
@@ -47,6 +56,7 @@ export default class LevelManager {
   }
 
   loadPreviewLevel(levelNumber: number) {
+    this.currentLevel = levelNumber
     this.cheatManager = undefined
     this.space.reset(
       spawnSpec[levelNumber as 1][0],
@@ -59,7 +69,9 @@ export default class LevelManager {
   }
 
   loadLevel(levelNumber: number) {
+    this.currentLevel = levelNumber
     this.cheatManager = undefined
+    this.cheatRecord = undefined
     this.space.reset(
       spawnSpec[levelNumber as 1][0],
       spawnSpec[levelNumber as 1][1]
@@ -127,10 +139,6 @@ export default class LevelManager {
         }
       }
     )
-
-    if (levelNumber === 3) {
-      // CTEST: todo, we need to make sure we use the data from the cheat manager to set up the objects/triggers correctly
-    }
   }
 
   loadCheatingResources() {
@@ -139,6 +147,16 @@ export default class LevelManager {
       this,
       this.space
     )
+  }
+
+  createCheatRecord() {
+    if (this.cheatManager) {
+      return new CheatRecord(
+        this.cheatManager.notVisibleTableIds,
+        this.cheatManager.dynamicObjectsByTableId,
+        this
+      )
+    }
   }
 
   // this should be called by the render loop
@@ -160,6 +178,16 @@ export default class LevelManager {
   }
 
   validateObjectById(objId: number) {
+    if (this.currentLevel === 3) {
+      if (this.cheatRecord) {
+        this.cheatRecord.validateObjectById(objId)
+      } else {
+        console.log(
+          "Bad news: we should be using a cheat record for validation but we couldn't find one :("
+        )
+      }
+      return
+    }
     for (const id in this.triggerInventories) {
       if (this.triggerInventories[id].has(objId)) {
         const obj = this.space.dynamicObjects.find(

@@ -102,6 +102,8 @@ export default class ObjectChecker {
   }
 
   setState(state: CheckStates) {
+    this.state = state
+
     if (this.checkingIntervalId) {
       clearInterval(this.checkingIntervalId)
     }
@@ -124,8 +126,11 @@ export default class ObjectChecker {
           if (this.checkingProgress >= 1) {
             if (this.alertFunction) {
               this.alertFunction(this.parent.id)
-              // at this point, the LevelManager should invoke `setState` and
-              // the interval should be cleared
+              // at this point, the LevelManager should invoke `setState`. if not,
+              // let's unset the state ourselves so we don't have a feedback loop
+              if (this.state === CheckStates.CHECKING) {
+                this.setState(CheckStates.UNSET)
+              }
             }
           }
         }, 1000 / 144)
