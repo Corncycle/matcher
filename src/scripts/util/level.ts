@@ -198,7 +198,6 @@ function createPuzzleObjects(
         )
       )
     } else {
-      console.log('yeah')
       objects.push(
         createDynamicObject(
           spawnSpec[levelNumber as 1][0] +

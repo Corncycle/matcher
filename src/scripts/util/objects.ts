@@ -43,7 +43,6 @@ export function createStaticFloor(
   xEnd: number,
   zEnd: number
 ) {
-  console.log(`creating floor from ${xStart}, ${zStart} to ${xEnd}, ${zEnd}`)
   const planeMesh = new THREE.Mesh(planeGeometry, t_floorMaterial)
   planeMesh.scale.set(xEnd - xStart, zEnd - zStart, 1)
   planeMesh.position.set((xEnd + xStart) / 2, 0, (zEnd + zStart) / 2)

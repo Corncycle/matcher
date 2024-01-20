@@ -47,20 +47,19 @@ export default class LevelManager {
   }
 
   loadPreviewLevel(levelNumber: number) {
+    this.cheatManager = undefined
     this.space.reset(
       spawnSpec[levelNumber as 1][0],
       spawnSpec[levelNumber as 1][1]
     )
     loadLevel(this.space, levelNumber, true)
-
-    // CTEST: remove this eventually, only need in loadlevel
     if (levelNumber === 3) {
-      console.log('we need to set up cheater tracking')
       this.loadCheatingResources()
     }
   }
 
   loadLevel(levelNumber: number) {
+    this.cheatManager = undefined
     this.space.reset(
       spawnSpec[levelNumber as 1][0],
       spawnSpec[levelNumber as 1][1]
@@ -130,8 +129,7 @@ export default class LevelManager {
     )
 
     if (levelNumber === 3) {
-      console.log('we need to set up cheater tracking')
-      this.loadCheatingResources()
+      // CTEST: todo, we need to make sure we use the data from the cheat manager to set up the objects/triggers correctly
     }
   }
 

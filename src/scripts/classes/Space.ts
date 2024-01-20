@@ -120,7 +120,6 @@ export default class SpaceManager {
       1000
     )
     window.addEventListener('resize', () => {
-      console.log('body update')
       this.camera.aspect = window.innerWidth / window.innerHeight
       this.camera.updateProjectionMatrix()
       this.renderer.setSize(window.innerWidth, window.innerHeight)

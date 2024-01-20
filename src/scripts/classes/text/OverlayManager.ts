@@ -82,7 +82,6 @@ export default class OverlayManager {
       const resizeFunc = () => {
         out.style.fontSize = `${out.offsetHeight}px`
         out.style.lineHeight = `${out.offsetHeight}px`
-        console.log('resize')
       }
       window.addEventListener('resize', resizeFunc)
       resizeFunc()
