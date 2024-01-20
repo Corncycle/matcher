@@ -18,8 +18,6 @@ export default class CheatRecord {
     this.unseenTableIds = unseenTableIds
     this.dynamicObjectIdsByTableId = dynamicObjectsByTableId
     this.levelManager = levelManager
-
-    console.log(this.dynamicObjectIdsByTableId)
   }
 
   validateObjectById(objId: number) {
@@ -64,7 +62,6 @@ export default class CheatRecord {
   }
 
   ordinaryValidation(objId: number, tableId: number) {
-    console.log('ordinary validation')
     const obj = this.levelManager.space.dynamicObjects.find(
       (dynObj) => dynObj.id === objId
     )
@@ -79,7 +76,6 @@ export default class CheatRecord {
   }
 
   guaranteeValidValidation(objId: number, tableId: number) {
-    console.log('guarantee validation')
     const obj = this.levelManager.space.dynamicObjects.find(
       (dynObj) => dynObj.id === objId
     )
@@ -90,7 +86,6 @@ export default class CheatRecord {
   }
 
   guaranteeInvalidValidation(objId: number, tableId: number) {
-    console.log('guarantee invalidation')
     const obj = this.levelManager.space.dynamicObjects.find(
       (dynObj) => dynObj.id === objId
     )

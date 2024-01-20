@@ -8,6 +8,11 @@ import OverlayManager, { OverlayModes } from './text/OverlayManager'
 import CheatManager from './CheatManager'
 import CheatRecord from './CheatRecord'
 
+export enum CompletenessStatuses {
+  WIN = 'win',
+  LOSE = 'lose',
+  UNFINISHED = 'unfinished',
+}
 export default class LevelManager {
   // currentLevel is mostly used to detect level 3 so we can override functionality
   // default to -1
@@ -87,16 +92,15 @@ export default class LevelManager {
       // the object's checker and check for a game win/loss
       dynObj.checker.alertFunction = (objToUpdateId: number) => {
         this.validateObjectById(objToUpdateId)
-        console.log(
-          `the level is${
-            this.checkForLevelCompletion() ? '' : ' not'
-          } completed`
-        )
-        if (this.checkForLevelCompletion()) {
-          this.overlayManager.setText(
-            this.overlayManager.headerElm,
-            'Good job!'
-          )
+        switch (this.checkForLevelCompletion()) {
+          case CompletenessStatuses.WIN:
+            this.winGameSequence()
+            break
+          case CompletenessStatuses.LOSE:
+            this.loseGameSequence()
+            break
+          case CompletenessStatuses.UNFINISHED:
+            break
         }
       }
     }
@@ -215,11 +219,36 @@ export default class LevelManager {
   }
 
   checkForLevelCompletion() {
-    for (const id in this.checkedInventories) {
-      if (!this.checkedInventories[id].has(parseInt(id))) {
-        return false
+    for (const obj of this.space.dynamicObjects) {
+      if (obj.checker.state === CheckStates.INVALID) {
+        return CompletenessStatuses.LOSE
       }
     }
-    return true
+    for (const id in this.checkedInventories) {
+      if (this.checkedInventories[id].size === 0) {
+        return CompletenessStatuses.UNFINISHED
+      }
+    }
+    return CompletenessStatuses.WIN
+  }
+
+  disableGrabbingAllObjects() {
+    for (const dynObj of this.space.dynamicObjects) {
+      dynObj.isHoldable = false
+    }
+  }
+
+  winGameSequence() {
+    this.disableGrabbingAllObjects()
+    setTimeout(() => {
+      this.loadTwoStageLevel(this.currentLevel + 1)
+    }, 5000)
+  }
+
+  loseGameSequence() {
+    this.disableGrabbingAllObjects()
+    setTimeout(() => {
+      this.loadTwoStageLevel(1)
+    }, 5000)
   }
 }
