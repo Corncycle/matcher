@@ -153,7 +153,7 @@ export default class LevelManager {
     if (this.cheatManager) {
       return new CheatRecord(
         this.cheatManager.notVisibleTableIds,
-        this.cheatManager.dynamicObjectsByTableId,
+        this.cheatManager.dynamicObjectsByTableId.map((obj) => obj.id),
         this
       )
     }
