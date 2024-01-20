@@ -17,8 +17,17 @@ import { TestColors } from './materials'
 // offset to make sure tables are pushed up against walls
 const TABLE_FIXER = 0.18
 
+export const menuCameraPos = new THREE.Vector3(1.19, 0.75, 2.2)
+export const menuCameraQuat = new THREE.Quaternion(
+  -0.005989410996304606,
+  -0.8387082217636656,
+  -0.00922616256429222,
+  0.5444699474041562
+)
+
 // specify the spawn coordinates of the player
 export const spawnSpec = {
+  0: [3, 4],
   1: [3, 5],
   2: [3, 5],
   3: [6.5, 4.5],
@@ -28,6 +37,12 @@ export const spawnSpec = {
 const h = 4
 // specify the walls for the level
 const wallSpec = {
+  0: [
+    [1, 3, 6, 0.5, 1.5, 4],
+    [1, 3, 6, 7.5, 1.5, 4],
+    [6, 3, 1, 4, 1.5, 0.5],
+    [6, 3, 1, 4, 1.5, 7.5],
+  ],
   1: [
     [1, 3, 6, 0.5, 1.5, 4],
     [1, 3, 6, 7.5, 1.5, 4],
@@ -57,6 +72,7 @@ const wallSpec = {
 }
 
 const floorSpec = {
+  0: [1, 1, 7, 7],
   1: [1, 1, 7, 7],
   2: [1, 1, 8, 8],
   3: [1, 1, 12, 9],

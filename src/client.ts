@@ -18,16 +18,16 @@ const cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
 const stats = new Stats()
 document.body.appendChild(stats.dom)
 
-levelManager.loadTwoStageLevel(3)
+levelManager.loadMenu()
 
 window.addEventListener('keydown', (e) => {
   // reload
-  if (e.key === '1' || e.key === '2' || e.key === '3') {
+  if (e.key === '1' || e.key === '2' || e.key === '3' || e.key === '0') {
     space.reset()
-    levelManager.loadLevel(parseInt(e.key))
+    levelManager.loadTwoStageLevel(parseInt(e.key))
     // memory profile
   } else if (e.key === 'm') {
-    console.log(roughSizeOfObject(space))
+    levelManager.loadMenu()
   } else if (e.key === 'p') {
     console.log(
       `Current camera position: ${space.cameraControls.camera.position.x.toFixed(

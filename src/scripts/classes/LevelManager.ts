@@ -1,4 +1,9 @@
-import { loadLevel, spawnSpec } from '../util/level'
+import {
+  loadLevel,
+  menuCameraPos,
+  menuCameraQuat,
+  spawnSpec,
+} from '../util/level'
 import DynamicObject from './DynamicObject'
 import { CheckStates } from './ObjectChecker'
 import PuzzleTrigger from './PuzzleTrigger'
@@ -14,6 +19,8 @@ export enum CompletenessStatuses {
   UNFINISHED = 'unfinished',
 }
 export default class LevelManager {
+  inMenu: boolean
+
   // currentLevel is mostly used to detect level 3 so we can override functionality
   // default to -1
   currentLevel: number
@@ -33,6 +40,8 @@ export default class LevelManager {
   cheatRecord?: CheatRecord
 
   constructor(space: SpaceManager) {
+    this.inMenu = true
+
     this.currentLevel = -1
     space.levelManager = this
     this.space = space
@@ -41,6 +50,18 @@ export default class LevelManager {
     this.triggers = []
 
     this.overlayManager = new OverlayManager()
+  }
+
+  loadMenu() {
+    this.loadLevel(0)
+    this.space.menuCamera.setRotationFromQuaternion(menuCameraQuat)
+    this.space.menuCamera.position.set(
+      menuCameraPos.x,
+      menuCameraPos.y,
+      menuCameraPos.z
+    )
+    this.inMenu = true
+    document.exitPointerLock()
   }
 
   // load the preview on a timer, then load the main level
@@ -61,6 +82,7 @@ export default class LevelManager {
   }
 
   loadPreviewLevel(levelNumber: number) {
+    this.inMenu = false
     this.currentLevel = levelNumber
     this.cheatManager = undefined
     this.space.reset(
@@ -74,6 +96,8 @@ export default class LevelManager {
   }
 
   loadLevel(levelNumber: number) {
+    this.inMenu = false
+    this.space.renderer.domElement.requestPointerLock()
     this.currentLevel = levelNumber
     this.cheatManager = undefined
     this.cheatRecord = undefined

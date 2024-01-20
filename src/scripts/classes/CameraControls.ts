@@ -97,6 +97,11 @@ export default class CameraControls {
     })
 
     canvas.addEventListener('click', () => {
+      if (this.space?.levelManager) {
+        if (this.space.levelManager.inMenu) {
+          return
+        }
+      }
       canvas.requestPointerLock()
     })
 

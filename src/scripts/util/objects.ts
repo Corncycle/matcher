@@ -19,7 +19,7 @@ export enum TestShapes {
   BOX = 'box',
 }
 
-const ballGeometry = new THREE.SphereGeometry(1)
+const ballGeometry = new THREE.SphereGeometry(1, 7, 7)
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
 const planeGeometry = new THREE.PlaneGeometry(1, 1)
 

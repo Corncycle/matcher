@@ -15,6 +15,7 @@ export default class SpaceManager {
   clock!: THREE.Clock
   scene!: THREE.Scene
   camera!: THREE.PerspectiveCamera
+  menuCamera!: THREE.PerspectiveCamera
   cameraControls!: CameraControls
   renderer: THREE.Renderer
   world!: CANNON.World
@@ -103,7 +104,11 @@ export default class SpaceManager {
 
     this.cameraControls.updateReticle()
 
-    this.renderer.render(this.scene, this.camera)
+    if (this.levelManager?.inMenu) {
+      this.renderer.render(this.scene, this.menuCamera)
+    } else {
+      this.renderer.render(this.scene, this.camera)
+    }
   }
 
   deleteCanvas() {
@@ -119,15 +124,21 @@ export default class SpaceManager {
       0.01,
       1000
     )
+    this.menuCamera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.01,
+      1000
+    )
     window.addEventListener('resize', () => {
       this.camera.aspect = window.innerWidth / window.innerHeight
       this.camera.updateProjectionMatrix()
+      this.menuCamera.aspect = window.innerWidth / window.innerHeight
+      this.menuCamera.updateProjectionMatrix()
       this.renderer.setSize(window.innerWidth, window.innerHeight)
     })
     this.scene.add(this.camera)
-
-    this.camera.position.y = 2
-    this.camera.position.z = 3
+    this.scene.add(this.menuCamera)
 
     this.world = new CANNON.World({ gravity: new CANNON.Vec3(0, -6, 0) })
     this.world.quatNormalizeSkip = 0
@@ -170,10 +181,14 @@ export default class SpaceManager {
       0.01,
       1000
     )
+    this.menuCamera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.01,
+      1000
+    )
     this.scene.add(this.camera)
-
-    this.camera.position.y = 2
-    this.camera.position.z = 3
+    this.scene.add(this.menuCamera)
 
     this.world = new CANNON.World({ gravity: new CANNON.Vec3(0, -6, 0) })
     this.world.quatNormalizeSkip = 0
