@@ -9,6 +9,43 @@ export interface BooleanDirection {
   back: boolean
 }
 
+export function initializeDivElement(
+  doDefaultStyles: boolean = true,
+  options: { [key: string]: string } = {},
+  parent?: HTMLElement
+) {
+  const out = document.createElement('div')
+  out.classList.add('overlayText')
+  if (doDefaultStyles) {
+    out.style.position = 'absolute'
+  }
+  out.style.visibility = 'hidden'
+
+  for (const opt in options) {
+    if (opt !== 'fontSizeFillHeight') {
+      out.style[opt as any] = options[opt]
+    }
+  }
+
+  if (parent) {
+    parent.appendChild(out)
+  }
+
+  if ('fontSizeFillHeight' in options) {
+    const resizeFunc = () => {
+      out.style.fontSize = `${
+        parseFloat(options.fontSizeFillHeight) * out.offsetHeight
+      }px`
+      out.style.lineHeight = `${
+        parseFloat(options.fontSizeFillHeight) * out.offsetHeight
+      }px`
+    }
+    window.addEventListener('resize', resizeFunc)
+    resizeFunc()
+  }
+  return out
+}
+
 export function roughSizeOfObject(object: any) {
   var objectList = []
   var stack = [object]

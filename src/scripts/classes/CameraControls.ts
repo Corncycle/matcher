@@ -10,6 +10,7 @@ export default class CameraControls {
   camera: THREE.Camera
   reticle: Reticle
   scene: THREE.Scene
+  canvas: HTMLElement
   active: boolean
   currentInput: BooleanDirection
   body: CANNON.Body
@@ -44,6 +45,7 @@ export default class CameraControls {
     this.camera = camera
     this.reticle = new Reticle(camera)
     this.scene = scene
+    this.canvas = canvas
     this.active = false
     this.currentInput = {
       left: false,
@@ -105,7 +107,7 @@ export default class CameraControls {
       canvas.requestPointerLock()
     })
 
-    window.addEventListener('pointerlockchange', () => {
+    document.addEventListener('pointerlockchange', () => {
       this.active = document.pointerLockElement === canvas
     })
 

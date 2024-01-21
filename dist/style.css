@@ -1,5 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700;900&display=swap');
 
+:root {
+    --charcoal: #18181b;
+    --soft-grey: #71717a;
+}
+
 .overlayText {
     font-family: "Roboto", sans-serif;
+}
+
+.menuButton {
+    transition: transform 0.05s ease-out;
+    color: var(--charcoal);
+}
+
+.menuButton:hover {
+    transform: scale(1.05);
+    color: var(--soft-grey);
 }

@@ -49,7 +49,7 @@ export default class LevelManager {
     this.checkedInventories = {}
     this.triggers = []
 
-    this.overlayManager = new OverlayManager()
+    this.overlayManager = new OverlayManager(this)
   }
 
   loadMenu() {
@@ -62,6 +62,7 @@ export default class LevelManager {
     )
     this.inMenu = true
     document.exitPointerLock()
+    this.overlayManager.setMode(OverlayModes.MAIN_MENU)
   }
 
   // load the preview on a timer, then load the main level
@@ -97,7 +98,6 @@ export default class LevelManager {
 
   loadLevel(levelNumber: number) {
     this.inMenu = false
-    this.space.renderer.domElement.requestPointerLock()
     this.currentLevel = levelNumber
     this.cheatManager = undefined
     this.cheatRecord = undefined
@@ -272,7 +272,7 @@ export default class LevelManager {
   loseGameSequence() {
     this.disableGrabbingAllObjects()
     setTimeout(() => {
-      this.loadTwoStageLevel(1)
+      this.loadMenu()
     }, 5000)
   }
 }

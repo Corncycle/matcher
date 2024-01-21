@@ -1,10 +1,9 @@
-import * as THREE from 'three'
-import {
-  CSS2DObject,
-  CSS2DRenderer,
-} from 'three/examples/jsm/renderers/CSS2DRenderer'
+import { initializeDivElement } from '../../util/util'
+import LevelManager from '../LevelManager'
+import MenuManager from './MenuManager'
 
 export enum OverlayModes {
+  NONE = 'none',
   COUNTDOWN = 'countdown',
   INFO = 'info',
   MAIN_MENU = 'main_menu',
@@ -12,12 +11,19 @@ export enum OverlayModes {
 }
 
 export default class OverlayManager {
+  levelManager: LevelManager
+
   canvas: HTMLDivElement
 
   headerElm: HTMLDivElement
   countdownElm: HTMLDivElement
 
-  constructor() {
+  menuManager: MenuManager
+  menuElm: HTMLDivElement
+
+  constructor(levelManager: LevelManager) {
+    this.levelManager = levelManager
+
     this.canvas = document.createElement('div')
     this.canvas.style.position = 'absolute'
     this.canvas.style.inset = '0'
@@ -31,7 +37,7 @@ export default class OverlayManager {
       height: '5%',
       textAlign: 'center',
       color: 'white',
-      fontSizeFillHeight: '',
+      fontSizeFillHeight: '1',
     })
     this.setText(this.headerElm, 'Memorize the locations of the objects!')
 
@@ -41,14 +47,18 @@ export default class OverlayManager {
       height: '10%',
       textAlign: 'center',
       color: 'white',
-      fontSizeFillHeight: '',
+      fontSizeFillHeight: '1',
     })
     this.setText(this.countdownElm, '10')
+
+    this.menuManager = new MenuManager(this)
+    this.menuElm = this.menuManager.root
   }
 
   setMode(mode: OverlayModes) {
     this.hideElm(this.headerElm)
     this.hideElm(this.countdownElm)
+    this.hideElm(this.menuElm)
 
     switch (mode) {
       case OverlayModes.COUNTDOWN:
@@ -57,6 +67,12 @@ export default class OverlayManager {
         return
       case OverlayModes.INFO:
         this.showElm(this.headerElm)
+        return
+      case OverlayModes.MAIN_MENU:
+        this.showElm(this.menuElm)
+        return
+      case OverlayModes.NONE:
+        return
       default:
         return
     }
@@ -66,27 +82,7 @@ export default class OverlayManager {
     doDefaultStyles: boolean = true,
     options: { [key: string]: string } = {}
   ) {
-    const out = document.createElement('div')
-    out.classList.add('overlayText')
-    out.style.position = 'absolute'
-    out.style.visibility = 'hidden'
-
-    for (const opt in options) {
-      if (opt !== 'fontSizeFillHeight') {
-        out.style[opt as any] = options[opt]
-      }
-    }
-    this.canvas.appendChild(out)
-
-    if ('fontSizeFillHeight' in options) {
-      const resizeFunc = () => {
-        out.style.fontSize = `${out.offsetHeight}px`
-        out.style.lineHeight = `${out.offsetHeight}px`
-      }
-      window.addEventListener('resize', resizeFunc)
-      resizeFunc()
-    }
-
+    const out = initializeDivElement(doDefaultStyles, options, this.canvas)
     return out
   }
 
