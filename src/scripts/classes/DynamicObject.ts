@@ -4,7 +4,7 @@ import { TestColors, testColoredMaterials } from '../util/materials'
 import ObjectChecker, { CheckStates } from './ObjectChecker'
 
 export default class DynamicObject {
-  mesh: THREE.Mesh
+  mesh: THREE.Mesh | THREE.Group
   body: CANNON.Body
   isHoldable: boolean
   nativeColor: TestColors | ''
@@ -14,7 +14,7 @@ export default class DynamicObject {
   checker: ObjectChecker
 
   constructor(
-    mesh: THREE.Mesh,
+    mesh: THREE.Mesh | THREE.Group,
     body: CANNON.Body,
     isHoldable: boolean = true,
     nativeColor: TestColors | '',
@@ -56,14 +56,16 @@ export default class DynamicObject {
   }
 
   setColor(color: TestColors | 'native') {
-    if (color === 'native') {
-      if (!this.nativeColor) {
-        this.mesh.material = testColoredMaterials['red']
+    if (this.mesh instanceof THREE.Mesh) {
+      if (color === 'native') {
+        if (!this.nativeColor) {
+          this.mesh.material = testColoredMaterials['red']
+        } else {
+          this.mesh.material = testColoredMaterials[this.nativeColor]
+        }
       } else {
-        this.mesh.material = testColoredMaterials[this.nativeColor]
+        this.mesh.material = testColoredMaterials[color]
       }
-    } else {
-      this.mesh.material = testColoredMaterials[color]
     }
   }
 

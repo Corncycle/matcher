@@ -1,10 +1,12 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import {
+  PredefinedObjects,
   TestShapes,
   createDynamicBall,
   createDynamicBox,
   createDynamicObject,
+  createPredefinedDynamicObject,
   createStaticBox,
   createStaticFloor,
   createStaticTable,
@@ -103,9 +105,9 @@ export const tableSpec = {
 // specify the objects to be used in the level. must have the same length as the corresponding tableSpec
 const objectSpec = {
   1: [
-    { color: TestColors.MAGENTA, shape: TestShapes.BALL },
-    { color: TestColors.CYAN, shape: TestShapes.BOX },
-    { color: TestColors.GREEN, shape: TestShapes.BOX },
+    PredefinedObjects.WATERMELON,
+    PredefinedObjects.APPLE,
+    PredefinedObjects.ORANGE,
   ],
   2: [
     { color: TestColors.MAGENTA, shape: TestShapes.BALL },
@@ -114,9 +116,9 @@ const objectSpec = {
     { color: TestColors.BLUE, shape: TestShapes.BALL },
   ],
   3: [
-    { color: TestColors.MAGENTA, shape: TestShapes.BALL },
-    { color: TestColors.CYAN, shape: TestShapes.BOX },
-    { color: TestColors.GREEN, shape: TestShapes.BOX },
+    PredefinedObjects.WATERMELON,
+    PredefinedObjects.APPLE,
+    PredefinedObjects.ORANGE,
     { color: TestColors.BLUE, shape: TestShapes.BALL },
     { color: TestColors.RED, shape: TestShapes.BOX },
   ],
@@ -198,43 +200,78 @@ function createPuzzleObjects(
   const objects = []
 
   for (const i in objectSpec[levelNumber as 1]) {
-    const { color, shape } = objectSpec[levelNumber as 1][i]
     if (isPreview) {
       let trigX = tableSpec[levelNumber as 1][i][0]
       let trigZ = tableSpec[levelNumber as 1][i][1]
-      objects.push(
-        createDynamicObject(
-          trigX,
-          0.65,
-          trigZ,
-          shape,
-          color,
-          parseInt(i),
-          !isPreview
+      if (typeof objectSpec[levelNumber as 1][i] === 'string') {
+        objects.push(
+          createPredefinedDynamicObject(
+            trigX,
+            0.9,
+            trigZ,
+            objectSpec[levelNumber as 1][i] as PredefinedObjects,
+            parseInt(i),
+            !isPreview
+          )
         )
-      )
+      } else {
+        objects.push(
+          createDynamicObject(
+            trigX,
+            0.65,
+            trigZ,
+            (objectSpec[levelNumber as 1][i] as any).shape,
+            (objectSpec[levelNumber as 1][i] as any).color,
+            parseInt(i),
+            !isPreview
+          )
+        )
+      }
     } else {
-      objects.push(
-        createDynamicObject(
-          spawnSpec[levelNumber as 1][0] +
-            Math.sin(
-              (0.3 * 2 * Math.PI * parseInt(i)) /
-                objectSpec[levelNumber as 1].length +
-                0.8 * Math.PI
-            ),
-          0.15,
-          spawnSpec[levelNumber as 1][1] +
-            Math.cos(
-              (0.3 * 2 * Math.PI * parseInt(i)) /
-                objectSpec[levelNumber as 1].length +
-                0.8 * Math.PI
-            ),
-          shape,
-          color,
-          parseInt(i),
-          !isPreview
+      if (typeof objectSpec[levelNumber as 1][i] === 'string') {
+        objects.push(
+          createPredefinedDynamicObject(
+            spawnSpec[levelNumber as 1][0] +
+              Math.sin(
+                (0.3 * 2 * Math.PI * parseInt(i)) /
+                  objectSpec[levelNumber as 1].length +
+                  0.8 * Math.PI
+              ),
+            0.25,
+            spawnSpec[levelNumber as 1][1] +
+              Math.cos(
+                (0.3 * 2 * Math.PI * parseInt(i)) /
+                  objectSpec[levelNumber as 1].length +
+                  0.8 * Math.PI
+              ),
+            objectSpec[levelNumber as 1][i] as PredefinedObjects,
+            parseInt(i),
+            !isPreview
+          )
         )
-      )
+      } else {
+        objects.push(
+          createDynamicObject(
+            spawnSpec[levelNumber as 1][0] +
+              Math.sin(
+                (0.3 * 2 * Math.PI * parseInt(i)) /
+                  objectSpec[levelNumber as 1].length +
+                  0.8 * Math.PI
+              ),
+            0.15,
+            spawnSpec[levelNumber as 1][1] +
+              Math.cos(
+                (0.3 * 2 * Math.PI * parseInt(i)) /
+                  objectSpec[levelNumber as 1].length +
+                  0.8 * Math.PI
+              ),
+            (objectSpec[levelNumber as 1][i] as any).shape,
+            (objectSpec[levelNumber as 1][i] as any).color,
+            parseInt(i),
+            !isPreview
+          )
+        )
+      }
     }
   }
   return objects

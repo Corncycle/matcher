@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import * as CANNON from 'cannon-es'
 import {
   TestColors,
@@ -18,6 +19,33 @@ export enum TestShapes {
   BALL = 'ball',
   BOX = 'box',
 }
+
+export enum PredefinedObjects {
+  WATERMELON = 'watermelon',
+  APPLE = 'apple',
+  ORANGE = 'orange',
+  PEAR = 'pear',
+}
+
+const loader = new GLTFLoader()
+export let watermelonMesh: THREE.Mesh | undefined
+export let appleMesh: THREE.Mesh | undefined
+export let orangeMesh: THREE.Mesh | undefined
+loader.load('assets/models/watermelon.glb', (gltf) => {
+  watermelonMesh = gltf.scene.children[0] as THREE.Mesh
+  watermelonMesh!.scale.set(0.12, 0.12, 0.12)
+  watermelonMesh!.geometry.center()
+})
+loader.load('assets/models/apple.glb', (gltf) => {
+  appleMesh = gltf.scene.children[2] as THREE.Mesh
+  appleMesh!.scale.set(0.17, 0.17, 0.17)
+  appleMesh!.geometry.center()
+})
+loader.load('assets/models/orange.glb', (gltf) => {
+  orangeMesh = gltf.scene.children[0] as THREE.Mesh
+  orangeMesh!.scale.set(0.17, 0.17, 0.17)
+  orangeMesh!.geometry.center()
+})
 
 const ballGeometry = new THREE.SphereGeometry(1, 7, 7)
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
@@ -158,6 +186,73 @@ export function createDynamicBox(
   boxBody.addShape(boxShape)
 
   return new DynamicObject(boxMesh, boxBody, isHoldable, color, id)
+}
+
+function addCannonSphereToBody(
+  b: CANNON.Body,
+  x: number,
+  y: number,
+  z: number,
+  r: number
+) {
+  const sph = new CANNON.Sphere(r)
+  b.addShape(sph, new CANNON.Vec3(x, y, z))
+}
+
+function addCannonBoxToBody(
+  b: CANNON.Body,
+  width: number,
+  height: number,
+  length: number,
+  x: number,
+  y: number,
+  z: number
+) {
+  const box = new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, length / 2))
+  b.addShape(box, new CANNON.Vec3(x, y, z))
+}
+
+export function createPredefinedDynamicObject(
+  x: number,
+  y: number,
+  z: number,
+  identifier: PredefinedObjects,
+  id: number = -1,
+  isHoldable: boolean = true
+) {
+  let body
+  switch (identifier) {
+    case PredefinedObjects.WATERMELON:
+      body = new CANNON.Body({ mass: 10, material: c_basicMaterial })
+      addCannonSphereToBody(body, -0.08, 0, 0, 0.18)
+      addCannonSphereToBody(body, 0.08, 0, 0, 0.18)
+      addCannonSphereToBody(body, 0, 0, 0, 0.21)
+      body.position = new CANNON.Vec3(x, y, z)
+      // balls need angular damping otherwise they roll forever without slowing down
+      // (they're modeled as ideal spheres which don't experience friction)
+      // this number was determined by. making it up.
+      body.angularDamping = 0.96
+      return new DynamicObject(
+        watermelonMesh!.clone(),
+        body,
+        isHoldable,
+        '',
+        id
+      )
+    case PredefinedObjects.APPLE:
+      body = new CANNON.Body({ mass: 7, material: c_basicMaterial })
+      addCannonSphereToBody(body, 0, 0, 0, 0.165)
+      body.position = new CANNON.Vec3(x, y, z)
+      body.angularDamping = 0.96
+      return new DynamicObject(appleMesh!.clone(), body, isHoldable, '', id)
+    case PredefinedObjects.ORANGE:
+      body = new CANNON.Body({ mass: 7, material: c_basicMaterial })
+      addCannonSphereToBody(body, 0, 0, 0, 0.165)
+      body.position = new CANNON.Vec3(x, y, z)
+      body.angularDamping = 0.96
+      return new DynamicObject(orangeMesh!.clone(), body, isHoldable, '', id)
+  }
+  return createDynamicBall(0.1, x, y, z, 1, TestColors.RED, id, isHoldable)
 }
 
 export function createDynamicObject(

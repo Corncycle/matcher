@@ -39,7 +39,7 @@ export default class OverlayManager {
       color: 'white',
       fontSizeFillHeight: '1',
     })
-    this.setText(this.headerElm, 'Memorize the locations of the objects!')
+    this.setText(this.headerElm, 'Memorize!')
 
     this.countdownElm = this.initializeElement(true, {
       top: '15%',

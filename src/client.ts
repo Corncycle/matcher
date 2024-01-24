@@ -2,10 +2,12 @@ import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import CannonDebugRenderer from './scripts/util/cannonDebugRenderer'
 import SpaceManager from './scripts/classes/Space'
-import { createStaticGround } from './scripts/util/objects'
+import {
+  createStaticBox,
+  createStaticGround,
+  watermelonMesh,
+} from './scripts/util/objects'
 import Stats from 'three/examples/jsm/libs/stats.module'
-import { loadLevel } from './scripts/util/level'
-import { roughSizeOfObject } from './scripts/util/util'
 import LevelManager from './scripts/classes/LevelManager'
 
 // ***** BEGIN SETUP *****
@@ -13,7 +15,7 @@ import LevelManager from './scripts/classes/LevelManager'
 const space = new SpaceManager()
 const levelManager = new LevelManager(space)
 
-const cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
+let cannonDebugRenderer: CannonDebugRenderer | null = null
 
 const stats = new Stats()
 document.body.appendChild(stats.dom)
@@ -25,6 +27,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key === '1' || e.key === '2' || e.key === '3' || e.key === '0') {
     space.reset()
     levelManager.loadTwoStageLevel(parseInt(e.key))
+    cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
     // memory profile
   } else if (e.key === 'm') {
     levelManager.loadMenu()
@@ -57,7 +60,9 @@ function animate() {
 
   stats.update()
 
-  // cannonDebugRenderer.update()
+  if (cannonDebugRenderer) {
+    cannonDebugRenderer.update()
+  }
 }
 
 animate()

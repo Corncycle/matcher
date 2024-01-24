@@ -75,11 +75,8 @@ export default class LevelManager {
       this.loadLevel(levelNumber)
       this.cheatRecord = record
       this.overlayManager.setMode(OverlayModes.INFO)
-      this.overlayManager.setText(
-        this.overlayManager.headerElm,
-        'Match the objects to their positions!'
-      )
-    }, 5 * 1000)
+      this.overlayManager.setText(this.overlayManager.headerElm, 'Match!')
+    }, 3 * 1000)
   }
 
   loadPreviewLevel(levelNumber: number) {
@@ -271,8 +268,12 @@ export default class LevelManager {
 
   loseGameSequence() {
     this.disableGrabbingAllObjects()
+    this.overlayManager.setText(
+      this.overlayManager.headerElm,
+      "That's not a match!"
+    )
     setTimeout(() => {
       this.loadMenu()
-    }, 5000)
+    }, 2000)
   }
 }
