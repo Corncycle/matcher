@@ -3,9 +3,9 @@ import * as CANNON from 'cannon-es'
 import CannonDebugRenderer from './scripts/util/cannonDebugRenderer'
 import SpaceManager from './scripts/classes/Space'
 import {
+  appleGroup,
   createStaticBox,
   createStaticGround,
-  watermelonMesh,
 } from './scripts/util/objects'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import LevelManager from './scripts/classes/LevelManager'
@@ -27,8 +27,6 @@ window.addEventListener('keydown', (e) => {
   if (e.key === '1' || e.key === '2' || e.key === '3' || e.key === '0') {
     space.reset()
     levelManager.loadTwoStageLevel(parseInt(e.key))
-    cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
-    // memory profile
   } else if (e.key === 'm') {
     levelManager.loadMenu()
   } else if (e.key === 'p') {
@@ -42,6 +40,13 @@ window.addEventListener('keydown', (e) => {
     console.log(space.cameraControls)
   } else if (e.key === 'i') {
     levelManager.logTriggerInventories()
+  } else if (e.key === 'n') {
+    appleGroup?.position.set(5, 3, 5)
+    space.scene.add(appleGroup!)
+  } else if (e.key === 'r') {
+    console.log(space.dynamicObjects[1].body.quaternion)
+  } else if (e.key === '[') {
+    cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
   }
 })
 

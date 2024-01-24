@@ -186,7 +186,7 @@ export default class CameraControls {
     if (!this.canJump) {
       return
     }
-    this.body.velocity.set(this.body.velocity.x, 4, this.body.velocity.z)
+    this.body.velocity.set(this.body.velocity.x, 2, this.body.velocity.z)
     this.canJump = false
   }
 

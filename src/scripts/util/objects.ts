@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import * as CANNON from 'cannon-es'
 import {
   TestColors,
@@ -25,27 +25,65 @@ export enum PredefinedObjects {
   APPLE = 'apple',
   ORANGE = 'orange',
   PEAR = 'pear',
+  MANGO = 'mango',
+  BANANA = 'banana',
 }
 
 const loader = new GLTFLoader()
-export let watermelonMesh: THREE.Mesh | undefined
-export let appleMesh: THREE.Mesh | undefined
-export let orangeMesh: THREE.Mesh | undefined
+export let watermelonGroup: THREE.Group | undefined
+export let appleGroup: THREE.Group | undefined
+export let orangeGroup: THREE.Group | undefined
+export let bananaGroup: THREE.Group | undefined
+export let mangoGroup: THREE.Group | undefined
 loader.load('assets/models/watermelon.glb', (gltf) => {
-  watermelonMesh = gltf.scene.children[0] as THREE.Mesh
-  watermelonMesh!.scale.set(0.12, 0.12, 0.12)
-  watermelonMesh!.geometry.center()
+  watermelonGroup = gltfLoaderHelper(gltf, 0, 0.12)
 })
 loader.load('assets/models/apple.glb', (gltf) => {
-  appleMesh = gltf.scene.children[2] as THREE.Mesh
-  appleMesh!.scale.set(0.17, 0.17, 0.17)
-  appleMesh!.geometry.center()
+  appleGroup = gltfLoaderHelper(gltf, 2, 0.18)
+  for (const child of appleGroup.children) {
+    child.rotateX(0.7)
+    child.rotateZ(0.1)
+  }
+  console.log(appleGroup)
 })
 loader.load('assets/models/orange.glb', (gltf) => {
-  orangeMesh = gltf.scene.children[0] as THREE.Mesh
-  orangeMesh!.scale.set(0.17, 0.17, 0.17)
-  orangeMesh!.geometry.center()
+  orangeGroup = gltfLoaderHelper(gltf, 0, 0.14)
 })
+loader.load('assets/models/banana.glb', (gltf) => {
+  bananaGroup = gltfLoaderHelper(gltf, 0, 0.14)
+  bananaGroup.children[0].rotateY(0.4)
+  bananaGroup.children[0].translateY(0.1)
+})
+loader.load('assets/models/mango.glb', (gltf) => {
+  mangoGroup = gltfLoaderHelper(gltf, 0, 0.18)
+  // yeah this is definitely how you should do this.
+  mangoGroup.children[0].rotateX(Math.PI / 2)
+  mangoGroup.children[0].rotateZ(Math.PI / 2)
+  mangoGroup.children[0].rotateY(-Math.PI / 2)
+  mangoGroup.children[0].rotateX(-Math.PI / 6)
+})
+const gltfLoaderHelper = (
+  gltf: GLTF,
+  centerIndex: number,
+  scaleFactor?: number
+) => {
+  const group = new THREE.Group()
+  const centerObj = gltf.scene.children[centerIndex] as THREE.Mesh
+  const center = new THREE.Vector3()
+  centerObj.geometry.computeBoundingBox()
+  centerObj.geometry.boundingBox!.getCenter(center).negate()
+  console.log(gltf.scene.children)
+  console.log(gltf.scene.children.length)
+  for (const child of gltf.scene.children) {
+    const newChild = (child as THREE.Mesh).clone()
+    newChild.geometry.translate(center.x, center.y, center.z)
+    group.add(newChild)
+  }
+  if (scaleFactor) {
+    group.scale.set(scaleFactor, scaleFactor, scaleFactor)
+  }
+  return group
+}
 
 const ballGeometry = new THREE.SphereGeometry(1, 7, 7)
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
@@ -206,10 +244,16 @@ function addCannonBoxToBody(
   length: number,
   x: number,
   y: number,
-  z: number
+  z: number,
+  zRotate?: number
 ) {
   const box = new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, length / 2))
-  b.addShape(box, new CANNON.Vec3(x, y, z))
+  let q
+  if (zRotate) {
+    q = new CANNON.Quaternion()
+    q.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), zRotate)
+  }
+  b.addShape(box, new CANNON.Vec3(x, y, z), q)
 }
 
 export function createPredefinedDynamicObject(
@@ -220,9 +264,16 @@ export function createPredefinedDynamicObject(
   id: number = -1,
   isHoldable: boolean = true
 ) {
+  let naiveMesh
   let body
   switch (identifier) {
     case PredefinedObjects.WATERMELON:
+      // naiveMesh will be empty here, HOWEVER, due to some... awesome implementations
+      // elsewhere, naiveMesh will be populated with the meshes used to display the
+      // check / X indicators when placing the object on tables. so the scale here
+      // determines the size of the checker and we fit it to the fruit size manually
+      naiveMesh = new THREE.Mesh()
+      naiveMesh.scale.multiplyScalar(0.26)
       body = new CANNON.Body({ mass: 10, material: c_basicMaterial })
       addCannonSphereToBody(body, -0.08, 0, 0, 0.18)
       addCannonSphereToBody(body, 0.08, 0, 0, 0.18)
@@ -233,24 +284,79 @@ export function createPredefinedDynamicObject(
       // this number was determined by. making it up.
       body.angularDamping = 0.96
       return new DynamicObject(
-        watermelonMesh!.clone(),
+        naiveMesh,
         body,
         isHoldable,
         '',
-        id
+        id,
+        watermelonGroup!.clone()
       )
     case PredefinedObjects.APPLE:
+      naiveMesh = new THREE.Mesh()
+      naiveMesh.scale.multiplyScalar(0.2)
       body = new CANNON.Body({ mass: 7, material: c_basicMaterial })
-      addCannonSphereToBody(body, 0, 0, 0, 0.165)
+      addCannonSphereToBody(body, 0, 0, 0, 0.115)
+      addCannonSphereToBody(body, 0, 0.12, 0, 0.01)
       body.position = new CANNON.Vec3(x, y, z)
       body.angularDamping = 0.96
-      return new DynamicObject(appleMesh!.clone(), body, isHoldable, '', id)
+      return new DynamicObject(
+        naiveMesh,
+        body,
+        isHoldable,
+        '',
+        id,
+        appleGroup!.clone()
+      )
     case PredefinedObjects.ORANGE:
+      naiveMesh = new THREE.Mesh()
+      naiveMesh.scale.multiplyScalar(0.2)
       body = new CANNON.Body({ mass: 7, material: c_basicMaterial })
-      addCannonSphereToBody(body, 0, 0, 0, 0.165)
+      addCannonSphereToBody(body, 0, 0, 0, 0.135)
       body.position = new CANNON.Vec3(x, y, z)
       body.angularDamping = 0.96
-      return new DynamicObject(orangeMesh!.clone(), body, isHoldable, '', id)
+      return new DynamicObject(
+        naiveMesh,
+        body,
+        isHoldable,
+        '',
+        id,
+        orangeGroup!.clone()
+      )
+    case PredefinedObjects.BANANA:
+      naiveMesh = new THREE.Mesh()
+      naiveMesh.scale.multiplyScalar(0.24)
+      body = new CANNON.Body({ mass: 7, material: c_basicMaterial })
+      addCannonBoxToBody(body, 0.3, 0.06, 0.06, 0, -0.06, 0, 0.3)
+      addCannonSphereToBody(body, 0.17, 0, -0.07, 0.03)
+      addCannonSphereToBody(body, -0.17, 0.03, 0.07, 0.015)
+      addCannonSphereToBody(body, -0.2, 0.075, 0.085, 0.015)
+      body.position = new CANNON.Vec3(x, y, z)
+      // body.angularDamping = 0.96
+      return new DynamicObject(
+        naiveMesh,
+        body,
+        isHoldable,
+        '',
+        id,
+        bananaGroup!.clone()
+      )
+    case PredefinedObjects.MANGO:
+      naiveMesh = new THREE.Mesh()
+      naiveMesh.scale.multiplyScalar(0.2)
+      body = new CANNON.Body({ mass: 7, material: c_basicMaterial })
+      addCannonSphereToBody(body, 0.105, 0, -0.07, 0.06)
+      addCannonSphereToBody(body, 0, -0.01, 0, 0.095)
+      addCannonSphereToBody(body, -0.06, 0, 0.04, 0.1)
+      body.position = new CANNON.Vec3(x, y, z)
+      body.angularDamping = 0.96
+      return new DynamicObject(
+        naiveMesh,
+        body,
+        isHoldable,
+        '',
+        id,
+        mangoGroup!.clone()
+      )
   }
   return createDynamicBall(0.1, x, y, z, 1, TestColors.RED, id, isHoldable)
 }

@@ -50,8 +50,15 @@ export default class SpaceManager {
     }
   }
 
-  addObject(obj: { mesh: THREE.Mesh | THREE.Group; body: CANNON.Body }) {
+  addObject(obj: {
+    mesh: THREE.Mesh | THREE.Group
+    body: CANNON.Body
+    meshGroup?: THREE.Group
+  }) {
     this.scene.add(obj.mesh)
+    if (obj.meshGroup) {
+      this.scene.add(obj.meshGroup)
+    }
     this.world.addBody(obj.body)
   }
 
@@ -81,7 +88,8 @@ export default class SpaceManager {
     for (const obj of this.dynamicObjects) {
       if (
         (obj.mesh === intersection.object ||
-          obj.mesh.children.includes(intersection.object)) &&
+          (obj.meshGroup &&
+            obj.meshGroup.children.includes(intersection.object))) &&
         obj.isHoldable
       ) {
         return obj

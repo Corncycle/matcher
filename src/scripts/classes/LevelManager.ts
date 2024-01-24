@@ -2,9 +2,9 @@ import {
   loadLevel,
   menuCameraPos,
   menuCameraQuat,
+  objectSpec,
   spawnSpec,
 } from '../util/level'
-import DynamicObject from './DynamicObject'
 import { CheckStates } from './ObjectChecker'
 import PuzzleTrigger from './PuzzleTrigger'
 import SpaceManager from './Space'
@@ -18,6 +18,9 @@ export enum CompletenessStatuses {
   LOSE = 'lose',
   UNFINISHED = 'unfinished',
 }
+
+const PREVIEW_LENGTH = 10
+
 export default class LevelManager {
   inMenu: boolean
 
@@ -53,7 +56,7 @@ export default class LevelManager {
   }
 
   loadMenu() {
-    this.loadLevel(0)
+    this.loadLevel(0, [])
     this.space.menuCamera.setRotationFromQuaternion(menuCameraQuat)
     this.space.menuCamera.position.set(
       menuCameraPos.x,
@@ -67,19 +70,22 @@ export default class LevelManager {
 
   // load the preview on a timer, then load the main level
   loadTwoStageLevel(levelNumber: number) {
-    this.loadPreviewLevel(levelNumber)
+    const objSpec = [...objectSpec[levelNumber as 1]]
+    objSpec.sort((a, b) => 0.5 - Math.random())
+    this.loadPreviewLevel(levelNumber, objSpec)
     this.overlayManager.setMode(OverlayModes.COUNTDOWN)
+
     setTimeout(() => {
       this.updateCheatingResources()
       const record = this.createCheatRecord()
-      this.loadLevel(levelNumber)
+      this.loadLevel(levelNumber, objSpec)
       this.cheatRecord = record
       this.overlayManager.setMode(OverlayModes.INFO)
       this.overlayManager.setText(this.overlayManager.headerElm, 'Match!')
-    }, 3 * 1000)
+    }, PREVIEW_LENGTH * 1000)
   }
 
-  loadPreviewLevel(levelNumber: number) {
+  loadPreviewLevel(levelNumber: number, objSpec: string[]) {
     this.inMenu = false
     this.currentLevel = levelNumber
     this.cheatManager = undefined
@@ -87,13 +93,13 @@ export default class LevelManager {
       spawnSpec[levelNumber as 1][0],
       spawnSpec[levelNumber as 1][1]
     )
-    loadLevel(this.space, levelNumber, true)
+    loadLevel(this.space, levelNumber, true, objSpec)
     if (levelNumber === 3) {
       this.loadCheatingResources()
     }
   }
 
-  loadLevel(levelNumber: number) {
+  loadLevel(levelNumber: number, objSpec: string[]) {
     this.inMenu = false
     this.currentLevel = levelNumber
     this.cheatManager = undefined
@@ -102,7 +108,7 @@ export default class LevelManager {
       spawnSpec[levelNumber as 1][0],
       spawnSpec[levelNumber as 1][1]
     )
-    const { tables } = loadLevel(this.space, levelNumber, false)
+    const { tables } = loadLevel(this.space, levelNumber, false, objSpec)
     this.triggers = tables.map((obj) => obj.trigger)
     this.triggerInventories = {}
     this.checkedInventories = {}
