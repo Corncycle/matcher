@@ -12,6 +12,7 @@ import * as CANNON from 'cannon-es'
 import OverlayManager, { OverlayModes } from './text/OverlayManager'
 import CheatManager from './CheatManager'
 import CheatRecord from './CheatRecord'
+import { wrapWithTransition } from '../util/util'
 
 export enum CompletenessStatuses {
   WIN = 'win',
@@ -268,7 +269,9 @@ export default class LevelManager {
   winGameSequence() {
     this.disableGrabbingAllObjects()
     setTimeout(() => {
-      this.loadTwoStageLevel(this.currentLevel + 1)
+      wrapWithTransition(this, () => {
+        this.loadTwoStageLevel(this.currentLevel + 1)
+      })
     }, 5000)
   }
 

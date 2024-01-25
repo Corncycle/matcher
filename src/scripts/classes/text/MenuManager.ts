@@ -1,4 +1,4 @@
-import { initializeDivElement } from '../../util/util'
+import { initializeDivElement, wrapWithTransition } from '../../util/util'
 import OverlayManager from './OverlayManager'
 
 export default class MenuManager {
@@ -77,7 +77,9 @@ export default class MenuManager {
     )
 
     playButton.addEventListener('click', () => {
-      this.overlayManager.levelManager.loadTwoStageLevel(1)
+      wrapWithTransition(this.overlayManager.levelManager, () => {
+        this.overlayManager.levelManager.loadTwoStageLevel(1)
+      })
       this.overlayManager.levelManager.space.renderer.domElement.requestPointerLock()
     })
   }

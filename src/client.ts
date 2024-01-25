@@ -9,6 +9,7 @@ import {
 } from './scripts/util/objects'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import LevelManager from './scripts/classes/LevelManager'
+import { wrapWithTransition } from './scripts/util/util'
 
 // ***** BEGIN SETUP *****
 
@@ -25,8 +26,10 @@ levelManager.loadMenu()
 window.addEventListener('keydown', (e) => {
   // reload
   if (e.key === '1' || e.key === '2' || e.key === '3' || e.key === '0') {
-    space.reset()
-    levelManager.loadTwoStageLevel(parseInt(e.key))
+    wrapWithTransition(levelManager, () => {
+      space.reset()
+      levelManager.loadTwoStageLevel(parseInt(e.key))
+    })
   } else if (e.key === 'm') {
     levelManager.loadMenu()
   } else if (e.key === 'p') {
@@ -47,6 +50,10 @@ window.addEventListener('keydown', (e) => {
     console.log(space.dynamicObjects[1].body.quaternion)
   } else if (e.key === '[') {
     cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
+  } else if (e.key === 't') {
+    space.levelManager?.overlayManager.slideOut()
+  } else if (e.key === 'y') {
+    space.levelManager?.overlayManager.fadeIn()
   }
 })
 

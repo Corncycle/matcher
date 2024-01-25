@@ -1,3 +1,6 @@
+import LevelManager from '../classes/LevelManager'
+import SpaceManager from '../classes/Space'
+
 export const clamp = (x: number, min: number, max: number) => {
   return Math.min(Math.max(x, min), max)
 }
@@ -46,6 +49,35 @@ export function initializeDivElement(
   return out
 }
 
+export function initializeTransitionElement(
+  extraStyles: { [key: string]: string } = {},
+  parent?: HTMLElement,
+  baseClassName?: string
+) {
+  const out = document.createElement('div')
+  if (baseClassName) {
+    out.classList.add(baseClassName)
+  }
+  out.style.visibility = 'hidden'
+  out.style.position = 'absolute'
+  out.style.top = '0px'
+  out.style.left = '0px'
+  out.style.right = '0px'
+  out.style.background = 'black'
+
+  for (const opt in extraStyles) {
+    if (opt !== 'fontSizeFillHeight') {
+      out.style[opt as any] = extraStyles[opt]
+    }
+  }
+
+  if (parent) {
+    parent.appendChild(out)
+  }
+
+  return out
+}
+
 export function roughSizeOfObject(object: any) {
   var objectList = []
   var stack = [object]
@@ -71,4 +103,12 @@ export function roughSizeOfObject(object: any) {
     }
   }
   return bytes / 1000000
+}
+
+export function wrapWithTransition(lm: LevelManager, fn: Function) {
+  lm.overlayManager.slideOut()
+  setTimeout(() => {
+    fn()
+    lm.overlayManager.fadeIn()
+  }, 1000)
 }

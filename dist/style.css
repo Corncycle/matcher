@@ -18,3 +18,26 @@
     transform: scale(1.05);
     color: var(--soft-grey);
 }
+
+.slideOutBase {
+    transition: none;
+    bottom: 100%;
+}
+
+.slideOutBase.slideOut {
+    transition: bottom 1s;
+    bottom: 0px;
+}
+
+.fadeInBase {
+    transition: none;
+    opacity: 100%;
+    /*bottom: 0px;*/
+}
+
+.fadeInBase.fadeIn {
+    transition: opacity 1.6s;
+    opacity: 0%;
+    /*transition: bottom 1s;
+    bottom: 100%;*/
+}

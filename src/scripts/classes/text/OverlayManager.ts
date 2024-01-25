@@ -1,4 +1,7 @@
-import { initializeDivElement } from '../../util/util'
+import {
+  initializeDivElement,
+  initializeTransitionElement,
+} from '../../util/util'
 import LevelManager from '../LevelManager'
 import MenuManager from './MenuManager'
 
@@ -20,6 +23,9 @@ export default class OverlayManager {
 
   menuManager: MenuManager
   menuElm: HTMLDivElement
+
+  slideTransElm: HTMLDivElement
+  fadeTransElm: HTMLDivElement
 
   constructor(levelManager: LevelManager) {
     this.levelManager = levelManager
@@ -53,6 +59,17 @@ export default class OverlayManager {
 
     this.menuManager = new MenuManager(this)
     this.menuElm = this.menuManager.root
+
+    this.slideTransElm = initializeTransitionElement(
+      {},
+      this.canvas,
+      'slideOutBase'
+    )
+    this.fadeTransElm = initializeTransitionElement(
+      { bottom: '0px' },
+      this.canvas,
+      'fadeInBase'
+    )
   }
 
   setMode(mode: OverlayModes) {
@@ -96,5 +113,19 @@ export default class OverlayManager {
 
   setText(elm: HTMLElement, text: string) {
     elm.textContent = text
+  }
+
+  slideOut() {
+    this.hideElm(this.fadeTransElm)
+    this.fadeTransElm.classList.remove('fadeIn')
+    this.showElm(this.slideTransElm)
+    this.slideTransElm.classList.add('slideOut')
+  }
+
+  fadeIn() {
+    this.hideElm(this.slideTransElm)
+    this.slideTransElm.classList.remove('slideOut')
+    this.showElm(this.fadeTransElm)
+    this.fadeTransElm.classList.add('fadeIn')
   }
 }
