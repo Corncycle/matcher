@@ -62,7 +62,8 @@ export default class MenuManager {
       },
       this.menuContainer
     )
-    title.textContent = 'Matcher'
+    title.classList.add('mainTitle')
+    title.textContent = 'Much to Match'
     title.style.visibility = 'inherit'
 
     const playButton = this.createButton(

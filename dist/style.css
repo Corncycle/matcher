@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dangrek&family=Varela+Round&display=swap');
 
 :root {
     --charcoal: #18181b;
@@ -8,6 +8,10 @@
 
 .overlayText {
     font-family: "Varela Round", sans-serif;
+}
+
+.mainTitle {
+    font-family: "Dangrek";
 }
 
 .menuButton {

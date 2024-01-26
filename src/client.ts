@@ -54,12 +54,13 @@ window.addEventListener('keydown', (e) => {
     space.levelManager?.overlayManager.slideOut()
   } else if (e.key === 'y') {
     space.levelManager?.overlayManager.fadeIn()
+  } else if (e.key === 'Shift') {
+    if (levelManager.inPreview) {
+      levelManager.inPreview = false
+      levelManager.goToSecondStage()
+    }
   }
 })
-
-// const light = new THREE.PointLight(0xffffff, 1000)
-// light.position.set(4, 10, 4)
-// space.scene.add(light)
 
 // ****** END SETUP ******
 

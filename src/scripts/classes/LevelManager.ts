@@ -24,6 +24,8 @@ const PREVIEW_LENGTH = 10
 
 export default class LevelManager {
   inMenu: boolean
+  inPreview: boolean
+  timeoutId: ReturnType<typeof setTimeout> | undefined
 
   // currentLevel is mostly used to detect level 3 so we can override functionality
   // default to -1
@@ -43,8 +45,13 @@ export default class LevelManager {
   cheatManager?: CheatManager
   cheatRecord?: CheatRecord
 
+  // do not tamper with this. this is only to be used so that the tab override to skip
+  // the preview portion of a level knows which objects to spawn
+  _objSpec: string[]
+
   constructor(space: SpaceManager) {
     this.inMenu = true
+    this.inPreview = false
 
     this.currentLevel = -1
     space.levelManager = this
@@ -52,6 +59,8 @@ export default class LevelManager {
     this.triggerInventories = {}
     this.checkedInventories = {}
     this.triggers = []
+
+    this._objSpec = []
 
     this.overlayManager = new OverlayManager(this)
   }
@@ -76,20 +85,32 @@ export default class LevelManager {
     this.loadPreviewLevel(levelNumber, objSpec)
     this.overlayManager.setMode(OverlayModes.COUNTDOWN)
 
-    setTimeout(() => {
-      wrapWithTransition(this, () => {
-        this.updateCheatingResources()
-        const record = this.createCheatRecord()
-        this.loadLevel(levelNumber, objSpec)
-        this.cheatRecord = record
-        this.overlayManager.setMode(OverlayModes.INFO)
-        this.overlayManager.setText(this.overlayManager.headerElm, 'Match!')
-      })
+    this._objSpec = objSpec
+
+    this.timeoutId = setTimeout(() => {
+      this.goToSecondStage()
     }, PREVIEW_LENGTH * 1000)
+  }
+
+  goToSecondStage() {
+    this.inPreview = false
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId)
+      this.timeoutId = undefined
+    }
+    wrapWithTransition(this, () => {
+      this.updateCheatingResources()
+      const record = this.createCheatRecord()
+      this.loadLevel(this.currentLevel, this._objSpec)
+      this.cheatRecord = record
+      this.overlayManager.setMode(OverlayModes.INFO)
+      this.overlayManager.setText(this.overlayManager.headerElm, 'Match!')
+    })
   }
 
   loadPreviewLevel(levelNumber: number, objSpec: string[]) {
     this.inMenu = false
+    this.inPreview = true
     this.currentLevel = levelNumber
     this.cheatManager = undefined
     this.space.reset(
@@ -104,6 +125,7 @@ export default class LevelManager {
 
   loadLevel(levelNumber: number, objSpec: string[]) {
     this.inMenu = false
+    this.inPreview = false
     this.currentLevel = levelNumber
     this.cheatManager = undefined
     this.cheatRecord = undefined
