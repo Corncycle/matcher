@@ -27,6 +27,9 @@ export default class OverlayManager {
   slideTransElm: HTMLDivElement
   fadeTransElm: HTMLDivElement
 
+  // used to block mouse interactions
+  blockerElm: HTMLDivElement
+
   constructor(levelManager: LevelManager) {
     this.levelManager = levelManager
 
@@ -70,6 +73,11 @@ export default class OverlayManager {
       this.canvas,
       'fadeInBase'
     )
+    this.blockerElm = this.initializeElement(false, {
+      inset: '0',
+      position: 'absolute',
+      pointerEvents: 'auto',
+    })
   }
 
   setMode(mode: OverlayModes) {
@@ -120,6 +128,7 @@ export default class OverlayManager {
     this.fadeTransElm.classList.remove('fadeIn')
     this.showElm(this.slideTransElm)
     this.slideTransElm.classList.add('slideOut')
+    this.showElm(this.blockerElm)
   }
 
   fadeIn() {
@@ -127,5 +136,6 @@ export default class OverlayManager {
     this.slideTransElm.classList.remove('slideOut')
     this.showElm(this.fadeTransElm)
     this.fadeTransElm.classList.add('fadeIn')
+    this.hideElm(this.blockerElm)
   }
 }

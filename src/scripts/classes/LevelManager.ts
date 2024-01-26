@@ -77,12 +77,14 @@ export default class LevelManager {
     this.overlayManager.setMode(OverlayModes.COUNTDOWN)
 
     setTimeout(() => {
-      this.updateCheatingResources()
-      const record = this.createCheatRecord()
-      this.loadLevel(levelNumber, objSpec)
-      this.cheatRecord = record
-      this.overlayManager.setMode(OverlayModes.INFO)
-      this.overlayManager.setText(this.overlayManager.headerElm, 'Match!')
+      wrapWithTransition(this, () => {
+        this.updateCheatingResources()
+        const record = this.createCheatRecord()
+        this.loadLevel(levelNumber, objSpec)
+        this.cheatRecord = record
+        this.overlayManager.setMode(OverlayModes.INFO)
+        this.overlayManager.setText(this.overlayManager.headerElm, 'Match!')
+      })
     }, PREVIEW_LENGTH * 1000)
   }
 
@@ -282,7 +284,9 @@ export default class LevelManager {
       "That's not a match!"
     )
     setTimeout(() => {
-      this.loadMenu()
+      wrapWithTransition(this, () => {
+        this.loadMenu()
+      })
     }, 2000)
   }
 }

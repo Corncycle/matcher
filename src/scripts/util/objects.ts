@@ -44,7 +44,6 @@ loader.load('assets/models/apple.glb', (gltf) => {
     child.rotateX(0.7)
     child.rotateZ(0.1)
   }
-  console.log(appleGroup)
 })
 loader.load('assets/models/orange.glb', (gltf) => {
   orangeGroup = gltfLoaderHelper(gltf, 0, 0.14)
@@ -72,8 +71,6 @@ const gltfLoaderHelper = (
   const center = new THREE.Vector3()
   centerObj.geometry.computeBoundingBox()
   centerObj.geometry.boundingBox!.getCenter(center).negate()
-  console.log(gltf.scene.children)
-  console.log(gltf.scene.children.length)
   for (const child of gltf.scene.children) {
     const newChild = (child as THREE.Mesh).clone()
     newChild.geometry.translate(center.x, center.y, center.z)

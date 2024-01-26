@@ -18,9 +18,9 @@ export function initializeDivElement(
   parent?: HTMLElement
 ) {
   const out = document.createElement('div')
-  out.classList.add('overlayText')
   if (doDefaultStyles) {
     out.style.position = 'absolute'
+    out.classList.add('overlayText')
   }
   out.style.visibility = 'hidden'
 

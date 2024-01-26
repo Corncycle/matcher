@@ -106,7 +106,7 @@ export const tableSpec = {
 export const objectSpec = {
   1: [
     PredefinedObjects.WATERMELON,
-    PredefinedObjects.BANANA,
+    PredefinedObjects.APPLE,
     PredefinedObjects.MANGO,
   ],
   2: [
