@@ -15,14 +15,17 @@ export interface BooleanDirection {
 export function initializeDivElement(
   doDefaultStyles: boolean = true,
   options: { [key: string]: string } = {},
-  parent?: HTMLElement
+  parent?: HTMLElement,
+  inheritVisibility?: boolean
 ) {
   const out = document.createElement('div')
   if (doDefaultStyles) {
     out.style.position = 'absolute'
     out.classList.add('overlayText')
   }
-  out.style.visibility = 'hidden'
+  if (!inheritVisibility) {
+    out.style.visibility = 'hidden'
+  }
 
   for (const opt in options) {
     if (opt !== 'fontSizeFillHeight') {
@@ -109,6 +112,8 @@ export function wrapWithTransition(lm: LevelManager, fn: Function) {
   lm.overlayManager.slideOut()
   setTimeout(() => {
     fn()
-    lm.overlayManager.fadeIn()
+    setTimeout(() => {
+      lm.overlayManager.fadeIn()
+    }, 300)
   }, 1000)
 }

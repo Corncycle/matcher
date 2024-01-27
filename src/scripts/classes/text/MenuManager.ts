@@ -8,6 +8,7 @@ export default class MenuManager {
   menuContainer: HTMLDivElement
 
   optionsRoot: HTMLDivElement
+  helpRoot!: HTMLDivElement
 
   constructor(overlayManager: OverlayManager) {
     this.overlayManager = overlayManager
@@ -27,6 +28,7 @@ export default class MenuManager {
       false,
       {
         // background: 'red',
+        userSelect: 'none',
         paddingLeft: '40px',
         paddingRight: '40px',
         color: 'white',
@@ -41,6 +43,7 @@ export default class MenuManager {
     )
     this.menuContainer.style.visibility = 'inherit'
     this.initializeMenuElements()
+    this.initializeHelpElements()
 
     this.optionsRoot = initializeDivElement(
       true,
@@ -63,7 +66,7 @@ export default class MenuManager {
       this.menuContainer
     )
     title.classList.add('mainTitle')
-    title.textContent = 'Much to Match'
+    title.textContent = 'Feeble Memory'
     title.style.visibility = 'inherit'
 
     const playButton = this.createButton(
@@ -83,6 +86,147 @@ export default class MenuManager {
       })
       this.overlayManager.levelManager.space.renderer.domElement.requestPointerLock()
     })
+
+    howButton.addEventListener('click', () => {
+      this.openHelp()
+    })
+  }
+
+  initializeHelpElements() {
+    this.helpRoot = initializeDivElement(
+      false,
+      {
+        position: 'absolute',
+        inset: '0',
+        pointerEvents: 'auto',
+        cursor: 'pointer',
+      },
+      this.root
+    )
+    this.helpRoot.addEventListener('click', () => {
+      this.closeHelp()
+    })
+
+    const margins = initializeDivElement(
+      false,
+      {
+        position: 'absolute',
+        left: '0',
+        right: '0',
+        top: '20%',
+        bottom: '20%',
+        pointerEvents: 'none',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      this.helpRoot,
+      true
+    )
+
+    const helpContainer = initializeDivElement(
+      false,
+      {
+        background: 'blue',
+        height: '100%',
+        width: 'auto',
+        pointerEvents: 'auto',
+        userSelect: 'none',
+        cursor: 'auto',
+      },
+      margins,
+      true
+    )
+    helpContainer.addEventListener('click', (e) => {
+      e.stopPropagation()
+    })
+
+    const topContainer = initializeDivElement(
+      false,
+      {
+        background: 'tomato',
+        height: '43%',
+        display: 'flex',
+        pointerEvents: 'none',
+      },
+      helpContainer,
+      true
+    )
+    // topContainer.textContent = 'im the top container'
+
+    const horizDivider = initializeDivElement(
+      false,
+      { height: '4%', poitnerEvents: 'none' },
+      helpContainer,
+      true
+    )
+
+    const botContainer = initializeDivElement(
+      false,
+      {
+        background: 'cyan',
+        height: '53%',
+        pointerEvents: 'none',
+      },
+      helpContainer,
+      true
+    )
+    botContainer.textContent = 'im the bot container'
+
+    const moveContainer = initializeDivElement(
+      false,
+      { background: 'brown', height: '100%' },
+      topContainer,
+      true
+    )
+
+    const vertDivider = initializeDivElement(
+      false,
+      { height: '100%' },
+      topContainer,
+      true
+    )
+
+    const pickContainer = initializeDivElement(
+      false,
+      { background: 'sienna', height: '100%' },
+      topContainer,
+      true
+    )
+
+    const moveKeysContainer = initializeDivElement(
+      false,
+      { height: '100%' },
+      moveContainer,
+      true
+    )
+
+    for (const char of ['w', 'a', 's', 'd']) {
+      this.initializeSvgElement(moveKeysContainer, `keyboard_${char}`, 50)
+    }
+  }
+
+  initializeSvgElement(
+    parent: HTMLElement,
+    fileName: string,
+    heightPct: number
+  ) {
+    const elm = document.createElement('img')
+    const resizeFunc = () => {
+      elm.style.height = parent.offsetHeight * (heightPct / 100) + 'px'
+    }
+    resizeFunc()
+    window.addEventListener('resize', resizeFunc)
+    elm.style.height = elm.src = `/assets/icons/${fileName}.svg`
+    parent.appendChild(elm)
+  }
+
+  openHelp() {
+    this.helpRoot.style.visibility = 'visible'
+  }
+
+  closeHelp() {
+    this.helpRoot.style.visibility = 'hidden'
   }
 
   createButton(

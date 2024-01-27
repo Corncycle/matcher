@@ -296,7 +296,7 @@ export default class LevelManager {
       wrapWithTransition(this, () => {
         this.loadTwoStageLevel(this.currentLevel + 1)
       })
-    }, 5000)
+    }, 2000)
   }
 
   loseGameSequence() {
