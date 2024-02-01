@@ -242,7 +242,7 @@ export default class MenuManager {
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: '9999px',
-        width: '100%',
+        width: '70%',
         height: '14%',
         fontSizeFillHeight: '0.6',
       },

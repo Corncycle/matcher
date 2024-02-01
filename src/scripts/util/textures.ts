@@ -20,4 +20,4 @@ export const floorTexture = loader.load(
 
 wallTexture.wrapS = THREE.RepeatWrapping
 wallTexture.wrapT = THREE.RepeatWrapping
-wallTexture.repeat = new THREE.Vector2(4, 4)
+// wallTexture.repeat = new THREE.Vector2(4, 4)

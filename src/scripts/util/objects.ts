@@ -151,9 +151,36 @@ export function createStaticWall(
   y: number,
   z: number
 ) {
-  const boxMesh = new THREE.Mesh(cubeGeometry, t_wallMaterial)
+  const newGeometry = cubeGeometry.clone()
+  const pos = newGeometry.getAttribute('position')
+  const uv = newGeometry.getAttribute('uv')
+  const tileFactor = 2
+  for (let i = 0; i < pos.count; i++) {
+    if (i < 8) {
+      uv.setXY(
+        i,
+        tileFactor * length * (pos.getZ(i) + 0.5),
+        tileFactor * height * (pos.getY(i) + 0.5)
+      ) // TODO: these should probably be width, height, length instead of x, y, z
+    } else if (i < 16) {
+      uv.setXY(
+        i,
+        tileFactor * width * (pos.getX(i) + 0.5),
+        tileFactor * length * (pos.getZ(i) + 0.5)
+      )
+    } else {
+      uv.setXY(
+        i,
+        tileFactor * width * (pos.getX(i) + 0.5),
+        tileFactor * height * (pos.getY(i) + 0.5)
+      )
+    }
+  }
+
+  const boxMesh = new THREE.Mesh(newGeometry, t_wallMaterial)
   boxMesh.scale.set(width, height, length)
   boxMesh.position.set(x, y, z)
+
   boxMesh.castShadow = true
   const cubeShape = new CANNON.Box(
     new CANNON.Vec3(width / 2, height / 2, length / 2)
