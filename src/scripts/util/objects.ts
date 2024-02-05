@@ -73,6 +73,7 @@ const gltfLoaderHelper = (
   centerObj.geometry.boundingBox!.getCenter(center).negate()
   for (const child of gltf.scene.children) {
     const newChild = (child as THREE.Mesh).clone()
+    newChild.castShadow = true
     newChild.geometry.translate(center.x, center.y, center.z)
     group.add(newChild)
   }
@@ -106,11 +107,24 @@ export function createStaticFloor(
   xEnd: number,
   zEnd: number
 ) {
-  const planeMesh = new THREE.Mesh(planeGeometry, t_floorMaterial)
+  const planeMesh = new THREE.Mesh(planeGeometry.clone(), t_floorMaterial)
+  const pos = planeMesh.geometry.getAttribute('position')
+  const uv = planeMesh.geometry.getAttribute('uv')
+  const tileFactor = 1
+
+  for (let i = 0; i < pos.count; i++) {
+    uv.setXY(
+      i,
+      tileFactor * (xEnd - xStart) * pos.getX(i) + 0.5,
+      tileFactor * (zEnd - zStart) * pos.getY(i) + 0.5
+    )
+  }
+
   planeMesh.scale.set(xEnd - xStart, zEnd - zStart, 1)
   planeMesh.position.set((xEnd + xStart) / 2, 0, (zEnd + zStart) / 2)
   planeMesh.rotateX(-Math.PI / 2)
   planeMesh.receiveShadow = true
+
   const planeShape = new CANNON.Plane()
   const planeBody = new CANNON.Body({ mass: 0, material: c_basicMaterial })
   planeBody.addShape(planeShape)
@@ -131,6 +145,7 @@ export function createStaticBox(
   boxMesh.scale.set(width, height, length)
   boxMesh.position.set(x, y, z)
   boxMesh.castShadow = true
+  boxMesh.receiveShadow = true
   const cubeShape = new CANNON.Box(
     new CANNON.Vec3(width / 2, height / 2, length / 2)
   )
@@ -149,7 +164,8 @@ export function createStaticWall(
   length: number,
   x: number,
   y: number,
-  z: number
+  z: number,
+  castShadow?: boolean
 ) {
   const newGeometry = cubeGeometry.clone()
   const pos = newGeometry.getAttribute('position')
@@ -181,7 +197,10 @@ export function createStaticWall(
   boxMesh.scale.set(width, height, length)
   boxMesh.position.set(x, y, z)
 
-  boxMesh.castShadow = true
+  if (castShadow) {
+    boxMesh.castShadow = true
+  }
+  boxMesh.receiveShadow = true
   const cubeShape = new CANNON.Box(
     new CANNON.Vec3(width / 2, height / 2, length / 2)
   )
@@ -423,26 +442,36 @@ export function createStaticTable(x: number, z: number, rotation: number) {
   const leg1 = new THREE.Mesh(cubeGeometry, t_tableLegMaterial)
   leg1.scale.set(0.1, 0.4, 0.1)
   leg1.position.set(-0.3, -0.25, -0.2)
+  leg1.castShadow = true
+  leg1.receiveShadow = true
   tableGroup.add(leg1)
 
   const leg2 = new THREE.Mesh(cubeGeometry, t_tableLegMaterial)
   leg2.scale.set(0.1, 0.4, 0.1)
   leg2.position.set(0.3, -0.25, -0.2)
+  leg2.castShadow = true
+  leg2.receiveShadow = true
   tableGroup.add(leg2)
 
   const leg3 = new THREE.Mesh(cubeGeometry, t_tableLegMaterial)
   leg3.scale.set(0.1, 0.4, 0.1)
   leg3.position.set(-0.3, -0.25, 0.2)
+  leg3.castShadow = true
+  leg3.receiveShadow = true
   tableGroup.add(leg3)
 
   const leg4 = new THREE.Mesh(cubeGeometry, t_tableLegMaterial)
   leg4.scale.set(0.1, 0.4, 0.1)
   leg4.position.set(0.3, -0.25, 0.2)
+  leg4.castShadow = true
+  leg4.receiveShadow = true
   tableGroup.add(leg4)
 
   const tabletop = new THREE.Mesh(cubeGeometry, t_tabletopMaterial)
   tabletop.scale.set(0.8, 0.1, 0.6)
   tableGroup.add(tabletop)
+  tabletop.castShadow = true
+  tabletop.receiveShadow = true
 
   tableGroup.position.set(x, 0.45, z)
   tableGroup.quaternion.setFromAxisAngle(t_axis, rotation)

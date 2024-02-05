@@ -35,10 +35,11 @@ export const t_wallMaterial = new THREE.MeshToonMaterial({ map: wallTexture })
 export const t_tabletopMaterial = new THREE.MeshToonMaterial({
   map: tabletopTexture,
 })
+t_tabletopMaterial.lightMapIntensity = 0
 export const t_tableLegMaterial = new THREE.MeshToonMaterial({
   map: tableLegTexture,
 })
-export const t_floorMaterial = new THREE.MeshToonMaterial({
+export const t_floorMaterial = new THREE.MeshLambertMaterial({
   map: floorTexture,
 })
 

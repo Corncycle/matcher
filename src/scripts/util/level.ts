@@ -174,21 +174,23 @@ function createFloor(space: SpaceManager, levelNumber: number = 1) {
 }
 
 function createLights(space: SpaceManager, levelNumber: number = 1) {
-  space.scene.add(new THREE.AmbientLight(0xffffff, 0.15))
+  space.scene.add(new THREE.AmbientLight(0xffffff, 0.2))
 
-  const light = new THREE.SpotLight(0xffffff, 20)
-  light.position.x = 4
-  light.position.y = 6
-  light.position.z = 4
+  const light = new THREE.DirectionalLight(0xffffff, 1)
+  light.castShadow = true
+  light.position.set(4, 6, 4)
   space.scene.add(light)
 
-  const spotlightTarget = new THREE.Object3D()
-  spotlightTarget.position.x = 4
-  spotlightTarget.position.y = 0
-  spotlightTarget.position.z = 4
-  space.scene.add(spotlightTarget)
-  light.target = spotlightTarget
-  light.power = 80
+  const helper = new THREE.CameraHelper(light.shadow.camera)
+  space.scene.add(helper)
+
+  const target = new THREE.Object3D()
+  target.position.x = 3
+  target.position.y = 0
+  target.position.z = 3
+  space.scene.add(target)
+  light.target = target
+  // light.power = 80
 }
 
 function createTables(

@@ -114,6 +114,6 @@ export function wrapWithTransition(lm: LevelManager, fn: Function) {
     fn()
     setTimeout(() => {
       lm.overlayManager.fadeIn()
-    }, 300)
-  }, 1000)
+    }, 200)
+  }, 800)
 }

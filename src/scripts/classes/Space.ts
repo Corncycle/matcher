@@ -17,7 +17,7 @@ export default class SpaceManager {
   camera!: THREE.PerspectiveCamera
   menuCamera!: THREE.PerspectiveCamera
   cameraControls!: CameraControls
-  renderer: THREE.Renderer
+  renderer: THREE.WebGLRenderer
   world!: CANNON.World
   // `dynamicObjects` must be stored so that after the physics simulation is ran,
   // we can sync up all meshes with their associated bodies. only need
@@ -128,6 +128,7 @@ export default class SpaceManager {
   }
 
   initialize() {
+    this.renderer.shadowMap.enabled = true
     this.clock = new THREE.Clock()
     this.scene = new THREE.Scene()
     this.camera = new THREE.PerspectiveCamera(

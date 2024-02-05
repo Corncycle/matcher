@@ -30,7 +30,7 @@
 }
 
 .slideOutBase.slideOut {
-    transition: bottom 1s;
+    transition: bottom 0.6s;
     bottom: 0px;
 }
 
