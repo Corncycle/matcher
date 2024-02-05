@@ -35,31 +35,24 @@ export let appleGroup: THREE.Group | undefined
 export let orangeGroup: THREE.Group | undefined
 export let bananaGroup: THREE.Group | undefined
 export let mangoGroup: THREE.Group | undefined
-loader.load('assets/models/watermelon.glb', (gltf) => {
-  watermelonGroup = gltfLoaderHelper(gltf, 0, 0.12)
+loader.load('assets/models/watermelon-new.glb', (gltf) => {
+  watermelonGroup = gltfLoaderHelper(gltf, 0, 0.56)
 })
-loader.load('assets/models/apple.glb', (gltf) => {
-  appleGroup = gltfLoaderHelper(gltf, 2, 0.18)
-  for (const child of appleGroup.children) {
-    child.rotateX(0.7)
-    child.rotateZ(0.1)
-  }
+loader.load('assets/models/apple-new.glb', (gltf) => {
+  appleGroup = gltfLoaderHelper(gltf, 2, 0.8)
 })
-loader.load('assets/models/orange.glb', (gltf) => {
-  orangeGroup = gltfLoaderHelper(gltf, 0, 0.14)
+loader.load('assets/models/orange-new.glb', (gltf) => {
+  orangeGroup = gltfLoaderHelper(gltf, 0, 0.6)
 })
-loader.load('assets/models/banana.glb', (gltf) => {
-  bananaGroup = gltfLoaderHelper(gltf, 0, 0.14)
-  bananaGroup.children[0].rotateY(0.4)
+loader.load('assets/models/banana-new.glb', (gltf) => {
+  bananaGroup = gltfLoaderHelper(gltf, 0, 0.7)
   bananaGroup.children[0].translateY(0.1)
 })
-loader.load('assets/models/mango.glb', (gltf) => {
-  mangoGroup = gltfLoaderHelper(gltf, 0, 0.18)
+loader.load('assets/models/mango-new.glb', (gltf) => {
+  mangoGroup = gltfLoaderHelper(gltf, 0, 0.7)
   // yeah this is definitely how you should do this.
   mangoGroup.children[0].rotateX(Math.PI / 2)
-  mangoGroup.children[0].rotateZ(Math.PI / 2)
-  mangoGroup.children[0].rotateY(-Math.PI / 2)
-  mangoGroup.children[0].rotateX(-Math.PI / 6)
+  mangoGroup.children[0].rotateZ(Math.PI / 4)
 })
 const gltfLoaderHelper = (
   gltf: GLTF,
@@ -67,14 +60,14 @@ const gltfLoaderHelper = (
   scaleFactor?: number
 ) => {
   const group = new THREE.Group()
-  const centerObj = gltf.scene.children[centerIndex] as THREE.Mesh
-  const center = new THREE.Vector3()
-  centerObj.geometry.computeBoundingBox()
-  centerObj.geometry.boundingBox!.getCenter(center).negate()
+  // const centerObj = gltf.scene.children[centerIndex] as THREE.Mesh
+  // const center = new THREE.Vector3()
+  // centerObj.geometry.computeBoundingBox()
+  // centerObj.geometry.boundingBox!.getCenter(center).negate()
   for (const child of gltf.scene.children) {
     const newChild = (child as THREE.Mesh).clone()
     newChild.castShadow = true
-    newChild.geometry.translate(center.x, center.y, center.z)
+    // newChild.geometry.translate(center.x, center.y, center.z)
     group.add(newChild)
   }
   if (scaleFactor) {
@@ -338,8 +331,9 @@ export function createPredefinedDynamicObject(
       naiveMesh = new THREE.Mesh()
       naiveMesh.scale.multiplyScalar(0.2)
       body = new CANNON.Body({ mass: 7, material: c_basicMaterial })
-      addCannonSphereToBody(body, 0, 0, 0, 0.115)
-      addCannonSphereToBody(body, 0, 0.12, 0, 0.01)
+      addCannonSphereToBody(body, 0, 0.01, 0, 0.11)
+      addCannonSphereToBody(body, 0.01, 0.118, 0, 0.01)
+      addCannonBoxToBody(body, 0.08, 0.03, 0.08, 0, -0.09, 0)
       body.position = new CANNON.Vec3(x, y, z)
       body.angularDamping = 0.96
       return new DynamicObject(
@@ -354,7 +348,7 @@ export function createPredefinedDynamicObject(
       naiveMesh = new THREE.Mesh()
       naiveMesh.scale.multiplyScalar(0.2)
       body = new CANNON.Body({ mass: 7, material: c_basicMaterial })
-      addCannonSphereToBody(body, 0, 0, 0, 0.135)
+      addCannonSphereToBody(body, 0, 0, 0, 0.13)
       body.position = new CANNON.Vec3(x, y, z)
       body.angularDamping = 0.96
       return new DynamicObject(
@@ -369,11 +363,13 @@ export function createPredefinedDynamicObject(
       naiveMesh = new THREE.Mesh()
       naiveMesh.scale.multiplyScalar(0.24)
       body = new CANNON.Body({ mass: 7, material: c_basicMaterial })
-      addCannonBoxToBody(body, 0.3, 0.06, 0.06, 0, -0.06, 0, 0.3)
-      addCannonSphereToBody(body, 0.17, 0, -0.07, 0.03)
-      addCannonSphereToBody(body, -0.17, 0.03, 0.07, 0.015)
-      addCannonSphereToBody(body, -0.2, 0.075, 0.085, 0.015)
+      addCannonBoxToBody(body, 0.25, 0.08, 0.08, 0, 0, 0)
+      addCannonSphereToBody(body, -0.25, 0.19, 0, 0.01)
+      addCannonSphereToBody(body, -0.15, 0.06, 0, 0.04)
+      addCannonSphereToBody(body, 0.25, 0.1, 0, 0.01)
+      addCannonSphereToBody(body, 0.15, 0.03, 0, 0.04)
       body.position = new CANNON.Vec3(x, y, z)
+      body.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.PI / 4)
       // body.angularDamping = 0.96
       return new DynamicObject(
         naiveMesh,
@@ -387,9 +383,9 @@ export function createPredefinedDynamicObject(
       naiveMesh = new THREE.Mesh()
       naiveMesh.scale.multiplyScalar(0.2)
       body = new CANNON.Body({ mass: 7, material: c_basicMaterial })
-      addCannonSphereToBody(body, 0.105, 0, -0.07, 0.06)
-      addCannonSphereToBody(body, 0, -0.01, 0, 0.095)
-      addCannonSphereToBody(body, -0.06, 0, 0.04, 0.1)
+      addCannonSphereToBody(body, 0.09, 0, -0.07, 0.055)
+      addCannonSphereToBody(body, 0, 0, 0, 0.085)
+      addCannonSphereToBody(body, -0.055, 0.01, 0.037, 0.075)
       body.position = new CANNON.Vec3(x, y, z)
       body.angularDamping = 0.96
       return new DynamicObject(

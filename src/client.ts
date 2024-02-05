@@ -11,6 +11,8 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 import LevelManager from './scripts/classes/LevelManager'
 import { wrapWithTransition } from './scripts/util/util'
 import { statue2 } from './scripts/util/props'
+import { objectSpec } from './scripts/util/level'
+import { OverlayModes } from './scripts/classes/text/OverlayManager'
 
 // ***** BEGIN SETUP *****
 
@@ -80,6 +82,12 @@ window.DEV_COMMANDS = () => {
 }
 
 window.DEV_COMMANDS()
+
+setTimeout(() => {
+  // levelManager.overlayManager.setMode(OverlayModes.INFO)
+  // levelManager.loadLevel(3, objectSpec[3])
+  // cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
+}, 500)
 
 // ****** END SETUP ******
 
