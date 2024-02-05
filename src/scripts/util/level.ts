@@ -35,6 +35,13 @@ export const spawnSpec = {
   3: [6.5, 4.5],
 }
 
+export const lightSpec = {
+  0: [4, 6, 5, 4, 0, 5],
+  1: [4, 6, 4, 4, 0, 4],
+  2: [4, 6, 4, 4, 0, 4],
+  3: [6, 10, 4, 6, 0, 4],
+}
+
 // h = hall length in level 3
 const h = 4
 // specify the walls for the level
@@ -174,23 +181,43 @@ function createFloor(space: SpaceManager, levelNumber: number = 1) {
 }
 
 function createLights(space: SpaceManager, levelNumber: number = 1) {
-  space.scene.add(new THREE.AmbientLight(0xffffff, 0.2))
+  const AMB_LIGHT_INTENSITY = 0.2
+  const DIR_LIGHT_INTENSITY = 1
+  // SHADOW_PROPORTION = how much intense, relative to fully accurate shadows, should shadow intensity be
+  const SHADOW_PROPORTION = 0.5
 
-  const light = new THREE.DirectionalLight(0xffffff, 1)
-  light.castShadow = true
-  light.position.set(4, 6, 4)
-  space.scene.add(light)
+  space.scene.add(new THREE.AmbientLight(0xffffff, AMB_LIGHT_INTENSITY))
 
-  const helper = new THREE.CameraHelper(light.shadow.camera)
-  space.scene.add(helper)
-
+  const dirLight = new THREE.DirectionalLight(
+    0xffffff,
+    DIR_LIGHT_INTENSITY * (1 - SHADOW_PROPORTION)
+  )
+  const shadDirLight = new THREE.DirectionalLight(
+    0xffffff,
+    DIR_LIGHT_INTENSITY * SHADOW_PROPORTION
+  )
   const target = new THREE.Object3D()
-  target.position.x = 3
-  target.position.y = 0
-  target.position.z = 3
+  target.position.set(
+    lightSpec[levelNumber as 1][3],
+    lightSpec[levelNumber as 1][4],
+    lightSpec[levelNumber as 1][5]
+  )
   space.scene.add(target)
-  light.target = target
-  // light.power = 80
+  for (const l of [dirLight, shadDirLight]) {
+    l.position.set(
+      lightSpec[levelNumber as 1][0],
+      lightSpec[levelNumber as 1][1],
+      lightSpec[levelNumber as 1][2]
+    )
+    l.shadow.camera.left = -8
+    l.shadow.camera.right = 8
+    l.shadow.camera.bottom = -8
+    l.shadow.camera.top = 8
+
+    l.target = target
+    space.scene.add(l)
+  }
+  shadDirLight.castShadow = true
 }
 
 function createTables(
