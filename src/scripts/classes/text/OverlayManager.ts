@@ -27,6 +27,8 @@ export default class OverlayManager {
   slideTransElm: HTMLDivElement
   fadeTransElm: HTMLDivElement
 
+  loadingModelsElm: HTMLDivElement
+
   // used to block mouse interactions
   blockerElm: HTMLDivElement
 
@@ -73,11 +75,27 @@ export default class OverlayManager {
       this.canvas,
       'fadeInBase'
     )
+
+    this.loadingModelsElm = initializeTransitionElement(
+      {
+        bottom: '0px',
+        color: 'white',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      this.canvas,
+      'loadingModelsElm'
+    )
+    this.loadingModelsElm.innerText = 'Loading models...'
+    this.showElm(this.loadingModelsElm)
+
     this.blockerElm = this.initializeElement(false, {
       inset: '0',
       position: 'absolute',
       pointerEvents: 'auto',
     })
+    this.showElm(this.blockerElm)
   }
 
   setMode(mode: OverlayModes) {
@@ -136,6 +154,12 @@ export default class OverlayManager {
     this.slideTransElm.classList.remove('slideOut')
     this.showElm(this.fadeTransElm)
     this.fadeTransElm.classList.add('fadeIn')
+    this.hideElm(this.blockerElm)
+  }
+
+  endLoading() {
+    this.loadingModelsElm.classList.add('fadeIn')
+    this.loadingModelsElm.innerText = ''
     this.hideElm(this.blockerElm)
   }
 }

@@ -13,6 +13,7 @@ import { wrapWithTransition } from './scripts/util/util'
 import { statue2 } from './scripts/util/props'
 import { objectSpec } from './scripts/util/level'
 import { OverlayModes } from './scripts/classes/text/OverlayManager'
+import { modelLoadingScreen } from './scripts/util/modelLoading'
 
 // ***** BEGIN SETUP *****
 
@@ -82,6 +83,10 @@ window.DEV_COMMANDS = () => {
 }
 
 window.DEV_COMMANDS()
+
+modelLoadingScreen(() => {
+  levelManager.overlayManager.endLoading()
+})
 
 setTimeout(() => {
   // levelManager.overlayManager.setMode(OverlayModes.INFO)
