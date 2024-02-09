@@ -51,3 +51,14 @@
     transition: opacity 0.6s;
     opacity: 0%;
 }
+
+.loadingModelsText {
+    animation: delayFadeInAnimation 2s;
+    animation-iteration-count: 1;
+}
+
+@keyframes delayFadeInAnimation {
+    0% { opacity: 0; }
+    60% { opacity: 0; }
+    100% { opacity: 1; }
+}

@@ -26,9 +26,7 @@ export const modelLoadingScreen = (onFinished: Function) => {
         count += 1
       }
     }
-    console.log(`models loaded: ${count}`)
     if (count >= numModels) {
-      console.log('All models loaded!')
       onFinished()
       clearInterval(interval)
     }
