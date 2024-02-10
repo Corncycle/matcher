@@ -6,6 +6,11 @@ import SpaceManager from './Space'
 import Reticle, { ReticleDisplays } from './Reticle'
 import DynamicObject from './DynamicObject'
 
+// original dimensions were B_H = 1.5, Y_O = 0
+const BODY_HEIGHT = 0.8
+// y_offset = the offset that the camera is placed relative to the center of the body vertically
+const Y_OFFSET = 0.25
+
 export default class CameraControls {
   camera: THREE.Camera
   reticle: Reticle
@@ -72,7 +77,12 @@ export default class CameraControls {
     // rotation gets WACKY if we don't do this
     this.camera.rotation.order = 'YXZ'
 
-    const bodyShape = new CANNON.Cylinder(bodyRadius, bodyRadius, 1.5, 10)
+    const bodyShape = new CANNON.Cylinder(
+      bodyRadius,
+      bodyRadius,
+      BODY_HEIGHT,
+      10
+    )
     const body = new CANNON.Body({
       mass: this.defaultBodyMass,
       material: c_playerMaterial,
@@ -304,7 +314,7 @@ export default class CameraControls {
   moveCameraToBody() {
     this.camera.position.set(
       this.body.position.x,
-      this.body.position.y,
+      this.body.position.y + Y_OFFSET,
       this.body.position.z
     )
   }
@@ -337,7 +347,12 @@ export default class CameraControls {
     // rotation gets WACKY if we don't do this
     this.camera.rotation.order = 'YXZ'
 
-    const bodyShape = new CANNON.Cylinder(bodyRadius, bodyRadius, 1.5, 10)
+    const bodyShape = new CANNON.Cylinder(
+      bodyRadius,
+      bodyRadius,
+      BODY_HEIGHT,
+      10
+    )
     const body = new CANNON.Body({
       mass: this.defaultBodyMass,
       material: c_playerMaterial,
