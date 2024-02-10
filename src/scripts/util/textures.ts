@@ -67,3 +67,31 @@ export const wpPinkNormalTexture = loader.load(
 wpPinkNormalTexture.magFilter = THREE.NearestFilter
 wpPinkNormalTexture.wrapS = THREE.RepeatWrapping
 wpPinkNormalTexture.wrapT = THREE.RepeatWrapping
+
+export const wpGreenTexture = loader.load(
+  'assets/textures/custom/256-wallpaper-green-diffuse-bl-90.jpg'
+)
+wpGreenTexture.magFilter = THREE.NearestFilter
+wpGreenTexture.wrapS = THREE.RepeatWrapping
+wpGreenTexture.wrapT = THREE.RepeatWrapping
+
+export const wpGreenNormalTexture = loader.load(
+  'assets/textures/custom/256-wallpaper-green-normal-bl-90.jpg'
+)
+wpGreenNormalTexture.magFilter = THREE.NearestFilter
+wpGreenNormalTexture.wrapS = THREE.RepeatWrapping
+wpGreenNormalTexture.wrapT = THREE.RepeatWrapping
+
+export const wpPurpleTexture = loader.load(
+  'assets/textures/custom/256-wallpaper-purple-diffuse-bl-90.jpg'
+)
+wpPurpleTexture.magFilter = THREE.NearestFilter
+wpPurpleTexture.wrapS = THREE.RepeatWrapping
+wpPurpleTexture.wrapT = THREE.RepeatWrapping
+
+export const wpPurpleNormalTexture = loader.load(
+  'assets/textures/custom/256-wallpaper-purple-normal-bl-90.jpg'
+)
+wpPurpleNormalTexture.magFilter = THREE.NearestFilter
+wpPurpleNormalTexture.wrapS = THREE.RepeatWrapping
+wpPurpleNormalTexture.wrapT = THREE.RepeatWrapping

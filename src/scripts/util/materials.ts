@@ -9,8 +9,12 @@ import {
   tableLegTexture,
   tabletopTexture,
   woodTrimTexture,
+  wpGreenNormalTexture,
+  wpGreenTexture,
   wpPinkNormalTexture,
   wpPinkTexture,
+  wpPurpleNormalTexture,
+  wpPurpleTexture,
 } from './textures'
 
 // THREE MATERIALS
@@ -66,6 +70,18 @@ export const t_wpPinkMaterial = new THREE.MeshLambertMaterial({
   normalMap: wpPinkNormalTexture,
 })
 t_wpPinkMaterial.normalScale.set(2, 2)
+
+export const t_wpGreenMaterial = new THREE.MeshLambertMaterial({
+  map: wpGreenTexture,
+  normalMap: wpGreenNormalTexture,
+})
+t_wpGreenMaterial.normalScale.set(2, 2)
+
+export const t_wpPurpleMaterial = new THREE.MeshLambertMaterial({
+  map: wpPurpleTexture,
+  normalMap: wpPurpleNormalTexture,
+})
+t_wpPurpleMaterial.normalScale.set(2, 2)
 
 // CANNON MATERIALS
 export const c_playerMaterial = new CANNON.Material()

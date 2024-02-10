@@ -16,7 +16,12 @@ import {
   createTableWithTrigger,
 } from './objects'
 import SpaceManager from '../classes/Space'
-import { TestColors } from './materials'
+import {
+  TestColors,
+  t_wpGreenMaterial,
+  t_wpPinkMaterial,
+  t_wpPurpleMaterial,
+} from './materials'
 import { PropTypes, createStatueProp } from './props'
 
 // offset to make sure tables are pushed up against walls
@@ -82,6 +87,13 @@ const wallSpec = {
     [5, CEIL_HEIGHT, 1, 6.5, CEIL_HEIGHT / 2, 0.5],
     [3, CEIL_HEIGHT, 1, 6.5, CEIL_HEIGHT / 2, 1.5],
   ],
+}
+
+const wallMaterialSpec = {
+  0: t_wpPinkMaterial,
+  1: t_wpGreenMaterial,
+  2: t_wpPurpleMaterial,
+  3: t_wpPinkMaterial,
 }
 
 const floorSpec = {
@@ -181,7 +193,8 @@ function createWalls(space: SpaceManager, levelNumber: number = 1) {
   for (const wall of wallSpec[levelNumber as 1]) {
     const { meshGroup, body } = createStaticWall(
       ...(wall as [number, number, number, number, number, number]),
-      true
+      true,
+      wallMaterialSpec[levelNumber as 1]
     )
     space.addObject({ meshGroup, body })
     walls.push({ meshGroup, body })

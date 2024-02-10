@@ -12,7 +12,9 @@ import {
   t_tableLegMaterial,
   t_tabletopMaterial,
   t_woodTrimMaterial,
+  t_wpGreenMaterial,
   t_wpPinkMaterial,
+  t_wpPurpleMaterial,
   testColoredMaterials,
 } from './materials'
 import DynamicObject from '../classes/DynamicObject'
@@ -258,7 +260,8 @@ export function createStaticWall(
   x: number,
   y: number,
   z: number,
-  castShadow?: boolean
+  castShadow?: boolean,
+  wallMaterial: THREE.Material = t_wpPinkMaterial
 ) {
   const tileFactor = 0.5
 
@@ -275,7 +278,7 @@ export function createStaticWall(
     y,
     z,
     tileFactor,
-    t_wpPinkMaterial,
+    wallMaterial,
     false
   )
   const topTrim = wallMeshHelper(
