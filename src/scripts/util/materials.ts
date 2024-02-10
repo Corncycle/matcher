@@ -1,10 +1,14 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import {
+  carpetNormalTexture,
+  carpetTexture,
   floorTexture,
   tableLegTexture,
   tabletopTexture,
-  wallTexture,
+  woodTrimTexture,
+  wpPinkNormalTexture,
+  wpPinkTexture,
 } from './textures'
 
 // THREE MATERIALS
@@ -31,19 +35,29 @@ export const testColoredMaterials = {
   cyan: new THREE.MeshLambertMaterial({ color: 0x00ffff }),
 }
 
-export const t_wallMaterial = new THREE.MeshStandardMaterial({
-  map: wallTexture,
-})
 export const t_tabletopMaterial = new THREE.MeshStandardMaterial({
   map: tabletopTexture,
 })
-t_tabletopMaterial.lightMapIntensity = 0
 export const t_tableLegMaterial = new THREE.MeshStandardMaterial({
   map: tableLegTexture,
+})
+export const t_woodTrimMaterial = new THREE.MeshStandardMaterial({
+  map: woodTrimTexture,
 })
 export const t_floorMaterial = new THREE.MeshLambertMaterial({
   map: floorTexture,
 })
+export const t_carpetMaterial = new THREE.MeshLambertMaterial({
+  map: carpetTexture,
+  normalMap: carpetNormalTexture,
+})
+t_carpetMaterial.normalScale.set(2, 2)
+
+export const t_wpPinkMaterial = new THREE.MeshLambertMaterial({
+  map: wpPinkTexture,
+  normalMap: wpPinkNormalTexture,
+})
+t_wpPinkMaterial.normalScale.set(2, 2)
 
 // CANNON MATERIALS
 export const c_playerMaterial = new CANNON.Material()

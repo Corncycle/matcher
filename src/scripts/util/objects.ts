@@ -4,12 +4,14 @@ import * as CANNON from 'cannon-es'
 import {
   TestColors,
   c_basicMaterial,
+  t_carpetMaterial,
   t_floorMaterial,
   t_lambertMaterial,
   t_normalMaterial,
   t_tableLegMaterial,
   t_tabletopMaterial,
-  t_wallMaterial,
+  t_woodTrimMaterial,
+  t_wpPinkMaterial,
   testColoredMaterials,
 } from './materials'
 import DynamicObject from '../classes/DynamicObject'
@@ -100,10 +102,10 @@ export function createStaticFloor(
   xEnd: number,
   zEnd: number
 ) {
-  const planeMesh = new THREE.Mesh(planeGeometry.clone(), t_floorMaterial)
+  const planeMesh = new THREE.Mesh(planeGeometry.clone(), t_carpetMaterial)
   const pos = planeMesh.geometry.getAttribute('position')
   const uv = planeMesh.geometry.getAttribute('uv')
-  const tileFactor = 1
+  const tileFactor = 0.5
 
   for (let i = 0; i < pos.count; i++) {
     uv.setXY(
@@ -152,19 +154,15 @@ export function createStaticBox(
   return { mesh: boxMesh, body: boxBody }
 }
 
-export function createStaticWall(
+export function createUvMappedCubeGeometry(
   width: number,
   height: number,
   length: number,
-  x: number,
-  y: number,
-  z: number,
-  castShadow?: boolean
+  tileFactor: number = 0.5
 ) {
   const newGeometry = cubeGeometry.clone()
   const pos = newGeometry.getAttribute('position')
   const uv = newGeometry.getAttribute('uv')
-  const tileFactor = 2
   for (let i = 0; i < pos.count; i++) {
     if (i < 8) {
       uv.setXY(
@@ -186,15 +184,114 @@ export function createStaticWall(
       )
     }
   }
+  return newGeometry
+}
 
-  const boxMesh = new THREE.Mesh(newGeometry, t_wallMaterial)
-  boxMesh.scale.set(width, height, length)
-  boxMesh.position.set(x, y, z)
+function wallMeshHelper(
+  width: number,
+  height: number,
+  length: number,
+  x: number,
+  y: number,
+  z: number,
+  tileFactor: number = 0.5,
+  material: THREE.Material,
+  castShadow?: boolean
+) {
+  const wallGeometry = createUvMappedCubeGeometry(
+    width,
+    height,
+    length,
+    tileFactor
+  )
+
+  const mesh = new THREE.Mesh(wallGeometry, material)
+  mesh.scale.set(width, height, length)
+  mesh.position.set(x, y, z)
 
   if (castShadow) {
-    boxMesh.castShadow = true
+    mesh.castShadow = true
   }
-  boxMesh.receiveShadow = true
+  mesh.receiveShadow = true
+
+  return mesh
+}
+
+export function createStaticWall(
+  width: number,
+  height: number,
+  length: number,
+  x: number,
+  y: number,
+  z: number,
+  castShadow?: boolean
+) {
+  const tileFactor = 0.5
+
+  // proportion of the wall taken up by the wooden panel
+  const panelProportion = 0.26
+  // length of trim protruding from wall
+  const trimDepth = 0.04
+
+  const wallMesh = wallMeshHelper(
+    width,
+    height,
+    length,
+    x,
+    y,
+    z,
+    tileFactor,
+    t_wpPinkMaterial,
+    castShadow
+  )
+  const topTrim = wallMeshHelper(
+    width + 2 * trimDepth,
+    height / 32,
+    length + 2 * trimDepth,
+    x,
+    y + height / 2 - height / 64,
+    z,
+    tileFactor * 2,
+    t_woodTrimMaterial,
+    castShadow
+  )
+  const midTrim = wallMeshHelper(
+    width + 2 * trimDepth,
+    height / 32,
+    length + 2 * trimDepth,
+    x,
+    y - height / 2 + panelProportion * height,
+    z,
+    tileFactor * 2,
+    t_woodTrimMaterial,
+    castShadow
+  )
+  const botTrim = wallMeshHelper(
+    width + 2 * trimDepth,
+    height / 32,
+    length + 2 * trimDepth,
+    x,
+    y - height / 2 + height / 64,
+    z,
+    tileFactor * 2,
+    t_woodTrimMaterial,
+    castShadow
+  )
+  const panel = wallMeshHelper(
+    width + 0.02,
+    height * panelProportion,
+    length + 0.02,
+    x,
+    y - height / 2 + (height * panelProportion) / 2,
+    z,
+    tileFactor * 2,
+    t_woodTrimMaterial,
+    castShadow
+  )
+
+  const mg = new THREE.Group()
+  mg.add(wallMesh, topTrim, panel, botTrim, midTrim)
+
   const cubeShape = new CANNON.Box(
     new CANNON.Vec3(width / 2, height / 2, length / 2)
   )
@@ -204,7 +301,7 @@ export function createStaticWall(
   boxBody.position.y = y
   boxBody.position.z = z
 
-  return { mesh: boxMesh, body: boxBody }
+  return { meshGroup: mg, body: boxBody }
 }
 
 export function createDynamicBall(
@@ -334,7 +431,7 @@ export function createPredefinedDynamicObject(
       body = new CANNON.Body({ mass: 7, material: c_basicMaterial })
       addCannonSphereToBody(body, 0, 0.01, 0, 0.11)
       addCannonSphereToBody(body, 0.01, 0.118, 0, 0.01)
-      addCannonBoxToBody(body, 0.08, 0.03, 0.08, 0, -0.09, 0)
+      addCannonBoxToBody(body, 0.16, 0.03, 0.16, 0, -0.09, 0)
       body.position = new CANNON.Vec3(x, y, z)
       body.angularDamping = 0.96
       return new DynamicObject(

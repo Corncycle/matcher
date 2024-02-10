@@ -176,11 +176,12 @@ export function loadLevel(
 function createWalls(space: SpaceManager, levelNumber: number = 1) {
   const walls = []
   for (const wall of wallSpec[levelNumber as 1]) {
-    const { mesh, body } = createStaticWall(
-      ...(wall as [number, number, number, number, number, number])
+    const { meshGroup, body } = createStaticWall(
+      ...(wall as [number, number, number, number, number, number]),
+      true
     )
-    space.addObject({ mesh, body })
-    walls.push({ mesh, body })
+    space.addObject({ meshGroup, body })
+    walls.push({ meshGroup, body })
   }
 
   return walls
@@ -196,12 +197,12 @@ function createFloor(space: SpaceManager, levelNumber: number = 1) {
 }
 
 function createLights(space: SpaceManager, levelNumber: number = 1) {
-  const AMB_LIGHT_INTENSITY = 0.4
-  const DIR_LIGHT_INTENSITY = 1.2
+  const AMB_LIGHT_INTENSITY = 0.6
+  const DIR_LIGHT_INTENSITY = 1.5
   // SHADOW_PROPORTION = how much intense, relative to fully accurate shadows, should shadow intensity be
   const SHADOW_PROPORTION = 0.5
 
-  const LIGHT_COLOR = 0xfffcf7
+  const LIGHT_COLOR = 0xffedd6
 
   space.scene.add(new THREE.AmbientLight(LIGHT_COLOR, AMB_LIGHT_INTENSITY))
 
