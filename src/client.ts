@@ -94,7 +94,7 @@ setTimeout(() => {
   levelManager.overlayManager.setMode(OverlayModes.INFO)
   levelManager.loadLevel(1, objectSpec[1])
   // cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
-}, 300)
+}, 400)
 
 // ****** END SETUP ******
 

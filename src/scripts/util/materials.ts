@@ -4,6 +4,8 @@ import {
   carpetNormalTexture,
   carpetTexture,
   floorTexture,
+  plasterNormalTexture,
+  plasterTexture,
   tableLegTexture,
   tabletopTexture,
   woodTrimTexture,
@@ -52,6 +54,12 @@ export const t_carpetMaterial = new THREE.MeshLambertMaterial({
   normalMap: carpetNormalTexture,
 })
 t_carpetMaterial.normalScale.set(2, 2)
+
+export const t_plasterMaterial = new THREE.MeshLambertMaterial({
+  map: plasterTexture,
+  normalMap: plasterNormalTexture,
+})
+t_plasterMaterial.normalScale.set(100, 100)
 
 export const t_wpPinkMaterial = new THREE.MeshLambertMaterial({
   map: wpPinkTexture,

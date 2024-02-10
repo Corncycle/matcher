@@ -8,6 +8,7 @@ import {
   t_floorMaterial,
   t_lambertMaterial,
   t_normalMaterial,
+  t_plasterMaterial,
   t_tableLegMaterial,
   t_tabletopMaterial,
   t_woodTrimMaterial,
@@ -16,6 +17,8 @@ import {
 } from './materials'
 import DynamicObject from '../classes/DynamicObject'
 import PuzzleTrigger from '../classes/PuzzleTrigger'
+
+export const CEIL_HEIGHT = 2.35
 
 export enum TestShapes {
   BALL = 'ball',
@@ -92,6 +95,37 @@ export function createStaticGround(y: number) {
   const planeBody = new CANNON.Body({ mass: 0, material: c_basicMaterial })
   planeBody.addShape(planeShape)
   planeBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
+
+  return { mesh: planeMesh, body: planeBody }
+}
+
+export function createStaticCeiling(
+  xStart: number,
+  zStart: number,
+  xEnd: number,
+  zEnd: number
+) {
+  const planeMesh = new THREE.Mesh(planeGeometry.clone(), t_plasterMaterial)
+  const pos = planeMesh.geometry.getAttribute('position')
+  const uv = planeMesh.geometry.getAttribute('uv')
+  const tileFactor = 0.25
+
+  for (let i = 0; i < pos.count; i++) {
+    uv.setXY(
+      i,
+      tileFactor * (xEnd - xStart) * pos.getX(i) + 0.5,
+      tileFactor * (zEnd - zStart) * pos.getY(i) + 0.5
+    )
+  }
+
+  planeMesh.scale.set(xEnd - xStart, zEnd - zStart, 1)
+  planeMesh.position.set((xEnd + xStart) / 2, CEIL_HEIGHT, (zEnd + zStart) / 2)
+  planeMesh.rotateX(Math.PI / 2)
+  planeMesh.receiveShadow = true
+
+  const planeShape = new CANNON.Box(new CANNON.Vec3(16, 1, 16))
+  const planeBody = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  planeBody.addShape(planeShape, new CANNON.Vec3(0, CEIL_HEIGHT + 1, 0))
 
   return { mesh: planeMesh, body: planeBody }
 }
@@ -231,7 +265,7 @@ export function createStaticWall(
   // proportion of the wall taken up by the wooden panel
   const panelProportion = 0.26
   // length of trim protruding from wall
-  const trimDepth = 0.04
+  const trimDepth = 0.045
 
   const wallMesh = wallMeshHelper(
     width,
@@ -242,7 +276,7 @@ export function createStaticWall(
     z,
     tileFactor,
     t_wpPinkMaterial,
-    castShadow
+    false
   )
   const topTrim = wallMeshHelper(
     width + 2 * trimDepth,
@@ -253,7 +287,7 @@ export function createStaticWall(
     z,
     tileFactor * 2,
     t_woodTrimMaterial,
-    castShadow
+    false
   )
   const midTrim = wallMeshHelper(
     width + 2 * trimDepth,

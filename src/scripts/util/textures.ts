@@ -27,28 +27,42 @@ floorTexture.wrapS = THREE.RepeatWrapping
 floorTexture.wrapT = THREE.RepeatWrapping
 
 export const carpetTexture = loader.load(
-  'assets/textures/custom/2k-ccarpet-diffuse-bl-90.jpg'
+  'assets/textures/custom/256-ccarpet-diffuse-bl-90.jpg'
 )
-// carpetTexture.magFilter = THREE.NearestFilter
+carpetTexture.magFilter = THREE.NearestFilter
 carpetTexture.wrapS = THREE.RepeatWrapping
 carpetTexture.wrapT = THREE.RepeatWrapping
 
 export const carpetNormalTexture = loader.load(
-  'assets/textures/custom/2k-ccarpet-normal-bl-90.jpg'
+  'assets/textures/custom/256-ccarpet-normal-bl-90.jpg'
 )
 carpetNormalTexture.magFilter = THREE.NearestFilter
 carpetNormalTexture.wrapS = THREE.RepeatWrapping
 carpetNormalTexture.wrapT = THREE.RepeatWrapping
 
+export const plasterTexture = loader.load(
+  'assets/textures/custom/2k-plaster-diffuse-bl-90.jpg'
+)
+carpetTexture.magFilter = THREE.NearestFilter
+plasterTexture.wrapS = THREE.RepeatWrapping
+plasterTexture.wrapT = THREE.RepeatWrapping
+
+export const plasterNormalTexture = loader.load(
+  'assets/textures/custom/2k-plaster-normal-bl-90.jpg'
+)
+plasterNormalTexture.magFilter = THREE.NearestFilter
+plasterNormalTexture.wrapS = THREE.RepeatWrapping
+plasterNormalTexture.wrapT = THREE.RepeatWrapping
+
 export const wpPinkTexture = loader.load(
-  'assets/textures/custom/2k-wallpaper-pink-diffuse-bl-90.jpg'
+  'assets/textures/custom/256-wallpaper-pink-diffuse-bl-90.jpg'
 )
 wpPinkTexture.magFilter = THREE.NearestFilter
 wpPinkTexture.wrapS = THREE.RepeatWrapping
 wpPinkTexture.wrapT = THREE.RepeatWrapping
 
 export const wpPinkNormalTexture = loader.load(
-  'assets/textures/custom/2k-wallpaper-pink-normal-bl-90.jpg'
+  'assets/textures/custom/256-wallpaper-pink-normal-bl-90.jpg'
 )
 wpPinkNormalTexture.magFilter = THREE.NearestFilter
 wpPinkNormalTexture.wrapS = THREE.RepeatWrapping
