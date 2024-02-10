@@ -316,6 +316,13 @@ function createPuzzleObjects(
 ) {
   const objects = []
 
+  // randomize the spawn positions in the second phase
+  const permuteArray = []
+  for (const i in spec) {
+    permuteArray.push(i)
+  }
+  permuteArray.sort((a, b) => 0.5 - Math.random())
+
   for (const i in spec) {
     if (isPreview) {
       let trigX = tableSpec[levelNumber as 1][i][0]
@@ -336,13 +343,15 @@ function createPuzzleObjects(
         createPredefinedDynamicObject(
           spawnSpec[levelNumber as 1][0] +
             Math.sin(
-              (0.3 * 2 * Math.PI * parseInt(i)) / spec.length + 0.8 * Math.PI
+              (0.3 * 2 * Math.PI * parseInt(permuteArray[i])) / spec.length +
+                0.8 * Math.PI
             ) *
               1.5,
           0.25,
           spawnSpec[levelNumber as 1][1] +
             Math.cos(
-              (0.3 * 2 * Math.PI * parseInt(i)) / spec.length + 0.8 * Math.PI
+              (0.3 * 2 * Math.PI * parseInt(permuteArray[i])) / spec.length +
+                0.8 * Math.PI
             ) *
               1.5,
           spec[i] as PredefinedObjects,
