@@ -110,7 +110,7 @@ export function createStaticCeiling(
   const planeMesh = new THREE.Mesh(planeGeometry.clone(), t_plasterMaterial)
   const pos = planeMesh.geometry.getAttribute('position')
   const uv = planeMesh.geometry.getAttribute('uv')
-  const tileFactor = 0.25
+  const tileFactor = 0.5
 
   for (let i = 0; i < pos.count; i++) {
     uv.setXY(

@@ -63,7 +63,7 @@ export const t_plasterMaterial = new THREE.MeshLambertMaterial({
   map: plasterTexture,
   normalMap: plasterNormalTexture,
 })
-t_plasterMaterial.normalScale.set(100, 100)
+t_plasterMaterial.normalScale.set(50, 50)
 
 export const t_wpPinkMaterial = new THREE.MeshLambertMaterial({
   map: wpPinkTexture,

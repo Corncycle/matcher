@@ -41,14 +41,14 @@ carpetNormalTexture.wrapS = THREE.RepeatWrapping
 carpetNormalTexture.wrapT = THREE.RepeatWrapping
 
 export const plasterTexture = loader.load(
-  'assets/textures/custom/2k-plaster-diffuse-bl-90.jpg'
+  'assets/textures/custom/256-plaster-diffuse-nn-90.jpg'
 )
 carpetTexture.magFilter = THREE.NearestFilter
 plasterTexture.wrapS = THREE.RepeatWrapping
 plasterTexture.wrapT = THREE.RepeatWrapping
 
 export const plasterNormalTexture = loader.load(
-  'assets/textures/custom/2k-plaster-normal-bl-90.jpg'
+  'assets/textures/custom/256-plaster-normal-nn-90.jpg'
 )
 plasterNormalTexture.magFilter = THREE.NearestFilter
 plasterNormalTexture.wrapS = THREE.RepeatWrapping
