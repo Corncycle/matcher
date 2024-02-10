@@ -3,6 +3,7 @@ import * as CANNON from 'cannon-es'
 import CannonDebugRenderer from './scripts/util/cannonDebugRenderer'
 import SpaceManager from './scripts/classes/Space'
 import {
+  PredefinedObjects,
   appleGroup,
   createStaticBox,
   createStaticGround,
@@ -10,7 +11,7 @@ import {
 import Stats from 'three/examples/jsm/libs/stats.module'
 import LevelManager from './scripts/classes/LevelManager'
 import { wrapWithTransition } from './scripts/util/util'
-import { statue2 } from './scripts/util/props'
+import { createStatueProp, statue2 } from './scripts/util/props'
 import { objectSpec } from './scripts/util/level'
 import { OverlayModes } from './scripts/classes/text/OverlayManager'
 import { modelLoadingScreen } from './scripts/util/modelLoading'
@@ -74,10 +75,11 @@ window.DEV_COMMANDS = () => {
     } else if (e.key === 'y') {
       space.levelManager?.overlayManager.fadeIn()
     } else if (e.key === 'k') {
-      if (statue2) {
-        space.scene.add(statue2)
-        statue2.position.set(4, 0.5, 4)
-      }
+      window.addEventListener('keydown', (e) => {
+        if (e.key === '.') {
+          // meshGroup.position.y = meshGroup.position.y - 0.01
+        }
+      })
     }
   })
 }
@@ -90,9 +92,9 @@ modelLoadingScreen(() => {
 
 setTimeout(() => {
   // levelManager.overlayManager.setMode(OverlayModes.INFO)
-  // levelManager.loadLevel(3, objectSpec[3])
+  // levelManager.loadLevel(1, objectSpec[1])
   // cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
-}, 500)
+}, 300)
 
 // ****** END SETUP ******
 

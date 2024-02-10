@@ -51,11 +51,13 @@ export default class SpaceManager {
   }
 
   addObject(obj: {
-    mesh: THREE.Mesh | THREE.Group
+    mesh?: THREE.Mesh | THREE.Group
     body: CANNON.Body
     meshGroup?: THREE.Group
   }) {
-    this.scene.add(obj.mesh)
+    if (obj.mesh) {
+      this.scene.add(obj.mesh)
+    }
     if (obj.meshGroup) {
       this.scene.add(obj.meshGroup)
     }

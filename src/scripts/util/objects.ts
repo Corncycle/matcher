@@ -132,9 +132,10 @@ export function createStaticBox(
   length: number,
   x: number,
   y: number,
-  z: number
+  z: number,
+  t_material?: THREE.Material
 ) {
-  const boxMesh = new THREE.Mesh(cubeGeometry, t_lambertMaterial)
+  const boxMesh = new THREE.Mesh(cubeGeometry, t_material || t_lambertMaterial)
   boxMesh.scale.set(width, height, length)
   boxMesh.position.set(x, y, z)
   boxMesh.castShadow = true

@@ -15,6 +15,7 @@ import {
 } from './objects'
 import SpaceManager from '../classes/Space'
 import { TestColors } from './materials'
+import { PropTypes, createStatueProp } from './props'
 
 // offset to make sure tables are pushed up against walls
 const TABLE_FIXER = 0.18
@@ -35,11 +36,12 @@ export const spawnSpec = {
   3: [6.5, 4.5],
 }
 
+// first 3 = positions of both lights, next 3 = target of shad light, last 3 = target of no shad light
 export const lightSpec = {
-  0: [4, 6, 5, 4, 0, 5],
-  1: [4, 6, 4, 4, 0, 4],
-  2: [4, 6, 4, 4, 0, 4],
-  3: [6, 10, 4, 6, 0, 4],
+  0: [4, 6, 5, 4, 0, 5, 10, 0, 6],
+  1: [4, 6, 4, 3.5, 0, 4.5, 5, 0, 0],
+  2: [4, 6, 4, 3.5, 0, 4.5, 5, 0, 0],
+  3: [6, 10, 4, 5.5, 0, 4.5, 7, 0, 0],
 }
 
 // h = hall length in level 3
@@ -131,6 +133,18 @@ export const objectSpec = {
   ],
 }
 
+export const propSpec = {
+  0: [],
+  1: [
+    { type: PropTypes.MINO_STATUE, x: 4.5, z: 1.3, rotation: 0 },
+    // { type: PropTypes.MINO_STATUE, x: 7, z: 1, rotation: 0 },
+    // { type: PropTypes.MINO_STATUE, x: 1, z: 7, rotation: 0 },
+    // { type: PropTypes.MINO_STATUE, x: 7, z: 7, rotation: 0 },
+  ],
+  2: [],
+  3: [],
+}
+
 // this function should only really be used by LevelManager, because it keeps track of triggers/objects
 export function loadLevel(
   space: SpaceManager,
@@ -142,6 +156,7 @@ export function loadLevel(
   const floor = createFloor(space, levelNumber)
   const lights = createLights(space, levelNumber)
   const tables = createTables(space, levelNumber, isPreview)
+  const props = createProps(space, levelNumber)
   const puzzleObjects = createPuzzleObjects(
     space,
     levelNumber,
@@ -181,28 +196,37 @@ function createFloor(space: SpaceManager, levelNumber: number = 1) {
 }
 
 function createLights(space: SpaceManager, levelNumber: number = 1) {
-  const AMB_LIGHT_INTENSITY = 0.2
-  const DIR_LIGHT_INTENSITY = 1
+  const AMB_LIGHT_INTENSITY = 0.4
+  const DIR_LIGHT_INTENSITY = 1.2
   // SHADOW_PROPORTION = how much intense, relative to fully accurate shadows, should shadow intensity be
   const SHADOW_PROPORTION = 0.5
 
-  space.scene.add(new THREE.AmbientLight(0xffffff, AMB_LIGHT_INTENSITY))
+  const LIGHT_COLOR = 0xfffcf7
+
+  space.scene.add(new THREE.AmbientLight(LIGHT_COLOR, AMB_LIGHT_INTENSITY))
 
   const dirLight = new THREE.DirectionalLight(
-    0xffffff,
+    LIGHT_COLOR,
     DIR_LIGHT_INTENSITY * (1 - SHADOW_PROPORTION)
   )
   const shadDirLight = new THREE.DirectionalLight(
-    0xffffff,
+    LIGHT_COLOR,
     DIR_LIGHT_INTENSITY * SHADOW_PROPORTION
   )
-  const target = new THREE.Object3D()
-  target.position.set(
+  const shadtarget = new THREE.Object3D()
+  shadtarget.position.set(
     lightSpec[levelNumber as 1][3],
     lightSpec[levelNumber as 1][4],
     lightSpec[levelNumber as 1][5]
   )
-  space.scene.add(target)
+  const noshadtarget = new THREE.Object3D()
+  noshadtarget.position.set(
+    lightSpec[levelNumber as 1][6],
+    lightSpec[levelNumber as 1][7],
+    lightSpec[levelNumber as 1][8]
+  )
+  space.scene.add(shadtarget)
+  space.scene.add(noshadtarget)
   for (const l of [dirLight, shadDirLight]) {
     l.position.set(
       lightSpec[levelNumber as 1][0],
@@ -214,9 +238,11 @@ function createLights(space: SpaceManager, levelNumber: number = 1) {
     l.shadow.camera.bottom = -8
     l.shadow.camera.top = 8
 
-    l.target = target
     space.scene.add(l)
   }
+  shadDirLight.target = shadtarget
+  dirLight.target = noshadtarget
+
   shadDirLight.castShadow = true
 }
 
@@ -239,6 +265,21 @@ function createTables(
   }
 
   return tables
+}
+
+function createProps(space: SpaceManager, levelNumber: number = 1) {
+  for (const prop of propSpec[levelNumber as 1]) {
+    switch (prop.type) {
+      case PropTypes.MINO_STATUE:
+        const { meshGroup, body } = createStatueProp(
+          prop.x,
+          0.8,
+          prop.z,
+          prop.rotation ?? 0
+        )
+        space.addObject({ body, meshGroup })
+    }
+  }
 }
 
 function createPuzzleObjects(
