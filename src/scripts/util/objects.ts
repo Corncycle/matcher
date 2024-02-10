@@ -564,74 +564,62 @@ export function createDynamicObject(
   }
 }
 
+function tableHelper(
+  group: THREE.Group,
+  body: CANNON.Body,
+  width: number,
+  height: number,
+  length: number,
+  x: number,
+  y: number,
+  z: number,
+  material: THREE.Material
+) {
+  const mesh = new THREE.Mesh(
+    createUvMappedCubeGeometry(width, height, length, 1),
+    material
+  )
+  mesh.scale.set(width, height, length)
+  mesh.position.set(x, y, z)
+  mesh.castShadow = true
+  mesh.receiveShadow = true
+  group.add(mesh)
+
+  body.addShape(
+    new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, length / 2)),
+    new CANNON.Vec3(x, y, z)
+  )
+}
+
 export function createStaticTable(x: number, z: number, rotation: number) {
   const t_axis = new THREE.Vector3(0, 1, 0)
   const c_axis = new CANNON.Vec3(0, 1, 0)
 
-  const tableGroup = new THREE.Group()
+  const gp = new THREE.Group()
+  const body = new CANNON.Body({ material: c_basicMaterial })
 
-  const leg1 = new THREE.Mesh(cubeGeometry, t_tableLegMaterial)
-  leg1.scale.set(0.1, 0.4, 0.1)
-  leg1.position.set(-0.3, -0.25, -0.2)
-  leg1.castShadow = true
-  leg1.receiveShadow = true
-  tableGroup.add(leg1)
+  // legs
+  tableHelper(gp, body, 0.07, 0.4, 0.07, -0.3, -0.25, -0.2, t_tableLegMaterial)
+  tableHelper(gp, body, 0.07, 0.4, 0.07, 0.3, -0.25, -0.2, t_tableLegMaterial)
+  tableHelper(gp, body, 0.07, 0.4, 0.07, -0.3, -0.25, 0.2, t_tableLegMaterial)
+  tableHelper(gp, body, 0.07, 0.4, 0.07, 0.3, -0.25, 0.2, t_tableLegMaterial)
 
-  const leg2 = new THREE.Mesh(cubeGeometry, t_tableLegMaterial)
-  leg2.scale.set(0.1, 0.4, 0.1)
-  leg2.position.set(0.3, -0.25, -0.2)
-  leg2.castShadow = true
-  leg2.receiveShadow = true
-  tableGroup.add(leg2)
+  // supports
+  tableHelper(gp, body, 0.02, 0.05, 0.4, -0.3, -0.35, 0, t_tableLegMaterial)
+  tableHelper(gp, body, 0.02, 0.05, 0.4, 0.3, -0.35, 0, t_tableLegMaterial)
+  tableHelper(gp, body, 0.6, 0.05, 0.02, 0, -0.35, 0, t_tableLegMaterial)
 
-  const leg3 = new THREE.Mesh(cubeGeometry, t_tableLegMaterial)
-  leg3.scale.set(0.1, 0.4, 0.1)
-  leg3.position.set(-0.3, -0.25, 0.2)
-  leg3.castShadow = true
-  leg3.receiveShadow = true
-  tableGroup.add(leg3)
+  // tabletop
+  tableHelper(gp, body, 0.8, 0.1, 0.6, 0, 0, 0, t_tabletopMaterial)
 
-  const leg4 = new THREE.Mesh(cubeGeometry, t_tableLegMaterial)
-  leg4.scale.set(0.1, 0.4, 0.1)
-  leg4.position.set(0.3, -0.25, 0.2)
-  leg4.castShadow = true
-  leg4.receiveShadow = true
-  tableGroup.add(leg4)
+  gp.position.set(x, 0.45, z)
+  gp.quaternion.setFromAxisAngle(t_axis, rotation)
 
-  const tabletop = new THREE.Mesh(cubeGeometry, t_tabletopMaterial)
-  tabletop.scale.set(0.8, 0.1, 0.6)
-  tableGroup.add(tabletop)
-  tabletop.castShadow = true
-  tabletop.receiveShadow = true
+  body.quaternion.setFromAxisAngle(c_axis, rotation)
 
-  tableGroup.position.set(x, 0.45, z)
-  tableGroup.quaternion.setFromAxisAngle(t_axis, rotation)
+  body.position = new CANNON.Vec3(x, 0.45, z)
 
-  const tableBody = new CANNON.Body({ material: c_basicMaterial })
-  tableBody.addShape(
-    new CANNON.Box(new CANNON.Vec3(0.05, 0.2, 0.05)),
-    new CANNON.Vec3(-0.3, -0.25, -0.2)
-  )
-  tableBody.addShape(
-    new CANNON.Box(new CANNON.Vec3(0.05, 0.2, 0.05)),
-    new CANNON.Vec3(0.3, -0.25, -0.2)
-  )
-  tableBody.addShape(
-    new CANNON.Box(new CANNON.Vec3(0.05, 0.2, 0.05)),
-    new CANNON.Vec3(-0.3, -0.25, 0.2)
-  )
-  tableBody.addShape(
-    new CANNON.Box(new CANNON.Vec3(0.05, 0.2, 0.05)),
-    new CANNON.Vec3(0.3, -0.25, 0.2)
-  )
-
-  tableBody.addShape(new CANNON.Box(new CANNON.Vec3(0.4, 0.05, 0.3)))
-
-  tableBody.quaternion.setFromAxisAngle(c_axis, rotation)
-
-  tableBody.position = new CANNON.Vec3(x, 0.45, z)
-
-  return { mesh: tableGroup, body: tableBody }
+  return { mesh: gp, body: body }
 }
 
 export function createTableWithTrigger(

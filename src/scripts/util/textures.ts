@@ -6,11 +6,15 @@ export const tabletopTexture = loader.load(
   'assets/textures/Wood/Wood_03-128x128.png'
 )
 tabletopTexture.magFilter = THREE.NearestFilter
+tabletopTexture.wrapS = THREE.RepeatWrapping
+tabletopTexture.wrapT = THREE.RepeatWrapping
 
 export const tableLegTexture = loader.load(
-  'assets/textures/Wood/Wood_07-128x128.png'
+  'assets/textures/Wood/Wood_07-128x128-low-contrast.png'
 )
 tableLegTexture.magFilter = THREE.NearestFilter
+tableLegTexture.wrapS = THREE.RepeatWrapping
+tableLegTexture.wrapT = THREE.RepeatWrapping
 
 export const woodTrimTexture = loader.load(
   'assets/textures/Wood/Wood_01-128x128.png'
