@@ -10,7 +10,7 @@ const loader = new GLTFLoader()
 
 export let statue2: THREE.Group | undefined
 export let armchair: THREE.Group | undefined
-// export let trashcan: THREE.Group | undefined
+export let couch: THREE.Group | undefined
 
 loader.load('assets/models/mino2.glb', (gltf) => {
   statue2 = gltf.scene
@@ -22,9 +22,15 @@ loader.load('assets/models/armchair-c4.glb', (gltf) => {
   armchair.scale.set(1.05, 1.05, 1.05)
 })
 
+loader.load('assets/models/couch-c4.glb', (gltf) => {
+  couch = gltf.scene
+  couch.scale.set(1.05, 1.05, 1.05)
+})
+
 export enum PropTypes {
   MINO_STATUE = 'minotaur',
   ARMCHAIR = 'armchair',
+  COUCH = 'couch',
 }
 
 function rotateAboutVertical(
@@ -123,8 +129,6 @@ export function createArmchairProp(
 ) {
   const g = new THREE.Group()
   const propMesh = armchair!.clone()
-  console.log('propmesh:')
-  console.log(propMesh)
   for (const child of propMesh.children) {
     child.castShadow = true
     child.receiveShadow = true
@@ -137,10 +141,38 @@ export function createArmchairProp(
   addCannonBoxToBody(body, 0.1, 0.2, 0.48, -0.26, 0.37, 0)
   addCannonBoxToBody(body, 0.1, 0.2, 0.48, 0.26, 0.37, 0)
   addCannonBoxToBody(body, 0.62, 0.45, 0.1, 0, 0.52, -0.24)
-  // const back = new CANNON.Box(new CANNON.Vec3(0.62 / 2, 0.45 / 2, 0.1 / 2))
-  // const q = new CANNON.Quaternion()
-  // q.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 16)
-  // body.addShape(back, new CANNON.Vec3(0, 0.52, -0.23), q)
+
+  g.add(propMesh)
+
+  g.position.set(x, y, z)
+  body.position.set(x, y, z)
+
+  rotateAboutVertical(g, body, rotationAboutVertical)
+
+  return { meshGroup: g, body: body }
+}
+
+export function createCouchProp(
+  x: number,
+  y: number,
+  z: number,
+  rotationAboutVertical: number = 0
+) {
+  const g = new THREE.Group()
+  const propMesh = couch!.clone()
+  for (const child of propMesh.children) {
+    child.castShadow = true
+    child.receiveShadow = true
+  }
+  propMesh.children[0].castShadow = true
+  propMesh.receiveShadow = true
+
+  const body = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonBoxToBody(body, 1.74, 0.62, 0.4, -0.03, 0, -0.2)
+  addCannonBoxToBody(body, 0.5, 0.62, 0.7, 0.55, 0, 0.3)
+  addCannonBoxToBody(body, 0.11, 1, 1.25, 0.79, 0.11, 0)
+  addCannonBoxToBody(body, 1.7, 1, 0.25, -0.02, 0.11, -0.55)
+  addCannonBoxToBody(body, 0.13, 1, 0.6, -0.835, 0.11, -0.3)
 
   g.add(propMesh)
 

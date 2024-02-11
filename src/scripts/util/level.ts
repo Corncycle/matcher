@@ -22,7 +22,12 @@ import {
   t_wpPinkMaterial,
   t_wpPurpleMaterial,
 } from './materials'
-import { PropTypes, createArmchairProp, createStatueProp } from './props'
+import {
+  PropTypes,
+  createArmchairProp,
+  createCouchProp,
+  createStatueProp,
+} from './props'
 
 // offset to make sure tables are pushed up against walls
 const TABLE_FIXER = 0.18
@@ -153,6 +158,7 @@ export const propSpec = {
   2: [
     { type: PropTypes.MINO_STATUE, x: 4.5, z: 1.3, rotation: 0 },
     { type: PropTypes.ARMCHAIR, x: 4.5, z: 3, rotation: 0 },
+    { type: PropTypes.COUCH, x: 2, z: 2.5, rotation: 0 },
   ],
   3: [],
 }
@@ -306,6 +312,15 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
         break
       case PropTypes.ARMCHAIR:
         ;({ meshGroup, body } = createArmchairProp(
+          prop.x,
+          0,
+          prop.z,
+          prop.rotation ?? 0
+        ))
+        space.addObject({ body, meshGroup })
+        break
+      case PropTypes.COUCH:
+        ;({ meshGroup, body } = createCouchProp(
           prop.x,
           0,
           prop.z,
