@@ -91,8 +91,8 @@ modelLoadingScreen(() => {
 })
 
 setTimeout(() => {
-  // levelManager.overlayManager.setMode(OverlayModes.INFO)
-  // levelManager.loadLevel(1, objectSpec[1])
+  levelManager.overlayManager.setMode(OverlayModes.INFO)
+  levelManager.loadLevel(2, objectSpec[2])
   // cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
 }, 400)
 
