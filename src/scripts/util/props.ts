@@ -11,6 +11,7 @@ const loader = new GLTFLoader()
 export let statue2: THREE.Group | undefined
 export let armchair: THREE.Group | undefined
 export let couch: THREE.Group | undefined
+export let dresser: THREE.Group | undefined
 
 loader.load('assets/models/mino2.glb', (gltf) => {
   statue2 = gltf.scene
@@ -27,10 +28,16 @@ loader.load('assets/models/couch-c4.glb', (gltf) => {
   couch.scale.set(1.05, 1.05, 1.05)
 })
 
+loader.load('assets/models/dresser.glb', (gltf) => {
+  dresser = gltf.scene
+  dresser.scale.set(1.05, 1.05, 1.05)
+})
+
 export enum PropTypes {
   MINO_STATUE = 'minotaur',
   ARMCHAIR = 'armchair',
   COUCH = 'couch',
+  DRESSER = 'dresser',
 }
 
 function rotateAboutVertical(
@@ -173,6 +180,35 @@ export function createCouchProp(
   addCannonBoxToBody(body, 0.11, 1, 1.25, 0.79, 0.11, 0)
   addCannonBoxToBody(body, 1.7, 1, 0.25, -0.02, 0.11, -0.55)
   addCannonBoxToBody(body, 0.13, 1, 0.6, -0.835, 0.11, -0.3)
+
+  g.add(propMesh)
+
+  g.position.set(x, y, z)
+  body.position.set(x, y, z)
+
+  rotateAboutVertical(g, body, rotationAboutVertical)
+
+  return { meshGroup: g, body: body }
+}
+
+export function createDresserProp(
+  x: number,
+  y: number,
+  z: number,
+  rotationAboutVertical: number = 0
+) {
+  const g = new THREE.Group()
+  const propMesh = dresser!.clone()
+  for (const child of propMesh.children) {
+    child.castShadow = true
+    child.receiveShadow = true
+  }
+  propMesh.children[0].castShadow = true
+  propMesh.receiveShadow = true
+
+  const body = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonBoxToBody(body, 1.01, 0.67, 0.29, 0, 0.3, 0)
+  addCannonBoxToBody(body, 1.08, 0.018, 0.35, 0, 0.648, 0)
 
   g.add(propMesh)
 

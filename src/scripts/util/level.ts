@@ -26,6 +26,7 @@ import {
   PropTypes,
   createArmchairProp,
   createCouchProp,
+  createDresserProp,
   createStatueProp,
 } from './props'
 
@@ -159,6 +160,7 @@ export const propSpec = {
     { type: PropTypes.MINO_STATUE, x: 4.5, z: 1.3, rotation: 0 },
     { type: PropTypes.ARMCHAIR, x: 4.5, z: 3, rotation: 0 },
     { type: PropTypes.COUCH, x: 2, z: 2.5, rotation: 0 },
+    { type: PropTypes.DRESSER, x: 2, z: 6, rotation: Math.PI / 2 },
   ],
   3: [],
 }
@@ -321,6 +323,15 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
         break
       case PropTypes.COUCH:
         ;({ meshGroup, body } = createCouchProp(
+          prop.x,
+          0,
+          prop.z,
+          prop.rotation ?? 0
+        ))
+        space.addObject({ body, meshGroup })
+        break
+      case PropTypes.DRESSER:
+        ;({ meshGroup, body } = createDresserProp(
           prop.x,
           0,
           prop.z,
