@@ -102,7 +102,7 @@ function animate() {
   requestAnimationFrame(animate)
 
   space.updateCameraControls()
-  space.physicsStep(2)
+  space.physicsStep(1)
   space.render()
 
   stats.update()

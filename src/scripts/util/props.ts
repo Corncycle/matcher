@@ -150,20 +150,35 @@ export function createArmchairProp(
   propMesh.children[0].castShadow = true
   propMesh.receiveShadow = true
 
-  const body = new CANNON.Body({ mass: 0, material: c_basicMaterial })
-  addCannonBoxToBody(body, 0.62, 0.64, 0.47, 0, 0, 0)
-  addCannonBoxToBody(body, 0.1, 0.2, 0.48, -0.26, 0.37, 0)
-  addCannonBoxToBody(body, 0.1, 0.2, 0.48, 0.26, 0.37, 0)
-  addCannonBoxToBody(body, 0.62, 0.45, 0.1, 0, 0.52, -0.24)
+  // If a body has multiple shapes, jump-refreshing can fail in cases like the following:
+  // Suppose the body has two shapes forming an L shape. If the player jumps into the
+  // vertical part of the body, a collision is detected. If the player fails to separate from
+  // the vertical "wall", then no collision is detected when landing on the horizontal part
+  // (because the player never stopped colliding with the body). Colliding with the vertical
+  // did not refresh the jump, so the player does not receive a jump even when landing on
+  // the horizontal, because no collision is registered when landing on the horizontal
+
+  // As a hacky fix, we separate bodies with shapes at multiple y-levels into separate bodies
+  // Our implementation for adding objects to the world allows `body` to be an array of bodies
+  const body1 = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonBoxToBody(body1, 0.62, 0.64, 0.47, 0, 0, 0)
+  const body2 = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonBoxToBody(body2, 0.1, 0.2, 0.48, -0.26, 0.37, 0)
+  addCannonBoxToBody(body2, 0.1, 0.2, 0.48, 0.26, 0.37, 0)
+  const body3 = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonBoxToBody(body3, 0.62, 0.45, 0.1, 0, 0.52, -0.24)
+  const bodies = [body1, body2, body3]
 
   g.add(propMesh)
 
   g.position.set(x, y, z)
-  body.position.set(x, y, z)
 
-  rotateAboutVertical(g, body, rotationAboutVertical)
+  for (const b of bodies) {
+    b.position.set(x, y, z)
+    rotateAboutVertical(g, b, rotationAboutVertical)
+  }
 
-  return { meshGroup: g, body: body }
+  return { meshGroup: g, body: bodies }
 }
 
 export function createCouchProp(
@@ -181,21 +196,25 @@ export function createCouchProp(
   propMesh.children[0].castShadow = true
   propMesh.receiveShadow = true
 
-  const body = new CANNON.Body({ mass: 0, material: c_basicMaterial })
-  addCannonBoxToBody(body, 1.74, 0.62, 0.4, -0.03, 0, -0.2)
-  addCannonBoxToBody(body, 0.5, 0.62, 0.7, 0.55, 0, 0.3)
-  addCannonBoxToBody(body, 0.11, 1, 1.25, 0.79, 0.11, 0)
-  addCannonBoxToBody(body, 1.7, 1, 0.25, -0.02, 0.11, -0.55)
-  addCannonBoxToBody(body, 0.13, 1, 0.6, -0.835, 0.11, -0.3)
+  const body1 = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonBoxToBody(body1, 1.74, 0.62, 0.4, -0.03, 0, -0.2)
+  addCannonBoxToBody(body1, 0.5, 0.62, 0.7, 0.55, 0, 0.3)
+  const body2 = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonBoxToBody(body2, 0.11, 1, 1.25, 0.79, 0.11, 0)
+  addCannonBoxToBody(body2, 1.7, 1, 0.25, -0.02, 0.11, -0.55)
+  addCannonBoxToBody(body2, 0.13, 1, 0.6, -0.835, 0.11, -0.3)
+  const bodies = [body1, body2]
 
   g.add(propMesh)
 
   g.position.set(x, y, z)
-  body.position.set(x, y, z)
 
-  rotateAboutVertical(g, body, rotationAboutVertical)
+  for (const b of bodies) {
+    b.position.set(x, y, z)
+    rotateAboutVertical(g, b, rotationAboutVertical)
+  }
 
-  return { meshGroup: g, body: body }
+  return { meshGroup: g, body: bodies }
 }
 
 export function createDresserProp(

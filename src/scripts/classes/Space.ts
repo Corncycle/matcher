@@ -52,7 +52,7 @@ export default class SpaceManager {
 
   addObject(obj: {
     mesh?: THREE.Mesh | THREE.Group
-    body: CANNON.Body
+    body: CANNON.Body | CANNON.Body[]
     meshGroup?: THREE.Group
   }) {
     if (obj.mesh) {
@@ -61,7 +61,13 @@ export default class SpaceManager {
     if (obj.meshGroup) {
       this.scene.add(obj.meshGroup)
     }
-    this.world.addBody(obj.body)
+    if (Array.isArray(obj.body)) {
+      for (const b of obj.body) {
+        this.world.addBody(b)
+      }
+    } else {
+      this.world.addBody(obj.body)
+    }
   }
 
   addDynamicObject(obj: DynamicObject) {
