@@ -5,7 +5,7 @@ import {
   orangeGroup,
   watermelonGroup,
 } from './objects'
-import { statue2 } from './props'
+import { armchair, couch, dresser, grandfatherClock, statue2 } from './props'
 
 const models = () => [
   appleGroup,
@@ -14,6 +14,10 @@ const models = () => [
   orangeGroup,
   watermelonGroup,
   statue2,
+  armchair,
+  couch,
+  dresser,
+  grandfatherClock,
 ]
 
 const numModels = models().length

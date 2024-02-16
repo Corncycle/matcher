@@ -25,6 +25,7 @@ import {
 import {
   PropTypes,
   createArmchairProp,
+  createClockProp,
   createCouchProp,
   createDresserProp,
   createStatueProp,
@@ -57,7 +58,7 @@ export const lightSpec = {
   3: [6, 10, 4, 5.5, 0, 4.5, 7, 0, 0],
 }
 
-// h = hall length in level 3
+// h = hall length in level 3 (DO NOT CHANGE)
 const h = 4
 // specify the walls for the level
 const wallSpec = {
@@ -161,6 +162,7 @@ export const propSpec = {
     { type: PropTypes.ARMCHAIR, x: 4.5, z: 3, rotation: 0 },
     { type: PropTypes.COUCH, x: 2, z: 2.5, rotation: 0 },
     { type: PropTypes.DRESSER, x: 2, z: 6, rotation: Math.PI / 2 },
+    { type: PropTypes.GRANDFATHER_CLOCK, x: 3, z: 7, rotation: Math.PI },
   ],
   3: [],
 }
@@ -332,6 +334,15 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
         break
       case PropTypes.DRESSER:
         ;({ meshGroup, body } = createDresserProp(
+          prop.x,
+          0,
+          prop.z,
+          prop.rotation ?? 0
+        ))
+        space.addObject({ body, meshGroup })
+        break
+      case PropTypes.GRANDFATHER_CLOCK:
+        ;({ meshGroup, body } = createClockProp(
           prop.x,
           0,
           prop.z,

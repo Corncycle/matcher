@@ -20,7 +20,7 @@ import {
 import DynamicObject from '../classes/DynamicObject'
 import PuzzleTrigger from '../classes/PuzzleTrigger'
 
-export const CEIL_HEIGHT = 2.35
+export const CEIL_HEIGHT = 1.8
 
 export enum TestShapes {
   BALL = 'ball',

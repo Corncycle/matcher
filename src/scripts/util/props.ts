@@ -12,6 +12,7 @@ export let statue2: THREE.Group | undefined
 export let armchair: THREE.Group | undefined
 export let couch: THREE.Group | undefined
 export let dresser: THREE.Group | undefined
+export let grandfatherClock: THREE.Group | undefined
 
 loader.load('assets/models/mino2.glb', (gltf) => {
   statue2 = gltf.scene
@@ -33,11 +34,17 @@ loader.load('assets/models/dresser.glb', (gltf) => {
   dresser.scale.set(1.05, 1.05, 1.05)
 })
 
+loader.load('assets/models/grandfather-clock.glb', (gltf) => {
+  grandfatherClock = gltf.scene
+  // grandfatherClock.scale.set(1.05, 1.05, 1.05)
+})
+
 export enum PropTypes {
   MINO_STATUE = 'minotaur',
   ARMCHAIR = 'armchair',
   COUCH = 'couch',
   DRESSER = 'dresser',
+  GRANDFATHER_CLOCK = 'grandfatherClock',
 }
 
 function rotateAboutVertical(
@@ -209,6 +216,34 @@ export function createDresserProp(
   const body = new CANNON.Body({ mass: 0, material: c_basicMaterial })
   addCannonBoxToBody(body, 1.01, 0.67, 0.29, 0, 0.3, 0)
   addCannonBoxToBody(body, 1.08, 0.018, 0.35, 0, 0.648, 0)
+
+  g.add(propMesh)
+
+  g.position.set(x, y, z)
+  body.position.set(x, y, z)
+
+  rotateAboutVertical(g, body, rotationAboutVertical)
+
+  return { meshGroup: g, body: body }
+}
+
+export function createClockProp(
+  x: number,
+  y: number,
+  z: number,
+  rotationAboutVertical: number = 0
+) {
+  const g = new THREE.Group()
+  const propMesh = grandfatherClock!.clone()
+  for (const child of propMesh.children) {
+    child.castShadow = true
+    child.receiveShadow = true
+  }
+  propMesh.children[0].castShadow = true
+  propMesh.receiveShadow = true
+
+  const body = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonBoxToBody(body, 0.3, 1.35, 0.22, 0, 0.675, -0.04)
 
   g.add(propMesh)
 
