@@ -10,21 +10,21 @@ tabletopTexture.wrapS = THREE.RepeatWrapping
 tabletopTexture.wrapT = THREE.RepeatWrapping
 
 export const tableLegTexture = loader.load(
-  'assets/textures/wood/128-wood-7-lowcontrast.png'
+  'assets/textures/wood/128-wood-7-adjust.png'
 )
 tableLegTexture.magFilter = THREE.NearestFilter
 tableLegTexture.wrapS = THREE.RepeatWrapping
 tableLegTexture.wrapT = THREE.RepeatWrapping
 
 export const woodTrimTexture = loader.load(
-  'assets/textures/wood/128-wood-1.png'
+  'assets/textures/wood/128-wood-1-dark.png'
 )
 woodTrimTexture.magFilter = THREE.NearestFilter
 woodTrimTexture.wrapS = THREE.RepeatWrapping
 woodTrimTexture.wrapT = THREE.RepeatWrapping
 
 export const carpetTexture = loader.load(
-  'assets/textures/custom/256-ccarpet-diffuse-bl-90.jpg'
+  'assets/textures/custom/256-ccarpet-adjust.jpg'
 )
 carpetTexture.magFilter = THREE.NearestFilter
 carpetTexture.wrapS = THREE.RepeatWrapping
@@ -52,7 +52,7 @@ plasterNormalTexture.wrapS = THREE.RepeatWrapping
 plasterNormalTexture.wrapT = THREE.RepeatWrapping
 
 export const wpPinkTexture = loader.load(
-  'assets/textures/custom/256-wallpaper-pink-diffuse-bl-90.jpg'
+  'assets/textures/custom/256-wallpaper-pink-adjust.jpg'
 )
 wpPinkTexture.magFilter = THREE.NearestFilter
 wpPinkTexture.wrapS = THREE.RepeatWrapping
@@ -66,7 +66,7 @@ wpPinkNormalTexture.wrapS = THREE.RepeatWrapping
 wpPinkNormalTexture.wrapT = THREE.RepeatWrapping
 
 export const wpGreenTexture = loader.load(
-  'assets/textures/custom/256-wallpaper-green-diffuse-bl-90.jpg'
+  'assets/textures/custom/256-wallpaper-green-adjust.jpg'
 )
 wpGreenTexture.magFilter = THREE.NearestFilter
 wpGreenTexture.wrapS = THREE.RepeatWrapping
@@ -80,7 +80,7 @@ wpGreenNormalTexture.wrapS = THREE.RepeatWrapping
 wpGreenNormalTexture.wrapT = THREE.RepeatWrapping
 
 export const wpPurpleTexture = loader.load(
-  'assets/textures/custom/256-wallpaper-purple-diffuse-bl-90.jpg'
+  'assets/textures/custom/256-wallpaper-purple-adjust.jpg'
 )
 wpPurpleTexture.magFilter = THREE.NearestFilter
 wpPurpleTexture.wrapS = THREE.RepeatWrapping
