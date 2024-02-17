@@ -3,7 +3,6 @@ import * as CANNON from 'cannon-es'
 import {
   carpetNormalTexture,
   carpetTexture,
-  floorTexture,
   plasterNormalTexture,
   plasterTexture,
   tableLegTexture,
@@ -49,9 +48,6 @@ export const t_tableLegMaterial = new THREE.MeshStandardMaterial({
 })
 export const t_woodTrimMaterial = new THREE.MeshStandardMaterial({
   map: woodTrimTexture,
-})
-export const t_floorMaterial = new THREE.MeshLambertMaterial({
-  map: floorTexture,
 })
 export const t_carpetMaterial = new THREE.MeshLambertMaterial({
   map: carpetTexture,

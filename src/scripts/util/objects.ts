@@ -5,7 +5,6 @@ import {
   TestColors,
   c_basicMaterial,
   t_carpetMaterial,
-  t_floorMaterial,
   t_lambertMaterial,
   t_normalMaterial,
   t_plasterMaterial,

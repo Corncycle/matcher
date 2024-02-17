@@ -3,32 +3,25 @@ import * as THREE from 'three'
 const loader = new THREE.TextureLoader()
 
 export const tabletopTexture = loader.load(
-  'assets/textures/Wood/Wood_03-128x128.png'
+  'assets/textures/wood/128-wood-3.png'
 )
 tabletopTexture.magFilter = THREE.NearestFilter
 tabletopTexture.wrapS = THREE.RepeatWrapping
 tabletopTexture.wrapT = THREE.RepeatWrapping
 
 export const tableLegTexture = loader.load(
-  'assets/textures/Wood/Wood_07-128x128-low-contrast.png'
+  'assets/textures/wood/128-wood-7-lowcontrast.png'
 )
 tableLegTexture.magFilter = THREE.NearestFilter
 tableLegTexture.wrapS = THREE.RepeatWrapping
 tableLegTexture.wrapT = THREE.RepeatWrapping
 
 export const woodTrimTexture = loader.load(
-  'assets/textures/Wood/Wood_01-128x128.png'
+  'assets/textures/wood/128-wood-1.png'
 )
 woodTrimTexture.magFilter = THREE.NearestFilter
 woodTrimTexture.wrapS = THREE.RepeatWrapping
 woodTrimTexture.wrapT = THREE.RepeatWrapping
-
-export const floorTexture = loader.load(
-  'assets/textures/Metal/Metal_07-128x128.png'
-)
-floorTexture.magFilter = THREE.NearestFilter
-floorTexture.wrapS = THREE.RepeatWrapping
-floorTexture.wrapT = THREE.RepeatWrapping
 
 export const carpetTexture = loader.load(
   'assets/textures/custom/256-ccarpet-diffuse-bl-90.jpg'
