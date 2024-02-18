@@ -265,7 +265,7 @@ export function createStaticWall(
   const tileFactor = 0.5
 
   // proportion of the wall taken up by the wooden panel
-  const panelProportion = 0.26
+  const panelProportion = 0.2
   // length of trim protruding from wall
   const trimDepth = 0.045
 

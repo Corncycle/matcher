@@ -13,6 +13,9 @@ export let armchair: THREE.Group | undefined
 export let couch: THREE.Group | undefined
 export let dresser: THREE.Group | undefined
 export let grandfatherClock: THREE.Group | undefined
+export let chandelier: THREE.Group | undefined
+export let armchairBlue: THREE.Group | undefined
+export let nightstand: THREE.Group | undefined
 
 loader.load('assets/models/mino2.glb', (gltf) => {
   statue2 = gltf.scene
@@ -36,7 +39,20 @@ loader.load('assets/models/dresser.glb', (gltf) => {
 
 loader.load('assets/models/grandfather-clock.glb', (gltf) => {
   grandfatherClock = gltf.scene
-  // grandfatherClock.scale.set(1.05, 1.05, 1.05)
+})
+
+loader.load('assets/models/chandelier.glb', (gltf) => {
+  chandelier = gltf.scene
+})
+
+loader.load('assets/models/armchair-blue.glb', (gltf) => {
+  armchairBlue = gltf.scene
+  armchairBlue.scale.set(1.05, 1.05, 1.05)
+})
+
+loader.load('assets/models/nightstand.glb', (gltf) => {
+  nightstand = gltf.scene
+  nightstand.scale.set(0.5, 0.5, 0.5)
 })
 
 export enum PropTypes {
@@ -45,6 +61,9 @@ export enum PropTypes {
   COUCH = 'couch',
   DRESSER = 'dresser',
   GRANDFATHER_CLOCK = 'grandfatherClock',
+  CHANDELIER = 'chandelier',
+  ARMCHAIR_BLUE = 'armchairBlue',
+  NIGHTSTAND = 'nightstand',
 }
 
 function rotateAboutVertical(
@@ -263,6 +282,107 @@ export function createClockProp(
 
   const body = new CANNON.Body({ mass: 0, material: c_basicMaterial })
   addCannonBoxToBody(body, 0.3, 1.35, 0.22, 0, 0.675, -0.04)
+
+  g.add(propMesh)
+
+  g.position.set(x, y, z)
+  body.position.set(x, y, z)
+
+  rotateAboutVertical(g, body, rotationAboutVertical)
+
+  return { meshGroup: g, body: body }
+}
+
+export function createChandelierProp(
+  x: number,
+  y: number,
+  z: number,
+  rotationAboutVertical: number = 0
+) {
+  const g = new THREE.Group()
+  const propMesh = chandelier!.clone()
+
+  const body = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonBoxToBody(body, 0.55, 0.2, 0.55, 0, -0.4, 0)
+  addCannonBoxToBody(body, 0.55, 0.2, 0.55, 0, -0.4, 0, Math.PI / 4)
+  addCannonBoxToBody(body, 0.12, 1, 0.2, 0, -0.14, 0)
+
+  g.add(propMesh)
+
+  g.position.set(x, y, z)
+  body.position.set(x, y, z)
+
+  rotateAboutVertical(g, body, rotationAboutVertical)
+
+  return { meshGroup: g, body: body }
+}
+
+export function createArmchairBlueProp(
+  x: number,
+  y: number,
+  z: number,
+  rotationAboutVertical: number = 0
+) {
+  const g = new THREE.Group()
+  const propMesh = armchairBlue!.clone()
+  for (const child of propMesh.children) {
+    child.castShadow = true
+    child.receiveShadow = true
+  }
+  propMesh.children[0].castShadow = true
+  propMesh.receiveShadow = true
+
+  // If a body has multiple shapes, jump-refreshing can fail in cases like the following:
+  // Suppose the body has two shapes forming an L shape. If the player jumps into the
+  // vertical part of the body, a collision is detected. If the player fails to separate from
+  // the vertical "wall", then no collision is detected when landing on the horizontal part
+  // (because the player never stopped colliding with the body). Colliding with the vertical
+  // did not refresh the jump, so the player does not receive a jump even when landing on
+  // the horizontal, because no collision is registered when landing on the horizontal
+
+  // As a hacky fix, we separate bodies with shapes at multiple y-levels into separate bodies
+  // Our implementation for adding objects to the world allows `body` to be an array of bodies
+  const body1 = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonBoxToBody(body1, 0.62, 0.64, 0.47, 0, 0, 0)
+  const body2 = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonBoxToBody(body2, 0.1, 0.2, 0.48, -0.26, 0.37, 0)
+  addCannonBoxToBody(body2, 0.1, 0.2, 0.48, 0.26, 0.37, 0)
+  const body3 = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonBoxToBody(body3, 0.62, 0.45, 0.1, 0, 0.52, -0.24)
+  const bodies = [body1, body2, body3]
+
+  g.add(propMesh)
+
+  g.position.set(x, y, z)
+
+  for (const b of bodies) {
+    b.position.set(x, y, z)
+    rotateAboutVertical(g, b, rotationAboutVertical)
+  }
+
+  return { meshGroup: g, body: bodies }
+}
+
+export function createNightstandProp(
+  x: number,
+  y: number,
+  z: number,
+  rotationAboutVertical: number = 0
+) {
+  const g = new THREE.Group()
+  const propMesh = nightstand!.clone()
+
+  console.log(propMesh)
+  for (const child of propMesh.children[0].children) {
+    child.castShadow = true
+    child.receiveShadow = true
+  }
+  propMesh.children[0].castShadow = true
+  propMesh.receiveShadow = true
+
+  const body = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonBoxToBody(body, 0.4, 0.46, 0.4, 0, 0.23, 0)
+  addCannonBoxToBody(body, 0.47, 0.02, 0.47, 0, 0.461, 0)
 
   g.add(propMesh)
 

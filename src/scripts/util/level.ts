@@ -1,33 +1,28 @@
 import * as THREE from 'three'
-import * as CANNON from 'cannon-es'
 import {
   CEIL_HEIGHT,
   PredefinedObjects,
-  TestShapes,
-  createDynamicBall,
-  createDynamicBox,
-  createDynamicObject,
   createPredefinedDynamicObject,
-  createStaticBox,
   createStaticCeiling,
   createStaticFloor,
-  createStaticTable,
   createStaticWall,
   createTableWithTrigger,
 } from './objects'
 import SpaceManager from '../classes/Space'
 import {
-  TestColors,
   t_wpGreenMaterial,
   t_wpPinkMaterial,
   t_wpPurpleMaterial,
 } from './materials'
 import {
   PropTypes,
+  createArmchairBlueProp,
   createArmchairProp,
+  createChandelierProp,
   createClockProp,
   createCouchProp,
   createDresserProp,
+  createNightstandProp,
   createStatueProp,
 } from './props'
 
@@ -120,7 +115,7 @@ export const tableSpec = {
   2: [
     [1.5, 7.5 + TABLE_FIXER, 0],
     [2.5, 1.5 - TABLE_FIXER, Math.PI],
-    [7, 4.5 + TABLE_FIXER, Math.PI],
+    [7.5, 4.5 + TABLE_FIXER, Math.PI],
     [7.5 + TABLE_FIXER, 1.5, (3 * Math.PI) / 2],
   ],
   3: [
@@ -156,15 +151,36 @@ export const objectSpec = {
 
 export const propSpec = {
   0: [],
-  1: [{ type: PropTypes.MINO_STATUE, x: 4.5, z: 1.3, rotation: 0 }],
+  1: [
+    { type: PropTypes.ARMCHAIR_BLUE, x: 4, z: 6.65, rotation: Math.PI },
+    { type: PropTypes.ARMCHAIR_BLUE, x: 5.2, z: 6.65, rotation: Math.PI },
+    { type: PropTypes.GRANDFATHER_CLOCK, x: 4.6, z: 6.8, rotation: Math.PI },
+    { type: PropTypes.ARMCHAIR_BLUE, x: 5.7, z: 1.35, rotation: 0 },
+    { type: PropTypes.NIGHTSTAND, x: 5, z: 1.3, rotation: 0 },
+  ],
   2: [
+    { type: PropTypes.COUCH, x: 4.27, z: 7.1, rotation: -Math.PI / 2 },
+    { type: PropTypes.MINO_STATUE, x: 5.5, z: 4.64, rotation: Math.PI },
+    {
+      type: PropTypes.GRANDFATHER_CLOCK,
+      x: 3.2,
+      z: 7.8,
+      rotation: Math.PI,
+    },
+    { type: PropTypes.DRESSER, x: 1.2, z: 6, rotation: Math.PI / 2 },
+    { type: PropTypes.ARMCHAIR, x: 1.6, z: 1.35, rotation: 0 },
+    { type: PropTypes.CHANDELIER, x: 3.5, z: 3.5, rotation: 0 },
+  ],
+  3: [],
+  // level 4 doesn't exist, just putting this here to have a list of valid objects to use
+  4: [
     { type: PropTypes.MINO_STATUE, x: 4.5, z: 1.3, rotation: 0 },
     { type: PropTypes.ARMCHAIR, x: 4.5, z: 3, rotation: 0 },
     { type: PropTypes.COUCH, x: 2, z: 2.5, rotation: 0 },
     { type: PropTypes.DRESSER, x: 2, z: 6, rotation: Math.PI / 2 },
     { type: PropTypes.GRANDFATHER_CLOCK, x: 3, z: 7, rotation: Math.PI },
+    { type: PropTypes.CHANDELIER, x: 3, z: 3, rotation: 0 },
   ],
-  3: [],
 }
 
 // this function should only really be used by LevelManager, because it keeps track of triggers/objects
@@ -348,9 +364,35 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
           prop.z,
           prop.rotation ?? 0
         ))
+        break
+      case PropTypes.CHANDELIER:
+        ;({ meshGroup, body } = createChandelierProp(
+          prop.x,
+          CEIL_HEIGHT,
+          prop.z,
+          prop.rotation ?? 0
+        ))
+        break
+      case PropTypes.ARMCHAIR_BLUE:
+        ;({ meshGroup, body } = createArmchairBlueProp(
+          prop.x,
+          0,
+          prop.z,
+          prop.rotation ?? 0
+        ))
+        space.addObject({ body, meshGroup })
+        break
+      case PropTypes.NIGHTSTAND:
+        ;({ meshGroup, body } = createNightstandProp(
+          prop.x,
+          0,
+          prop.z,
+          prop.rotation ?? 0
+        ))
         space.addObject({ body, meshGroup })
         break
     }
+    space.addObject({ body, meshGroup })
   }
 }
 
