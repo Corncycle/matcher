@@ -92,3 +92,9 @@ export const wpPurpleNormalTexture = loader.load(
 wpPurpleNormalTexture.magFilter = THREE.NearestFilter
 wpPurpleNormalTexture.wrapS = THREE.RepeatWrapping
 wpPurpleNormalTexture.wrapT = THREE.RepeatWrapping
+
+export const redRugTexture = loader.load('assets/textures/custom/red-rug.png')
+redRugTexture.magFilter = THREE.NearestFilter
+
+export const blueRugTexture = loader.load('assets/textures/custom/blue-rug.png')
+blueRugTexture.magFilter = THREE.NearestFilter

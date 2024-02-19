@@ -2,7 +2,12 @@ import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { createStaticBox } from './objects'
-import { c_basicMaterial, t_tabletopMaterial } from './materials'
+import {
+  c_basicMaterial,
+  t_blueRugMaterial,
+  t_redRugMaterial,
+  t_tabletopMaterial,
+} from './materials'
 
 // this file is for loading in models for props
 
@@ -71,16 +76,19 @@ export enum PropTypes {
   ARMCHAIR_BLUE = 'armchairBlue',
   NIGHTSTAND = 'nightstand',
   LAMP = 'lamp',
+  RUG = 'rug',
 }
 
 function rotateAboutVertical(
   group: THREE.Group,
-  body: CANNON.Body,
+  body: CANNON.Body | null,
   rotation: number
 ) {
   if (rotation) {
     group.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), rotation)
-    body.quaternion.copy(group.quaternion as any)
+    if (body) {
+      body.quaternion.copy(group.quaternion as any)
+    }
   }
 }
 
@@ -441,4 +449,32 @@ export function createLampProp(
   rotateAboutVertical(g, body, rotationAboutVertical)
 
   return { meshGroup: g, body: body }
+}
+
+export function createRugProp(
+  x: number,
+  y: number,
+  z: number,
+  color: 'red' | 'blue',
+  rotationAboutVertical: number = 0
+) {
+  const g = new THREE.Group()
+  const planeMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(1, 1),
+    color === 'blue' ? t_blueRugMaterial : t_redRugMaterial
+  )
+  planeMesh.receiveShadow = true
+  planeMesh.castShadow = true
+  g.add(planeMesh)
+  g.position.set(x, y, z)
+  if (color === 'red') {
+    g.scale.set(3, 1, 2.25)
+  } else {
+    g.scale.set(4, 1, 3)
+  }
+  planeMesh.rotateOnAxis(new THREE.Vector3(1, 0, 0), -Math.PI / 2)
+
+  rotateAboutVertical(g, null, rotationAboutVertical)
+
+  return { meshGroup: g }
 }

@@ -24,6 +24,7 @@ import {
   createDresserProp,
   createLampProp,
   createNightstandProp,
+  createRugProp,
   createStatueProp,
 } from './props'
 
@@ -158,6 +159,7 @@ export const propSpec = {
     { type: PropTypes.GRANDFATHER_CLOCK, x: 4.6, z: 6.8, rotation: Math.PI },
     { type: PropTypes.ARMCHAIR_BLUE, x: 5.7, z: 1.35, rotation: 0 },
     { type: PropTypes.NIGHTSTAND, x: 5, z: 1.3, rotation: 0 },
+    { type: PropTypes.RUG, x: 4, z: 4, rotation: 0, color: 'blue' },
   ],
   2: [
     { type: PropTypes.COUCH, x: 4.27, z: 7.1, rotation: -Math.PI / 2 },
@@ -171,7 +173,8 @@ export const propSpec = {
     { type: PropTypes.DRESSER, x: 1.2, z: 6, rotation: Math.PI / 2 },
     { type: PropTypes.ARMCHAIR, x: 1.6, z: 1.35, rotation: 0 },
     { type: PropTypes.CHANDELIER, x: 3.5, z: 3.5, rotation: 0 },
-    { type: PropTypes.LAMP, x: 1.5, z: 2, rotation: 0 },
+    { type: PropTypes.LAMP, x: 1.5, z: 4, rotation: 0 },
+    { type: PropTypes.RUG, x: 5.7, z: 3, rotation: 0, color: 'red' },
   ],
   3: [],
   // level 4 doesn't exist, just putting this here to have a list of valid objects to use
@@ -251,7 +254,7 @@ function createLights(space: SpaceManager, levelNumber: number = 1) {
   const AMB_LIGHT_INTENSITY = 1
   const DIR_LIGHT_INTENSITY = 1.5
   // SHADOW_PROPORTION = how much intense, relative to fully accurate shadows, should shadow intensity be
-  const SHADOW_PROPORTION = 0.5
+  const SHADOW_PROPORTION = 0.6
 
   const LIGHT_COLOR = 0xffedd6
 
@@ -395,6 +398,15 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
           prop.rotation ?? 0
         ))
         break
+      case PropTypes.RUG:
+        ;({ meshGroup } = createRugProp(
+          prop.x,
+          0.01,
+          prop.z,
+          (prop as any).color ?? 'red',
+          prop.rotation ?? 0
+        ))
+        body = null
     }
     space.addObject({ body, meshGroup })
   }

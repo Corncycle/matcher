@@ -1,10 +1,12 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import {
+  blueRugTexture,
   carpetNormalTexture,
   carpetTexture,
   plasterNormalTexture,
   plasterTexture,
+  redRugTexture,
   tableLegTexture,
   tabletopTexture,
   woodTrimTexture,
@@ -78,6 +80,14 @@ export const t_wpPurpleMaterial = new THREE.MeshLambertMaterial({
   normalMap: wpPurpleNormalTexture,
 })
 t_wpPurpleMaterial.normalScale.set(2, 2)
+
+export const t_redRugMaterial = new THREE.MeshLambertMaterial({
+  map: redRugTexture,
+})
+
+export const t_blueRugMaterial = new THREE.MeshLambertMaterial({
+  map: blueRugTexture,
+})
 
 // CANNON MATERIALS
 export const c_playerMaterial = new CANNON.Material()

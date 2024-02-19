@@ -52,7 +52,7 @@ export default class SpaceManager {
 
   addObject(obj: {
     mesh?: THREE.Mesh | THREE.Group
-    body: CANNON.Body | CANNON.Body[]
+    body: CANNON.Body | CANNON.Body[] | null
     meshGroup?: THREE.Group
   }) {
     if (obj.mesh) {
@@ -60,6 +60,9 @@ export default class SpaceManager {
     }
     if (obj.meshGroup) {
       this.scene.add(obj.meshGroup)
+    }
+    if (!obj.body) {
+      return
     }
     if (Array.isArray(obj.body)) {
       for (const b of obj.body) {
