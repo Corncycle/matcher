@@ -22,6 +22,7 @@ import {
   createClockProp,
   createCouchProp,
   createDresserProp,
+  createLampProp,
   createNightstandProp,
   createStatueProp,
 } from './props'
@@ -170,6 +171,7 @@ export const propSpec = {
     { type: PropTypes.DRESSER, x: 1.2, z: 6, rotation: Math.PI / 2 },
     { type: PropTypes.ARMCHAIR, x: 1.6, z: 1.35, rotation: 0 },
     { type: PropTypes.CHANDELIER, x: 3.5, z: 3.5, rotation: 0 },
+    { type: PropTypes.LAMP, x: 1.5, z: 2, rotation: 0 },
   ],
   3: [],
   // level 4 doesn't exist, just putting this here to have a list of valid objects to use
@@ -328,7 +330,6 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
           prop.z,
           prop.rotation ?? 0
         ))
-        space.addObject({ body, meshGroup })
         break
       case PropTypes.ARMCHAIR:
         ;({ meshGroup, body } = createArmchairProp(
@@ -337,7 +338,6 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
           prop.z,
           prop.rotation ?? 0
         ))
-        space.addObject({ body, meshGroup })
         break
       case PropTypes.COUCH:
         ;({ meshGroup, body } = createCouchProp(
@@ -346,7 +346,6 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
           prop.z,
           prop.rotation ?? 0
         ))
-        space.addObject({ body, meshGroup })
         break
       case PropTypes.DRESSER:
         ;({ meshGroup, body } = createDresserProp(
@@ -355,7 +354,6 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
           prop.z,
           prop.rotation ?? 0
         ))
-        space.addObject({ body, meshGroup })
         break
       case PropTypes.GRANDFATHER_CLOCK:
         ;({ meshGroup, body } = createClockProp(
@@ -380,7 +378,6 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
           prop.z,
           prop.rotation ?? 0
         ))
-        space.addObject({ body, meshGroup })
         break
       case PropTypes.NIGHTSTAND:
         ;({ meshGroup, body } = createNightstandProp(
@@ -389,7 +386,14 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
           prop.z,
           prop.rotation ?? 0
         ))
-        space.addObject({ body, meshGroup })
+        break
+      case PropTypes.LAMP:
+        ;({ meshGroup, body } = createLampProp(
+          prop.x,
+          0,
+          prop.z,
+          prop.rotation ?? 0
+        ))
         break
     }
     space.addObject({ body, meshGroup })

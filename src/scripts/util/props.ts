@@ -16,6 +16,7 @@ export let grandfatherClock: THREE.Group | undefined
 export let chandelier: THREE.Group | undefined
 export let armchairBlue: THREE.Group | undefined
 export let nightstand: THREE.Group | undefined
+export let lamp: THREE.Group | undefined
 
 loader.load('assets/models/mino2.glb', (gltf) => {
   statue2 = gltf.scene
@@ -55,6 +56,11 @@ loader.load('assets/models/nightstand.glb', (gltf) => {
   nightstand.scale.set(0.5, 0.5, 0.5)
 })
 
+loader.load('assets/models/lamp.glb', (gltf) => {
+  lamp = gltf.scene
+  lamp.scale.set(0.4, 0.4, 0.4)
+})
+
 export enum PropTypes {
   MINO_STATUE = 'minotaur',
   ARMCHAIR = 'armchair',
@@ -64,6 +70,7 @@ export enum PropTypes {
   CHANDELIER = 'chandelier',
   ARMCHAIR_BLUE = 'armchairBlue',
   NIGHTSTAND = 'nightstand',
+  LAMP = 'lamp',
 }
 
 function rotateAboutVertical(
@@ -86,6 +93,19 @@ function addCannonSphereToBody(
 ) {
   const sph = new CANNON.Sphere(r)
   b.addShape(sph, new CANNON.Vec3(x, y, z))
+}
+
+function addCannonCylinderToBody(
+  b: CANNON.Body,
+  x: number,
+  y: number,
+  z: number,
+  r: number,
+  h: number,
+  segments: number = 8
+) {
+  const cyl = new CANNON.Cylinder(r, r, h, segments)
+  b.addShape(cyl, new CANNON.Vec3(x, y, z))
 }
 
 function addCannonBoxToBody(
@@ -383,6 +403,35 @@ export function createNightstandProp(
   const body = new CANNON.Body({ mass: 0, material: c_basicMaterial })
   addCannonBoxToBody(body, 0.4, 0.46, 0.4, 0, 0.23, 0)
   addCannonBoxToBody(body, 0.47, 0.02, 0.47, 0, 0.461, 0)
+
+  g.add(propMesh)
+
+  g.position.set(x, y, z)
+  body.position.set(x, y, z)
+
+  rotateAboutVertical(g, body, rotationAboutVertical)
+
+  return { meshGroup: g, body: body }
+}
+
+export function createLampProp(
+  x: number,
+  y: number,
+  z: number,
+  rotationAboutVertical: number = 0
+) {
+  const g = new THREE.Group()
+  const propMesh = lamp!.clone()
+  for (const child of propMesh.children) {
+    child.castShadow = true
+    child.receiveShadow = true
+  }
+  propMesh.children[0].castShadow = true
+  propMesh.receiveShadow = true
+
+  const body = new CANNON.Body({ mass: 0, material: c_basicMaterial })
+  addCannonCylinderToBody(body, 0, 0.55, 0, 0.02, 1.1)
+  addCannonCylinderToBody(body, 0, 1.04, 0, 0.16, 0.28)
 
   g.add(propMesh)
 
