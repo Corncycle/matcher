@@ -310,7 +310,8 @@ function createTables(
   for (const i in tableSpec[levelNumber as 1]) {
     const { mesh, body, trigger } = createTableWithTrigger(
       ...(tableSpec[levelNumber as 1][i] as [number, number, number]),
-      parseInt(i)
+      parseInt(i),
+      isPreview
     )
     space.addObject({ mesh, body })
     if (!isPreview) {

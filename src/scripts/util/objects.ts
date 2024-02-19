@@ -572,7 +572,8 @@ function tableHelper(
   x: number,
   y: number,
   z: number,
-  material: THREE.Material
+  material: THREE.Material,
+  withBlocker: boolean = false
 ) {
   const mesh = new THREE.Mesh(
     createUvMappedCubeGeometry(width, height, length, 1),
@@ -588,9 +589,23 @@ function tableHelper(
     new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, length / 2)),
     new CANNON.Vec3(x, y, z)
   )
+
+  if (withBlocker) {
+    body.addShape(
+      new CANNON.Box(
+        new CANNON.Vec3(width / 2 + 0.02, height / 2, length / 2 + 0.02)
+      ),
+      new CANNON.Vec3(x, y + 0.7, z)
+    )
+  }
 }
 
-export function createStaticTable(x: number, z: number, rotation: number) {
+export function createStaticTable(
+  x: number,
+  z: number,
+  rotation: number,
+  withBlocker: boolean = false
+) {
   const t_axis = new THREE.Vector3(0, 1, 0)
   const c_axis = new CANNON.Vec3(0, 1, 0)
 
@@ -609,7 +624,7 @@ export function createStaticTable(x: number, z: number, rotation: number) {
   tableHelper(gp, body, 0.6, 0.05, 0.02, 0, -0.35, 0, t_tableLegMaterial)
 
   // tabletop
-  tableHelper(gp, body, 0.8, 0.1, 0.6, 0, 0, 0, t_tabletopMaterial)
+  tableHelper(gp, body, 0.8, 0.1, 0.6, 0, 0, 0, t_tabletopMaterial, withBlocker)
 
   gp.position.set(x, 0.45, z)
   gp.quaternion.setFromAxisAngle(t_axis, rotation)
@@ -625,9 +640,10 @@ export function createTableWithTrigger(
   x: number,
   z: number,
   rotation: number,
-  id: number = -1
+  id: number = -1,
+  withBlocker: boolean = false
 ) {
-  const { mesh, body } = createStaticTable(x, z, rotation)
+  const { mesh, body } = createStaticTable(x, z, rotation, withBlocker)
   const trigger = new PuzzleTrigger(0.7, 0.1, 0.5, x, 0.55, z, rotation, id)
   return { mesh, body, trigger }
 }
