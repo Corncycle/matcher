@@ -66,6 +66,8 @@ window.DEV_COMMANDS = () => {
     } else if (e.key === 'n') {
       appleGroup?.position.set(5, 3, 5)
       space.scene.add(appleGroup!)
+    } else if (e.key === 'c') {
+      console.log(space.cameraControls.currentInput)
     } else if (e.key === 'r') {
       console.log(space.dynamicObjects[1].body.quaternion)
     } else if (e.key === '[') {

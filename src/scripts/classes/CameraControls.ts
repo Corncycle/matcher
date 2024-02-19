@@ -333,6 +333,13 @@ export default class CameraControls {
 
     this.canJump = false
 
+    this.currentInput = {
+      left: false,
+      right: false,
+      forward: false,
+      back: false,
+    }
+
     this.heldObjectDestination = new THREE.Vector3(0, 0, -1)
 
     this.worldDirection = new THREE.Vector3(0, 0, 0)
@@ -378,5 +385,7 @@ export default class CameraControls {
         this.canJump = true
       }
     })
+
+    this.updateHorizontal()
   }
 }
