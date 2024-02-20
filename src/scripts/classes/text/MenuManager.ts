@@ -66,7 +66,7 @@ export default class MenuManager {
       this.menuContainer
     )
     title.classList.add('mainTitle')
-    title.textContent = 'The Memory Assessment'
+    title.textContent = 'A Memory Assessment'
     title.style.visibility = 'inherit'
 
     const playButton = this.createButton(

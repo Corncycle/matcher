@@ -16,7 +16,6 @@ import {
 } from './materials'
 import {
   PropTypes,
-  createArmchairBlueProp,
   createArmchairProp,
   createChandelierProp,
   createClockProp,
@@ -154,10 +153,23 @@ export const objectSpec = {
 export const propSpec = {
   0: [],
   1: [
-    { type: PropTypes.ARMCHAIR_BLUE, x: 4, z: 6.65, rotation: Math.PI },
-    { type: PropTypes.ARMCHAIR_BLUE, x: 5.2, z: 6.65, rotation: Math.PI },
+    { type: PropTypes.LAMP, x: 1.3, z: 1.3, rotation: 0 },
+    {
+      type: PropTypes.ARMCHAIR,
+      x: 4,
+      z: 6.65,
+      rotation: Math.PI,
+      color: 'blue',
+    },
+    {
+      type: PropTypes.ARMCHAIR,
+      x: 5.2,
+      z: 6.65,
+      rotation: Math.PI,
+      color: 'blue',
+    },
     { type: PropTypes.GRANDFATHER_CLOCK, x: 4.6, z: 6.8, rotation: Math.PI },
-    { type: PropTypes.ARMCHAIR_BLUE, x: 5.7, z: 1.35, rotation: 0 },
+    { type: PropTypes.ARMCHAIR, x: 5.7, z: 1.35, rotation: 0, color: 'blue' },
     { type: PropTypes.NIGHTSTAND, x: 5, z: 1.3, rotation: 0 },
     { type: PropTypes.RUG, x: 4, z: 4, rotation: 0, color: 'blue' },
   ],
@@ -170,21 +182,42 @@ export const propSpec = {
       z: 7.8,
       rotation: Math.PI,
     },
-    { type: PropTypes.DRESSER, x: 1.2, z: 6, rotation: Math.PI / 2 },
+    { type: PropTypes.DRESSER, x: 1.2, z: 5, rotation: Math.PI / 2 },
     { type: PropTypes.ARMCHAIR, x: 1.6, z: 1.35, rotation: 0 },
     { type: PropTypes.CHANDELIER, x: 3.5, z: 3.5, rotation: 0 },
-    { type: PropTypes.LAMP, x: 1.5, z: 4, rotation: 0 },
+    { type: PropTypes.LAMP, x: 1.2, z: 6, rotation: 0 },
     { type: PropTypes.RUG, x: 5.7, z: 3, rotation: 0, color: 'red' },
+    { type: PropTypes.ARMCHAIR, x: 4.5, z: 1.35, rotation: 0 },
+    { type: PropTypes.NIGHTSTAND, x: 5.1, z: 1.35, rotation: 0 },
+    { type: PropTypes.ARMCHAIR, x: 5.7, z: 1.35, rotation: 0 },
+    { type: PropTypes.DRESSER, x: 7.8, z: 3, rotation: -Math.PI / 2 },
+    { type: PropTypes.NIGHTSTAND, x: 4.7, z: 5.9, rotation: -Math.PI / 2 },
   ],
-  3: [],
-  // level 4 doesn't exist, just putting this here to have a list of valid objects to use
-  4: [
-    { type: PropTypes.MINO_STATUE, x: 4.5, z: 1.3, rotation: 0 },
-    { type: PropTypes.ARMCHAIR, x: 4.5, z: 3, rotation: 0 },
-    { type: PropTypes.COUCH, x: 2, z: 2.5, rotation: 0 },
-    { type: PropTypes.DRESSER, x: 2, z: 6, rotation: Math.PI / 2 },
-    { type: PropTypes.GRANDFATHER_CLOCK, x: 3, z: 7, rotation: Math.PI },
-    { type: PropTypes.CHANDELIER, x: 3, z: 3, rotation: 0 },
+  3: [
+    { type: PropTypes.DRESSER, x: 6.2, z: 2.2, rotation: 0, color: 'washed' },
+    { type: PropTypes.LAMP, x: 7, z: 2.2, rotation: 0 },
+    {
+      type: PropTypes.ARMCHAIR,
+      x: 8.6,
+      z: 5.65,
+      rotation: Math.PI,
+      color: 'pink',
+    },
+    {
+      type: PropTypes.NIGHTSTAND,
+      x: 8,
+      z: 5.7,
+      rotation: Math.PI,
+      color: 'washed',
+    },
+    {
+      type: PropTypes.ARMCHAIR,
+      x: 5,
+      z: 5.65,
+      rotation: Math.PI,
+      color: 'pink',
+    },
+    { type: PropTypes.GRANDFATHER_CLOCK, x: 4.3, z: 5.8, rotation: Math.PI },
   ],
 }
 
@@ -340,7 +373,8 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
           prop.x,
           0,
           prop.z,
-          prop.rotation ?? 0
+          prop.rotation ?? 0,
+          prop.color! as any
         ))
         break
       case PropTypes.COUCH:
@@ -356,7 +390,8 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
           prop.x,
           0,
           prop.z,
-          prop.rotation ?? 0
+          prop.rotation ?? 0,
+          prop.color! as any
         ))
         break
       case PropTypes.GRANDFATHER_CLOCK:
@@ -375,20 +410,13 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
           prop.rotation ?? 0
         ))
         break
-      case PropTypes.ARMCHAIR_BLUE:
-        ;({ meshGroup, body } = createArmchairBlueProp(
-          prop.x,
-          0,
-          prop.z,
-          prop.rotation ?? 0
-        ))
-        break
       case PropTypes.NIGHTSTAND:
         ;({ meshGroup, body } = createNightstandProp(
           prop.x,
           0,
           prop.z,
-          prop.rotation ?? 0
+          prop.rotation ?? 0,
+          prop.color! as any
         ))
         break
       case PropTypes.LAMP:

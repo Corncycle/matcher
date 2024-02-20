@@ -1,17 +1,9 @@
-import * as THREE from 'three'
-import * as CANNON from 'cannon-es'
 import CannonDebugRenderer from './scripts/util/cannonDebugRenderer'
 import SpaceManager from './scripts/classes/Space'
-import {
-  PredefinedObjects,
-  appleGroup,
-  createStaticBox,
-  createStaticGround,
-} from './scripts/util/objects'
+import { appleGroup } from './scripts/util/objects'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import LevelManager from './scripts/classes/LevelManager'
 import { wrapWithTransition } from './scripts/util/util'
-import { createStatueProp, statue2 } from './scripts/util/props'
 import { objectSpec } from './scripts/util/level'
 import { OverlayModes } from './scripts/classes/text/OverlayManager'
 import { modelLoadingScreen } from './scripts/util/modelLoading'

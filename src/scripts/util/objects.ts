@@ -52,7 +52,6 @@ loader.load('assets/models/orange-new.glb', (gltf) => {
 })
 loader.load('assets/models/banana-new.glb', (gltf) => {
   bananaGroup = gltfLoaderHelper(gltf, 0, 0.7)
-  bananaGroup.children[0].translateY(0.1)
 })
 loader.load('assets/models/mango-new.glb', (gltf) => {
   mangoGroup = gltfLoaderHelper(gltf, 0, 0.7)
@@ -497,11 +496,11 @@ export function createPredefinedDynamicObject(
       naiveMesh = new THREE.Mesh()
       naiveMesh.scale.multiplyScalar(0.24)
       body = new CANNON.Body({ mass: 7, material: c_basicMaterial })
-      addCannonBoxToBody(body, 0.25, 0.08, 0.08, 0, 0, 0)
-      addCannonSphereToBody(body, -0.25, 0.19, 0, 0.01)
-      addCannonSphereToBody(body, -0.15, 0.06, 0, 0.04)
-      addCannonSphereToBody(body, 0.25, 0.1, 0, 0.01)
-      addCannonSphereToBody(body, 0.15, 0.03, 0, 0.04)
+      addCannonBoxToBody(body, 0.25, 0.08, 0.08, 0, -0.03, 0)
+      addCannonSphereToBody(body, -0.25, 0.16, 0, 0.01)
+      addCannonSphereToBody(body, -0.15, 0.03, 0, 0.04)
+      addCannonSphereToBody(body, 0.25, 0.07, 0, 0.01)
+      addCannonSphereToBody(body, 0.15, 0, 0, 0.04)
       body.position = new CANNON.Vec3(x, y, z)
       body.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.PI / 4)
       // body.angularDamping = 0.96

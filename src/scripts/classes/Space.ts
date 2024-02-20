@@ -7,6 +7,7 @@ import {
 import CameraControls from './CameraControls'
 import DynamicObject from './DynamicObject'
 import LevelManager from './LevelManager'
+import { clamp } from '../util/util'
 
 // A space manager holds graphical + physical data for a world
 // ie a three scene + camera + renderer, cannon world, etc
@@ -46,7 +47,7 @@ export default class SpaceManager {
     // new delta of 0.1 each
     const delta = Math.min(this.clock.getDelta(), 0.1)
     for (let i = 0; i < deltaSubdivisions; i++) {
-      this.world.step(Math.max(0.0001, delta / deltaSubdivisions)) // if a value <= 0 is passed into this.world.step we can get NaN positions on bodies
+      this.world.step(clamp(delta / deltaSubdivisions, 0.0001, 0.1)) // if a value <= 0 is passed into this.world.step we can get NaN positions on bodies
     }
   }
 
