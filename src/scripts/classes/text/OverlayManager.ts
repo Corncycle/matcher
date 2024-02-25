@@ -21,6 +21,10 @@ export default class OverlayManager {
   headerElm: HTMLDivElement
   countdownElm: HTMLDivElement
 
+  grabElm: HTMLDivElement
+  dropElm: HTMLDivElement
+  skipElm: HTMLDivElement
+
   menuManager: MenuManager
   menuElm: HTMLDivElement
 
@@ -38,19 +42,26 @@ export default class OverlayManager {
 
     this.canvas = document.createElement('div')
     this.canvas.style.position = 'absolute'
-    this.canvas.style.inset = '0'
+    this.canvas.style.top = '0'
+    this.canvas.style.width = '100%'
+    this.canvas.style.zIndex = '0'
     this.canvas.style.pointerEvents = 'none'
+    this.canvas.style.height = document.body.clientHeight + 'px'
+    window.addEventListener('resize', () => {
+      this.canvas.style.height = document.body.clientHeight + 'px'
+    })
 
     document.body.appendChild(this.canvas)
 
     this.headerElm = this.initializeElement(true, {
       top: '5%',
       width: '100%',
-      height: '5%',
+      height: '8%',
       textAlign: 'center',
       color: 'white',
       fontSizeFillHeight: '1',
     })
+    this.headerElm.classList.add('gradientText', 'textOutlineMedium')
     this.setText(this.headerElm, 'Memorize!')
 
     this.countdownElm = this.initializeElement(true, {
@@ -62,6 +73,19 @@ export default class OverlayManager {
       fontSizeFillHeight: '1',
     })
     this.setText(this.countdownElm, '10')
+
+    this.grabElm = this.initializeInputSuggestionElement(
+      'Grab',
+      'keyboard_e_outline.svg'
+    )
+    this.dropElm = this.initializeInputSuggestionElement(
+      'Drop',
+      'keyboard_e.svg'
+    )
+    this.skipElm = this.initializeInputSuggestionElement(
+      'Skip',
+      'keyboard_shift_outline.svg'
+    )
 
     this.menuManager = new MenuManager(this)
     this.menuElm = this.menuManager.root
@@ -139,6 +163,48 @@ export default class OverlayManager {
     return out
   }
 
+  initializeInputSuggestionElement(text: string, img: string) {
+    const root = initializeDivElement(
+      false,
+      {
+        position: 'absolute',
+        bottom: '0',
+        left: '1%',
+        height: '18%',
+        // background: 'Red',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '5%',
+        opacity: '80%',
+      },
+      this.canvas
+    )
+
+    const textElm = initializeDivElement(
+      false,
+      {
+        height: '40%',
+        fontSizeFillHeight: '1',
+        color: 'white',
+      },
+      root,
+      true
+    )
+    textElm.classList.add('inputSuggestion')
+    this.setText(textElm, text)
+
+    const imgElm = document.createElement('img')
+    if (text === 'Skip') {
+      imgElm.style.height = '100%'
+    } else {
+      imgElm.style.height = '50%'
+    }
+    imgElm.src = '/assets/icons/' + img
+
+    root.append(imgElm, textElm)
+    return root
+  }
+
   showElm(elm: HTMLElement) {
     elm.style.visibility = 'visible'
   }
@@ -149,6 +215,7 @@ export default class OverlayManager {
 
   setText(elm: HTMLElement, text: string) {
     elm.textContent = text
+    elm.dataset.text = text
   }
 
   slideOut() {
@@ -172,5 +239,30 @@ export default class OverlayManager {
     this.loadingModelsElm.innerText = ''
     this.hideElm(this.blockerElm)
     this.hideElm(this.loadingModelsText)
+  }
+
+  suggestSkip() {
+    this.hideElm(this.grabElm)
+    this.hideElm(this.dropElm)
+    this.showElm(this.skipElm)
+    this.skipElm.style.opacity = '20%'
+  }
+
+  suggestGrab() {
+    this.showElm(this.grabElm)
+    this.hideElm(this.dropElm)
+    this.hideElm(this.skipElm)
+  }
+
+  suggestDrop() {
+    this.hideElm(this.grabElm)
+    this.showElm(this.dropElm)
+    this.hideElm(this.skipElm)
+  }
+
+  suggestNone() {
+    this.hideElm(this.grabElm)
+    this.hideElm(this.dropElm)
+    this.hideElm(this.skipElm)
   }
 }

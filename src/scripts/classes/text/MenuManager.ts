@@ -16,7 +16,7 @@ export default class MenuManager {
     this.root = initializeDivElement(
       true,
       {
-        inset: '0px',
+        inset: '0',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -58,15 +58,14 @@ export default class MenuManager {
     const title = initializeDivElement(
       false,
       {
-        overflow: 'hidden',
         whiteSpace: 'nowrap',
-        height: '20%',
+        height: '24%',
         fontSizeFillHeight: '1',
       },
       this.menuContainer
     )
-    title.classList.add('mainTitle')
-    title.textContent = 'A Memory Assessment'
+    title.classList.add('mainTitle', 'textOutlineLarge', 'gradientText')
+    this.overlayManager.setText(title, 'A Memory Assessment')
     title.style.visibility = 'inherit'
 
     const playButton = this.createButton(
@@ -97,7 +96,9 @@ export default class MenuManager {
       false,
       {
         position: 'absolute',
-        inset: '0',
+        zIndex: '1',
+        width: '100%',
+        height: '100%',
         pointerEvents: 'auto',
         cursor: 'pointer',
       },
@@ -113,8 +114,8 @@ export default class MenuManager {
         position: 'absolute',
         left: '0',
         right: '0',
-        top: '20%',
-        bottom: '20%',
+        top: '15%',
+        bottom: '15%',
         pointerEvents: 'none',
         display: 'flex',
         justifyContent: 'center',
@@ -124,86 +125,16 @@ export default class MenuManager {
       true
     )
 
-    const helpContainer = initializeDivElement(
-      false,
-      {
-        background: 'blue',
-        height: '100%',
-        width: 'auto',
-        pointerEvents: 'auto',
-        userSelect: 'none',
-        cursor: 'auto',
-      },
-      margins,
-      true
-    )
-    helpContainer.addEventListener('click', (e) => {
+    const img = document.createElement('img')
+    img.style.height = '100%'
+    img.style.pointerEvents = 'auto'
+    img.style.cursor = 'auto'
+    img.src = 'assets/how-to-play.png'
+    img.draggable = false
+    img.addEventListener('click', (e) => {
       e.stopPropagation()
     })
-
-    const topContainer = initializeDivElement(
-      false,
-      {
-        background: 'tomato',
-        height: '43%',
-        display: 'flex',
-        pointerEvents: 'none',
-      },
-      helpContainer,
-      true
-    )
-    // topContainer.textContent = 'im the top container'
-
-    const horizDivider = initializeDivElement(
-      false,
-      { height: '4%', poitnerEvents: 'none' },
-      helpContainer,
-      true
-    )
-
-    const botContainer = initializeDivElement(
-      false,
-      {
-        background: 'cyan',
-        height: '53%',
-        pointerEvents: 'none',
-      },
-      helpContainer,
-      true
-    )
-    botContainer.textContent = 'im the bot container'
-
-    const moveContainer = initializeDivElement(
-      false,
-      { background: 'brown', height: '100%' },
-      topContainer,
-      true
-    )
-
-    const vertDivider = initializeDivElement(
-      false,
-      { height: '100%' },
-      topContainer,
-      true
-    )
-
-    const pickContainer = initializeDivElement(
-      false,
-      { background: 'sienna', height: '100%' },
-      topContainer,
-      true
-    )
-
-    const moveKeysContainer = initializeDivElement(
-      false,
-      { height: '100%' },
-      moveContainer,
-      true
-    )
-
-    for (const char of ['w', 'a', 's', 'd']) {
-      this.initializeSvgElement(moveKeysContainer, `keyboard_${char}`, 50)
-    }
+    margins.appendChild(img)
   }
 
   initializeSvgElement(
@@ -242,7 +173,7 @@ export default class MenuManager {
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: '9999px',
-        width: '70%',
+        width: '50%',
         height: '14%',
         fontSizeFillHeight: '0.6',
       },

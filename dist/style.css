@@ -4,14 +4,66 @@
 :root {
     --charcoal: #18181b;
     --soft-grey: #71717a;
+
+    --gradient1: #ffffff;
+    --gradient2: rgb(255, 252, 88);
+
+    --textOutline: #000000;
+
+    /* palette colors */
+    /* --pal1: #995D81;
+    --pal2: #B7C3F3;
+    --pal3: #FFC857;
+    --pal4: #E9724C;
+    --pal5: #255F85; */
+
+    --pal1: #B68CA5;
+    --pal2: #CFD6F5;
+    --pal3: #FAD58D;
+    --pal4: #EB9F86;
+    --pal5: #4892C4;
+}
+
+.gradientText {
+    position: relative;
+    color: transparent;
+    background: linear-gradient(var(--pal3), var(--pal1));
+    /* background: transparent; */
+    -webkit-background-clip: text;
+    background-clip: text;
+    fill: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+.textOutlineSmall::before, .textOutlineMedium::before, .textOutlineLarge::before {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+}
+
+.textOutlineSmall::before {
+    -webkit-text-stroke: 5px var(--charcoal);
+}
+
+.textOutlineMedium::before {
+    -webkit-text-stroke: 10px var(--charcoal);
+}
+
+.textOutlineLarge::before {
+    -webkit-text-stroke: 20px var(--charcoal);
 }
 
 .overlayText {
-    font-family: "Varela Round", sans-serif;
+    font-family: "Dangrek", sans-serif;
 }
 
 .mainTitle {
-    font-family: "Dangrek";
+    font-family: "Dangrek", sans-serif;
+}
+
+.inputSuggestion {
+    font-family: "Dangrek", sans-serif;
 }
 
 .menuButton {
@@ -22,6 +74,11 @@
 .menuButton:hover {
     transform: scale(1.03);
     color: var(--soft-grey);
+}
+
+.slideOutBase, .fadeInBase {
+    position: relative;
+    z-index: 200;
 }
 
 .slideOutBase {

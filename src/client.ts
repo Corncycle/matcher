@@ -4,8 +4,6 @@ import { appleGroup } from './scripts/util/objects'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import LevelManager from './scripts/classes/LevelManager'
 import { wrapWithTransition } from './scripts/util/util'
-import { objectSpec } from './scripts/util/level'
-import { OverlayModes } from './scripts/classes/text/OverlayManager'
 import { modelLoadingScreen } from './scripts/util/modelLoading'
 
 // ***** BEGIN SETUP *****
@@ -28,8 +26,9 @@ declare global {
 
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Shift') {
-    if (levelManager.inPreview) {
-      levelManager.inPreview = false
+    console.log(`canSkip: ${levelManager.canSkip}`)
+    if (levelManager.canSkip) {
+      levelManager.canSkip = false
       levelManager.goToSecondStage()
     }
   }
@@ -85,8 +84,8 @@ modelLoadingScreen(() => {
 })
 
 setTimeout(() => {
-  levelManager.overlayManager.setMode(OverlayModes.INFO)
-  levelManager.loadLevel(2, objectSpec[2])
+  // levelManager.overlayManager.setMode(OverlayModes.INFO)
+  // levelManager.loadLevel(2, objectSpec[2])
   // cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
 }, 400)
 

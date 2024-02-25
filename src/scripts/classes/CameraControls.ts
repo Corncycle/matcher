@@ -275,10 +275,15 @@ export default class CameraControls {
 
   updateReticle() {
     if (this.heldObject) {
+      this.space?.levelManager?.overlayManager.suggestDrop()
       this.reticle.setMode(ReticleDisplays.ACTIVE)
     } else if (this.getInteractableObjectInSight()) {
+      this.space?.levelManager?.overlayManager.suggestGrab()
       this.reticle.setMode(ReticleDisplays.HOVER)
     } else {
+      if (!this.space?.levelManager?.inPreview) {
+        this.space?.levelManager?.overlayManager.suggestNone()
+      }
       this.reticle.setMode(ReticleDisplays.INACTIVE)
     }
   }

@@ -395,7 +395,6 @@ export function createNightstandProp(
   } else {
     propMesh = nightstand!.clone()
   }
-  console.log(propMesh)
   for (const child of propMesh.children[0].children) {
     child.castShadow = true
     child.receiveShadow = true

@@ -24,6 +24,7 @@ const PREVIEW_LENGTH = 10
 
 export default class LevelManager {
   inMenu: boolean
+  canSkip: boolean
   inPreview: boolean
   timeoutId: ReturnType<typeof setTimeout> | undefined
 
@@ -52,6 +53,7 @@ export default class LevelManager {
   constructor(space: SpaceManager) {
     this.inMenu = true
     this.inPreview = false
+    this.canSkip = false
 
     this.currentLevel = -1
     space.levelManager = this
@@ -84,6 +86,7 @@ export default class LevelManager {
     objSpec.sort((a, b) => 0.5 - Math.random())
     this.loadPreviewLevel(levelNumber, objSpec)
     this.overlayManager.setMode(OverlayModes.COUNTDOWN)
+    this.overlayManager.suggestSkip()
 
     this._objSpec = objSpec
 
@@ -94,6 +97,7 @@ export default class LevelManager {
 
   goToSecondStage() {
     this.inPreview = false
+    this.canSkip = false
     if (this.timeoutId) {
       clearTimeout(this.timeoutId)
       this.timeoutId = undefined
@@ -105,6 +109,7 @@ export default class LevelManager {
       this.cheatRecord = record
       this.overlayManager.setMode(OverlayModes.INFO)
       this.overlayManager.setText(this.overlayManager.headerElm, 'Match!')
+      this.overlayManager.suggestNone()
     })
   }
 
@@ -118,6 +123,10 @@ export default class LevelManager {
       spawnSpec[levelNumber as 1][1]
     )
     loadLevel(this.space, levelNumber, true, objSpec)
+    setTimeout(() => {
+      this.canSkip = true
+      this.overlayManager.skipElm.style.opacity = '80%'
+    }, 2000)
     if (levelNumber === 3) {
       this.loadCheatingResources()
     }
