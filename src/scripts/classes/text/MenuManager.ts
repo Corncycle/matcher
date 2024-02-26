@@ -168,7 +168,6 @@ export default class MenuManager {
     const button = initializeDivElement(
       doDefaultStyles,
       {
-        background: 'white',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

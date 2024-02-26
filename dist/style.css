@@ -8,27 +8,64 @@
     --gradient1: #ffffff;
     --gradient2: rgb(255, 252, 88);
 
+    --buttonbg: #F2AD71;
+
     --textOutline: #000000;
 
     /* palette colors */
-    /* --pal1: #995D81;
+    --pal1: #995D81;
     --pal2: #B7C3F3;
     --pal3: #FFC857;
     --pal4: #E9724C;
-    --pal5: #255F85; */
+    --pal5: #255F85;
 
-    --pal1: #B68CA5;
+    /* --pal1: #B68CA5;
     --pal2: #CFD6F5;
     --pal3: #FAD58D;
     --pal4: #EB9F86;
-    --pal5: #4892C4;
+    --pal5: #4892C4; */
 }
 
-.gradientText {
+.gradientText, .gradientTextRed, .gradientTextGreen {
     position: relative;
     color: transparent;
-    background: linear-gradient(var(--pal3), var(--pal1));
-    /* background: transparent; */
+    -webkit-background-clip: text;
+    background-clip: text;
+    fill: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+/* dude do not ever try to animate gradient text with an outline ever again */
+.gradientText::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: transparent;
+    background: linear-gradient(var(--pal3), var(--pal4));
+    -webkit-background-clip: text;
+    background-clip: text;
+    fill: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+.gradientTextRed::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: transparent;
+    background: linear-gradient(var(--pal4), var(--pal1));
+    -webkit-background-clip: text;
+    background-clip: text;
+    fill: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+.gradientTextGreen::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: transparent;
+    background: linear-gradient(var(--pal2), var(--pal5));
     -webkit-background-clip: text;
     background-clip: text;
     fill: transparent;
@@ -67,12 +104,15 @@
 }
 
 .menuButton {
+    background: rgba(213, 213, 222, 0.8);
     transition: transform 0.05s ease-out;
     color: var(--charcoal);
+    border: 4px solid var(--charcoal);
 }
 
 .menuButton:hover {
     transform: scale(1.03);
+    background: var(--charcoal);
     color: var(--soft-grey);
 }
 
@@ -114,8 +154,44 @@
     animation-iteration-count: 1;
 }
 
+.wiggle {
+    animation: wiggle 1s ease-in-out;    
+}
+
+.grow {
+    animation: grow 1s ease-in-out;
+}
+
+.splash {
+    animation: splash 1s ease-out;
+    animation-fill-mode: forwards; /* stay on final keyframe upon finishing animating */
+}
+
 @keyframes delayFadeInAnimation {
     0% { opacity: 0; }
     60% { opacity: 0; }
     100% { opacity: 1; }
+}
+
+@keyframes wiggle {
+    0% { transform: rotate(0deg) }
+    25% { transform: rotate(0deg) }
+    37% { transform: rotate(-2deg) }
+    50% { transform: rotate(4deg) }
+    62% { transform: rotate(-6deg) }
+    75% { transform: rotate(4deg) }
+    87% { transform: rotate(-2deg) }
+    100% { transform: rotate(0deg) }
+}
+
+@keyframes grow {
+    0% { transform: scale(1) }
+    50% { transform: scale(1.3) }
+    100% { transform: scale(1) }
+}
+
+@keyframes splash {
+    0% { transform: scale(1); opacity: 1 }
+    60% { transform: scale(1.2); opacity: 1 }
+    100% { transform: scale(1.5); opacity: 0 }
 }

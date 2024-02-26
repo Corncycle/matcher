@@ -26,7 +26,6 @@ declare global {
 
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Shift') {
-    console.log(`canSkip: ${levelManager.canSkip}`)
     if (levelManager.canSkip) {
       levelManager.canSkip = false
       levelManager.goToSecondStage()
@@ -59,8 +58,6 @@ window.DEV_COMMANDS = () => {
       space.scene.add(appleGroup!)
     } else if (e.key === 'c') {
       console.log(space.cameraControls.currentInput)
-    } else if (e.key === 'r') {
-      console.log(space.dynamicObjects[1].body.quaternion)
     } else if (e.key === '[') {
       cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
     } else if (e.key === 't') {

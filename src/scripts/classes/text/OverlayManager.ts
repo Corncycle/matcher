@@ -4,11 +4,14 @@ import {
 } from '../../util/util'
 import LevelManager from '../LevelManager'
 import MenuManager from './MenuManager'
+import WiggleableText from './WiggleableText'
 
 export enum OverlayModes {
   NONE = 'none',
   COUNTDOWN = 'countdown',
   INFO = 'info',
+  INCORRECT = 'incorrect',
+  CORRECT = 'correct',
   MAIN_MENU = 'main_menu',
   OPTIONS = 'options',
 }
@@ -18,8 +21,15 @@ export default class OverlayManager {
 
   canvas: HTMLDivElement
 
+  headerWT: WiggleableText
   headerElm: HTMLDivElement
   countdownElm: HTMLDivElement
+
+  incorrectWT: WiggleableText
+  incorrectElm: HTMLDivElement
+
+  correctWT: WiggleableText
+  correctElm: HTMLDivElement
 
   grabElm: HTMLDivElement
   dropElm: HTMLDivElement
@@ -53,16 +63,71 @@ export default class OverlayManager {
 
     document.body.appendChild(this.canvas)
 
-    this.headerElm = this.initializeElement(true, {
-      top: '5%',
-      width: '100%',
-      height: '8%',
-      textAlign: 'center',
-      color: 'white',
-      fontSizeFillHeight: '1',
-    })
+    const headerCnt = this.initializeElement(
+      true,
+      { width: '100%', height: '8%', top: '5%', visibility: 'hidden' },
+      true
+    )
+    this.headerElm = this.initializeElement(
+      false,
+      {
+        height: '100%',
+        textAlign: 'center',
+        color: 'red',
+        fontSizeFillHeight: '1',
+        visibility: 'inherit',
+      },
+      false,
+      headerCnt
+    )
+    this.headerWT = new WiggleableText(headerCnt, this.headerElm)
+
     this.headerElm.classList.add('gradientText', 'textOutlineMedium')
     this.setText(this.headerElm, 'Memorize!')
+
+    const incorrectCnt = this.initializeElement(
+      true,
+      { width: '100%', height: '12%', top: '44%', visibility: 'hidden' },
+      true
+    )
+    this.incorrectElm = this.initializeElement(
+      false,
+      {
+        height: '100%',
+        textAlign: 'center',
+        color: 'red',
+        fontSizeFillHeight: '1',
+        visibility: 'inherit',
+      },
+      false,
+      incorrectCnt
+    )
+    this.incorrectWT = new WiggleableText(incorrectCnt, this.incorrectElm)
+
+    this.incorrectElm.classList.add('gradientTextRed', 'textOutlineMedium')
+    this.setText(this.incorrectElm, "That's not a match!")
+
+    const correctCnt = this.initializeElement(
+      true,
+      { width: '100%', height: '12%', top: '44%', visibility: 'hidden' },
+      true
+    )
+    this.correctElm = this.initializeElement(
+      false,
+      {
+        height: '100%',
+        textAlign: 'center',
+        color: 'red',
+        fontSizeFillHeight: '1',
+        visibility: 'inherit',
+      },
+      false,
+      correctCnt
+    )
+    this.correctWT = new WiggleableText(correctCnt, this.correctElm)
+
+    this.correctElm.classList.add('gradientTextGreen', 'textOutlineMedium')
+    this.setText(this.correctElm, 'Well done!')
 
     this.countdownElm = this.initializeElement(true, {
       top: '15%',
@@ -73,6 +138,7 @@ export default class OverlayManager {
       fontSizeFillHeight: '1',
     })
     this.setText(this.countdownElm, '10')
+    this.countdownElm.classList.add('textOutlineSmall')
 
     this.grabElm = this.initializeInputSuggestionElement(
       'Grab',
@@ -133,22 +199,38 @@ export default class OverlayManager {
   }
 
   setMode(mode: OverlayModes) {
-    this.hideElm(this.headerElm)
+    this.hideElm(this.headerWT.container)
     this.hideElm(this.countdownElm)
     this.hideElm(this.menuElm)
+    this.hideElm(this.incorrectWT.container)
+    this.hideElm(this.correctWT.container)
 
     switch (mode) {
       case OverlayModes.COUNTDOWN:
-        this.showElm(this.headerElm)
-        this.showElm(this.countdownElm)
+        this.setText(this.headerElm, 'Memorize!')
+        this.showElm(this.headerWT.container)
+        this.headerWT.wiggle(400)
+        // this.showElm(this.countdownElm) // countdownElm should be shown by splashing it
         return
       case OverlayModes.INFO:
-        this.showElm(this.headerElm)
+        this.setText(this.headerElm, 'Match!')
+        this.headerWT.wiggle(400)
+        this.showElm(this.headerWT.container)
         return
       case OverlayModes.MAIN_MENU:
         this.showElm(this.menuElm)
         return
       case OverlayModes.NONE:
+        return
+      case OverlayModes.INCORRECT:
+        this.showElm(this.headerWT.container)
+        this.incorrectWT.wiggle(0)
+        this.showElm(this.incorrectWT.container)
+        return
+      case OverlayModes.CORRECT:
+        this.showElm(this.headerWT.container)
+        this.correctWT.wiggle(0)
+        this.showElm(this.correctWT.container)
         return
       default:
         return
@@ -157,9 +239,15 @@ export default class OverlayManager {
 
   initializeElement(
     doDefaultStyles: boolean = true,
-    options: { [key: string]: string } = {}
+    options: { [key: string]: string } = {},
+    appendToCanvas: boolean = true,
+    overrideParent?: HTMLElement
   ) {
-    const out = initializeDivElement(doDefaultStyles, options, this.canvas)
+    const out = initializeDivElement(
+      doDefaultStyles,
+      options,
+      appendToCanvas ? this.canvas : overrideParent ? overrideParent : undefined
+    )
     return out
   }
 
@@ -232,6 +320,26 @@ export default class OverlayManager {
     this.showElm(this.fadeTransElm)
     this.fadeTransElm.classList.add('fadeIn')
     this.hideElm(this.blockerElm)
+  }
+
+  splashText(elm: HTMLElement, text?: string) {
+    if (text) {
+      this.setText(elm, text)
+    }
+    elm.classList.remove('splash')
+
+    // magic: see https://css-tricks.com/restart-css-animation/
+    void elm.offsetWidth
+
+    elm.classList.add('splash')
+  }
+
+  splashCountdown(time: number) {
+    this.showElm(this.countdownElm)
+    this.setText(this.countdownElm, time.toString())
+    this.countdownElm.classList.remove('splash')
+    void this.countdownElm.offsetWidth
+    this.countdownElm.classList.add('splash')
   }
 
   endLoading() {

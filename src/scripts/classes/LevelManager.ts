@@ -20,13 +20,14 @@ export enum CompletenessStatuses {
   UNFINISHED = 'unfinished',
 }
 
-const PREVIEW_LENGTH = 10
+const PREVIEW_LENGTH = 15
 
 export default class LevelManager {
   inMenu: boolean
   canSkip: boolean
   inPreview: boolean
-  timeoutId: ReturnType<typeof setTimeout> | undefined
+  timeoutId: ReturnType<typeof setInterval> | undefined
+  countdownAmount: number
 
   // currentLevel is mostly used to detect level 3 so we can override functionality
   // default to -1
@@ -65,6 +66,8 @@ export default class LevelManager {
     this._objSpec = []
 
     this.overlayManager = new OverlayManager(this)
+
+    this.countdownAmount = -1
   }
 
   loadMenu() {
@@ -82,6 +85,11 @@ export default class LevelManager {
 
   // load the preview on a timer, then load the main level
   loadTwoStageLevel(levelNumber: number) {
+    if (this.timeoutId) {
+      clearInterval(this.timeoutId)
+      this.timeoutId = undefined
+    }
+
     const objSpec = [...objectSpec[levelNumber as 1]]
     objSpec.sort((a, b) => 0.5 - Math.random())
     this.loadPreviewLevel(levelNumber, objSpec)
@@ -89,17 +97,28 @@ export default class LevelManager {
     this.overlayManager.suggestSkip()
 
     this._objSpec = objSpec
+    this.countdownAmount = PREVIEW_LENGTH
 
-    this.timeoutId = setTimeout(() => {
-      this.goToSecondStage()
-    }, PREVIEW_LENGTH * 1000)
+    setTimeout(() => {
+      this.overlayManager.splashCountdown(this.countdownAmount)
+      this.timeoutId = setInterval(() => {
+        this.countdownAmount -= 1
+
+        if (this.countdownAmount <= 0) {
+          this.overlayManager.hideElm(this.overlayManager.countdownElm)
+          this.goToSecondStage()
+        } else {
+          this.overlayManager.splashCountdown(this.countdownAmount)
+        }
+      }, 1000)
+    }, 1500)
   }
 
   goToSecondStage() {
     this.inPreview = false
     this.canSkip = false
     if (this.timeoutId) {
-      clearTimeout(this.timeoutId)
+      clearInterval(this.timeoutId)
       this.timeoutId = undefined
     }
     wrapWithTransition(this, () => {
@@ -108,7 +127,6 @@ export default class LevelManager {
       this.loadLevel(this.currentLevel, this._objSpec)
       this.cheatRecord = record
       this.overlayManager.setMode(OverlayModes.INFO)
-      this.overlayManager.setText(this.overlayManager.headerElm, 'Match!')
       this.overlayManager.suggestNone()
     })
   }
@@ -301,6 +319,7 @@ export default class LevelManager {
 
   winGameSequence() {
     this.disableGrabbingAllObjects()
+    this.overlayManager.setMode(OverlayModes.CORRECT)
     setTimeout(() => {
       wrapWithTransition(this, () => {
         this.loadTwoStageLevel(this.currentLevel + 1)
@@ -310,10 +329,7 @@ export default class LevelManager {
 
   loseGameSequence() {
     this.disableGrabbingAllObjects()
-    this.overlayManager.setText(
-      this.overlayManager.headerElm,
-      "That's not a match!"
-    )
+    this.overlayManager.setMode(OverlayModes.INCORRECT)
     setTimeout(() => {
       wrapWithTransition(this, () => {
         this.loadMenu()

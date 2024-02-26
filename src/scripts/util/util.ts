@@ -38,7 +38,7 @@ export function initializeDivElement(
   }
 
   if ('fontSizeFillHeight' in options) {
-    const resizeFunc = () => {
+    const resizeFunc = (e?: any, forcedOffsetHeight?: number) => {
       out.style.fontSize = `${
         parseFloat(options.fontSizeFillHeight) * out.offsetHeight
       }px`
@@ -47,7 +47,7 @@ export function initializeDivElement(
       }px`
     }
     window.addEventListener('resize', resizeFunc)
-    resizeFunc()
+    resizeFunc(undefined, parent ? parent.offsetHeight : undefined)
   }
   return out
 }
