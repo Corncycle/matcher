@@ -27,6 +27,8 @@ export default class SpaceManager {
   dynamicObjects!: DynamicObject[]
   levelManager?: LevelManager
 
+  delta!: number
+
   constructor() {
     this.renderer = new THREE.WebGLRenderer()
     this.renderer.setSize(window.innerWidth, window.innerHeight)
@@ -41,13 +43,16 @@ export default class SpaceManager {
     this.cameraControls.updateHeldObject()
   }
 
+  computeDelta() {
+    this.delta = Math.min(this.clock.getDelta(), 0.1)
+  }
+
   physicsStep(deltaSubdivisions: number) {
     // deltaSubdivisions indicates how many times we break up delta for better simulation
     // eg if delta === 0.3 and deltaSubdivisions === 3 then we do 3 world steps with a
     // new delta of 0.1 each
-    const delta = Math.min(this.clock.getDelta(), 0.1)
     for (let i = 0; i < deltaSubdivisions; i++) {
-      this.world.step(clamp(delta / deltaSubdivisions, 0.0001, 0.1)) // if a value <= 0 is passed into this.world.step we can get NaN positions on bodies
+      this.world.step(clamp(this.delta / deltaSubdivisions, 0.0001, 0.1)) // if a value <= 0 is passed into this.world.step we can get NaN positions on bodies
     }
   }
 
@@ -112,6 +117,7 @@ export default class SpaceManager {
 
   render() {
     for (const object of this.dynamicObjects) {
+      object.checker.tryGainRingProgress(this.delta)
       object.updateMeshTransform()
       if (this.levelManager) {
         if (object.mesh.children) {
@@ -140,6 +146,7 @@ export default class SpaceManager {
   }
 
   initialize() {
+    this.delta = 0
     this.renderer.shadowMap.enabled = true
     this.clock = new THREE.Clock()
     this.scene = new THREE.Scene()
@@ -182,6 +189,7 @@ export default class SpaceManager {
   }
 
   reset(spawnX: number = 2, spawnZ: number = 2) {
+    this.delta = 0
     this.clock = new THREE.Clock()
     this.scene = new THREE.Scene()
     this.camera = new THREE.PerspectiveCamera(

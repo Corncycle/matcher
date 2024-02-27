@@ -5,7 +5,20 @@ import {
   orangeGroup,
   watermelonGroup,
 } from './objects'
-import { armchair, couch, dresser, grandfatherClock, statue2 } from './props'
+import {
+  armchair,
+  armchairBlue,
+  armchairPink,
+  chandelier,
+  couch,
+  dresser,
+  dresserWashed,
+  grandfatherClock,
+  lamp,
+  nightstand,
+  nightstandWashed,
+  statue2,
+} from './props'
 
 const models = () => [
   appleGroup,
@@ -18,10 +31,19 @@ const models = () => [
   couch,
   dresser,
   grandfatherClock,
+  chandelier,
+  armchairBlue,
+  nightstand,
+  lamp,
+  armchairPink,
+  dresserWashed,
+  nightstandWashed,
 ]
 
 const numModels = models().length
 
+// there's almost certainly a Promise.all way to do this instead of this hack
+// but it works so
 export const modelLoadingScreen = (onFinished: Function) => {
   const interval = setInterval(() => {
     let count = 0

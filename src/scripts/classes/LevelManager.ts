@@ -4,6 +4,7 @@ import {
   menuCameraQuat,
   objectSpec,
   spawnSpec,
+  timeSpec,
 } from '../util/level'
 import { CheckStates } from './ObjectChecker'
 import PuzzleTrigger from './PuzzleTrigger'
@@ -19,8 +20,6 @@ export enum CompletenessStatuses {
   LOSE = 'lose',
   UNFINISHED = 'unfinished',
 }
-
-const PREVIEW_LENGTH = 15
 
 export default class LevelManager {
   inMenu: boolean
@@ -97,7 +96,7 @@ export default class LevelManager {
     this.overlayManager.suggestSkip()
 
     this._objSpec = objSpec
-    this.countdownAmount = PREVIEW_LENGTH
+    this.countdownAmount = timeSpec[levelNumber as 1]
 
     setTimeout(() => {
       this.overlayManager.splashCountdown(this.countdownAmount)

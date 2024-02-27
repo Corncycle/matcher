@@ -100,7 +100,7 @@ export default class MenuManager {
         width: '100%',
         height: '100%',
         pointerEvents: 'auto',
-        cursor: 'pointer',
+        cursor: 'auto',
       },
       this.root
     )
@@ -125,16 +125,59 @@ export default class MenuManager {
       true
     )
 
-    const img = document.createElement('img')
-    img.style.height = '100%'
-    img.style.pointerEvents = 'auto'
-    img.style.cursor = 'auto'
-    img.src = 'assets/how-to-play.png'
-    img.draggable = false
-    img.addEventListener('click', (e) => {
+    const imgContainer = document.createElement('div')
+    imgContainer.style.backgroundImage = "url('assets/help-bg.png')"
+    // imgContainer.style.background = 'grey'
+    imgContainer.style.pointerEvents = 'auto'
+    imgContainer.style.cursor = 'auto'
+    imgContainer.style.height = '100%'
+    imgContainer.style.aspectRatio = '1000 / 720'
+    imgContainer.style.display = 'flex'
+    imgContainer.style.position = 'relative'
+    imgContainer.style.justifyContent = 'center'
+    imgContainer.style.userSelect = 'none'
+    imgContainer.style.border = '4px solid var(--charcoal)'
+    imgContainer.style.borderRadius = '30px'
+    imgContainer.addEventListener('click', (e) => {
       e.stopPropagation()
     })
-    margins.appendChild(img)
+
+    margins.appendChild(imgContainer)
+    const nn = document.createElement('img')
+    nn.style.position = 'absolute'
+    nn.style.width = '100%'
+    nn.style.height = '100%'
+    nn.style.pointerEvents = 'none'
+    nn.style.imageRendering = 'pixelated'
+    nn.src = 'assets/help-nn.png'
+    nn.draggable = false
+
+    const aa = document.createElement('img')
+    aa.style.position = 'absolute'
+    aa.style.width = '100%'
+    aa.style.height = '100%'
+    aa.src = 'assets/help-aa.png'
+    aa.style.pointerEvents = 'none'
+    aa.draggable = false
+
+    const closeButton = this.createButton(
+      false,
+      'X',
+      imgContainer,
+      '0.6',
+      '5%',
+      `${(5 * 1000) / 720}%`
+    )
+    closeButton.style.position = 'absolute'
+    closeButton.style.top = '1%'
+    closeButton.style.right = `1%`
+    closeButton.classList.add('closeButton')
+    closeButton.addEventListener('click', () => {
+      this.closeHelp()
+    })
+
+    imgContainer.appendChild(nn)
+    imgContainer.appendChild(aa)
   }
 
   initializeSvgElement(
@@ -163,7 +206,10 @@ export default class MenuManager {
   createButton(
     doDefaultStyles: boolean = true,
     text: string,
-    parent?: HTMLElement
+    parent?: HTMLElement,
+    fontSizeFillHeight: string = '0.6',
+    width: string = '50%',
+    height: string = '14%'
   ) {
     const button = initializeDivElement(
       doDefaultStyles,
@@ -172,9 +218,9 @@ export default class MenuManager {
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: '9999px',
-        width: '50%',
-        height: '14%',
-        fontSizeFillHeight: '0.6',
+        width: width,
+        height: height,
+        fontSizeFillHeight: fontSizeFillHeight,
       },
       parent
     )

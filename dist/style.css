@@ -110,10 +110,18 @@
     border: 4px solid var(--charcoal);
 }
 
+.menuButton.closeButton {
+    transition: none;
+}
+
 .menuButton:hover {
     transform: scale(1.03);
     background: var(--charcoal);
     color: var(--soft-grey);
+}
+
+.menuButton.closeButton:hover {
+    transform: scale(1);
 }
 
 .slideOutBase, .fadeInBase {

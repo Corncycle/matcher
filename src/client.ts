@@ -53,9 +53,6 @@ window.DEV_COMMANDS = () => {
       console.log(space.cameraControls)
     } else if (e.key === 'i') {
       levelManager.logTriggerInventories()
-    } else if (e.key === 'n') {
-      appleGroup?.position.set(5, 3, 5)
-      space.scene.add(appleGroup!)
     } else if (e.key === 'c') {
       console.log(space.cameraControls.currentInput)
     } else if (e.key === '[') {
@@ -64,12 +61,6 @@ window.DEV_COMMANDS = () => {
       space.levelManager?.overlayManager.slideOut()
     } else if (e.key === 'y') {
       space.levelManager?.overlayManager.fadeIn()
-    } else if (e.key === 'k') {
-      window.addEventListener('keydown', (e) => {
-        if (e.key === '.') {
-          // meshGroup.position.y = meshGroup.position.y - 0.01
-        }
-      })
     }
   })
 }
@@ -80,17 +71,18 @@ modelLoadingScreen(() => {
   levelManager.overlayManager.endLoading()
 })
 
-setTimeout(() => {
-  // levelManager.overlayManager.setMode(OverlayModes.INFO)
-  // levelManager.loadLevel(2, objectSpec[2])
-  // cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
-}, 400)
+// setTimeout(() => {
+//   levelManager.overlayManager.setMode(OverlayModes.INFO)
+//   levelManager.loadLevel(2, objectSpec[2])
+//   cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
+// }, 400)
 
 // ****** END SETUP ******
 
 function animate() {
   requestAnimationFrame(animate)
 
+  space.computeDelta()
   space.updateCameraControls()
   space.physicsStep(1)
   space.render()

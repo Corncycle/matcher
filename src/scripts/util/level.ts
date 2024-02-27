@@ -46,6 +46,13 @@ export const spawnSpec = {
   3: [6.5, 4.5],
 }
 
+export const timeSpec = {
+  0: -1,
+  1: 5,
+  2: 10,
+  3: 15,
+}
+
 // first 3 = positions of both lights, next 3 = target of shad light, last 3 = target of no shad light
 export const lightSpec = {
   0: [4, 6, 5, 4, 0, 5, 10, 0, 6],
