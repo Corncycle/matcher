@@ -29,12 +29,16 @@ export default class SpaceManager {
 
   delta!: number
 
+  canRequestPointerLock: boolean
+
   constructor() {
     this.renderer = new THREE.WebGLRenderer()
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     document.body.appendChild(this.renderer.domElement)
 
     this.initialize()
+
+    this.canRequestPointerLock = true
   }
 
   updateCameraControls() {
@@ -226,5 +230,16 @@ export default class SpaceManager {
     )
 
     this.dynamicObjects = []
+  }
+
+  safeRequestPointerLock() {
+    if (!this.canRequestPointerLock) {
+      return
+    }
+    this.canRequestPointerLock = false
+    this.renderer.domElement.requestPointerLock()
+    setTimeout(() => {
+      this.canRequestPointerLock = true
+    }, 1000)
   }
 }

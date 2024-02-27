@@ -114,7 +114,7 @@ export default class CameraControls {
           return
         }
       }
-      canvas.requestPointerLock()
+      this.space?.safeRequestPointerLock()
     })
 
     document.addEventListener('pointerlockchange', () => {

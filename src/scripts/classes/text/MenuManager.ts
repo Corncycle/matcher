@@ -83,7 +83,7 @@ export default class MenuManager {
       wrapWithTransition(this.overlayManager.levelManager, () => {
         this.overlayManager.levelManager.loadTwoStageLevel(1)
       })
-      this.overlayManager.levelManager.space.renderer.domElement.requestPointerLock()
+      this.overlayManager.levelManager.space.safeRequestPointerLock()
     })
 
     howButton.addEventListener('click', () => {
