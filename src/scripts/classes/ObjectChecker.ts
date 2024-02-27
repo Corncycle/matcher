@@ -138,21 +138,6 @@ export default class ObjectChecker {
         this.setRingProgress(0)
         this.ringMesh.material = this.validatingMaterial
         this.parent.mesh.add(this.ringMesh)
-        // this.checkingIntervalId = setInterval(() => {
-        //   this.setRingProgress(
-        //     this.checkingProgress + 0.05 * (1.04 - this.checkingProgress)
-        //   )
-        //   if (this.checkingProgress >= 1) {
-        //     if (this.alertFunction) {
-        //       this.alertFunction(this.parent.id)
-        //       // at this point, the LevelManager should invoke `setState`. if not,
-        //       // let's unset the state ourselves so we don't have a feedback loop
-        //       if (this.state === CheckStates.CHECKING) {
-        //         this.setState(CheckStates.UNSET)
-        //       }
-        //     }
-        //   }
-        // }, 1000 / 144)
         return
       case CheckStates.INVALID:
         this.setRingProgress(1)

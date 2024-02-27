@@ -117,7 +117,9 @@ export default class SpaceManager {
 
   render() {
     for (const object of this.dynamicObjects) {
-      object.checker.tryGainRingProgress(this.delta)
+      if (object.isHoldable) {
+        object.checker.tryGainRingProgress(this.delta)
+      }
       object.updateMeshTransform()
       if (this.levelManager) {
         if (object.mesh.children) {

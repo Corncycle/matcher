@@ -328,6 +328,7 @@ export default class LevelManager {
 
   loseGameSequence() {
     this.disableGrabbingAllObjects()
+    this.space.cameraControls.heldObject = null
     this.overlayManager.setMode(OverlayModes.INCORRECT)
     setTimeout(() => {
       wrapWithTransition(this, () => {
