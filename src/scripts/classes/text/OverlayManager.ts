@@ -44,6 +44,8 @@ export default class OverlayManager {
   loadingModelsElm: HTMLDivElement
   loadingModelsText: HTMLDivElement
 
+  volumeElm: HTMLDivElement
+
   // used to block mouse interactions
   blockerElm: HTMLDivElement
 
@@ -152,6 +154,29 @@ export default class OverlayManager {
       'Skip',
       'keyboard_shift_outline.svg'
     )
+
+    this.volumeElm = this.initializeElement(false, {
+      margin: '10px',
+      height: '8%',
+      fontSizeFillHeight: '1',
+      position: 'absolute',
+      right: '0',
+      top: '0',
+      cursor: 'pointer',
+      pointerEvents: 'auto',
+      color: 'white',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      userSelect: 'none',
+    })
+
+    this.volumeElm.classList.add('material-symbols-outlined')
+    this.volumeElm.innerText = 'volume_up'
+    this.volumeElm.style.visibility = 'visible'
+    this.volumeElm.addEventListener('click', () => {
+      this.toggleVolume()
+    })
 
     this.menuManager = new MenuManager(this)
     this.menuElm = this.menuManager.root
@@ -372,5 +397,15 @@ export default class OverlayManager {
     this.hideElm(this.grabElm)
     this.hideElm(this.dropElm)
     this.hideElm(this.skipElm)
+  }
+
+  toggleVolume() {
+    if (this.volumeElm.innerText === 'volume_up') {
+      this.volumeElm.innerText = 'volume_mute'
+      this.levelManager.pauseAudio()
+    } else {
+      this.volumeElm.innerText = 'volume_up'
+      this.levelManager.playAudio()
+    }
   }
 }

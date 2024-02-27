@@ -10,8 +10,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/howler": "^2.2.11",
     "@types/three": "^0.158.2",
     "cannon-es": "^0.20.0",
+    "howler": "^2.2.4",
     "three": "^0.158.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.2.2",

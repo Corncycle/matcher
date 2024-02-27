@@ -10,6 +10,7 @@ import { CheckStates } from './ObjectChecker'
 import PuzzleTrigger from './PuzzleTrigger'
 import SpaceManager from './Space'
 import * as CANNON from 'cannon-es'
+import { Howl } from 'howler'
 import OverlayManager, { OverlayModes } from './text/OverlayManager'
 import CheatManager from './CheatManager'
 import CheatRecord from './CheatRecord'
@@ -46,6 +47,9 @@ export default class LevelManager {
   cheatManager?: CheatManager
   cheatRecord?: CheatRecord
 
+  muted: boolean
+  audioPlayer: Howl
+
   // do not tamper with this. this is only to be used so that the tab override to skip
   // the preview portion of a level knows which objects to spawn
   _objSpec: string[]
@@ -67,6 +71,15 @@ export default class LevelManager {
     this.overlayManager = new OverlayManager(this)
 
     this.countdownAmount = -1
+
+    this.audioPlayer = new Howl({
+      src: ['assets/audio/jersey-bounce.mp3'],
+      loop: true,
+      volume: 0.2,
+    })
+
+    this.audioPlayer.play()
+    this.muted = false
   }
 
   loadMenu() {
@@ -192,7 +205,7 @@ export default class LevelManager {
           const dynObj = this.space.getDynamicObjectByBody(e.body)
           if (dynObj) {
             this.triggerInventories[obj.trigger.id].add(dynObj.id)
-            dynObj.setCheckerState(CheckStates.CHECKING)
+            dynObj.setCheckerState(CheckStates.CHECKING, this.muted)
           }
         }
       )
@@ -216,7 +229,7 @@ export default class LevelManager {
           if (dynObj) {
             this.checkedInventories[tri.id].delete(dynObj.id)
             this.triggerInventories[tri.id].delete(dynObj.id)
-            dynObj.setCheckerState(CheckStates.UNSET)
+            dynObj.setCheckerState(CheckStates.UNSET, this.muted)
           }
         }
       }
@@ -278,9 +291,9 @@ export default class LevelManager {
         if (obj) {
           this.checkedInventories[id].add(objId)
           if (parseInt(id) === objId) {
-            obj.setCheckerState(CheckStates.VALID)
+            obj.setCheckerState(CheckStates.VALID, this.muted)
           } else {
-            obj.setCheckerState(CheckStates.INVALID)
+            obj.setCheckerState(CheckStates.INVALID, this.muted)
           }
         }
       }
@@ -335,5 +348,15 @@ export default class LevelManager {
         this.loadMenu()
       })
     }, 2000)
+  }
+
+  pauseAudio() {
+    this.muted = true
+    this.audioPlayer.pause()
+  }
+
+  playAudio() {
+    this.muted = false
+    this.audioPlayer.play()
   }
 }

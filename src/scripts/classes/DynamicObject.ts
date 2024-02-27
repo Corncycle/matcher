@@ -83,7 +83,7 @@ export default class DynamicObject {
     }
   }
 
-  setCheckerState(state: CheckStates) {
-    this.checker.setState(state)
+  setCheckerState(state: CheckStates, isMuted: boolean = true) {
+    this.checker.setState(state, isMuted)
   }
 }

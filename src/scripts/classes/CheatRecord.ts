@@ -68,9 +68,9 @@ export default class CheatRecord {
     if (obj) {
       this.levelManager.checkedInventories[tableId].add(objId)
       if (this.dynamicObjectIdsByTableId[tableId] === objId) {
-        obj.setCheckerState(CheckStates.VALID)
+        obj.setCheckerState(CheckStates.VALID, this.levelManager.muted)
       } else {
-        obj.setCheckerState(CheckStates.INVALID)
+        obj.setCheckerState(CheckStates.INVALID, this.levelManager.muted)
       }
     }
   }
@@ -81,7 +81,7 @@ export default class CheatRecord {
     )
     if (obj) {
       this.levelManager.checkedInventories[tableId].add(objId)
-      obj.setCheckerState(CheckStates.VALID)
+      obj.setCheckerState(CheckStates.VALID, this.levelManager.muted)
     }
   }
 
@@ -91,7 +91,7 @@ export default class CheatRecord {
     )
     if (obj) {
       this.levelManager.checkedInventories[tableId].add(objId)
-      obj.setCheckerState(CheckStates.INVALID)
+      obj.setCheckerState(CheckStates.INVALID, this.levelManager.muted)
     }
   }
 }

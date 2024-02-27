@@ -25,6 +25,10 @@ export default class ObjectChecker {
   checkMesh: THREE.Mesh
   xMesh: THREE.Mesh
 
+  checkingSound: Howl
+  successSound: Howl
+  failureSound: Howl
+
   // a function to be run when the checker progress is completed
   // a LevelManager should assign this and pay attention to when the function is called
   alertFunction?: Function
@@ -99,6 +103,22 @@ export default class ObjectChecker {
       new THREE.ShapeGeometry(checkShape),
       validMaterial
     )
+
+    this.checkingSound = new Howl({
+      src: ['assets/audio/loop6.wav'],
+      volume: 0.5,
+      rate: 0.5,
+    })
+
+    this.successSound = new Howl({
+      src: ['assets/audio/neutral6.wav'],
+      volume: 0.5,
+    })
+
+    this.failureSound = new Howl({
+      src: ['assets/audio/neutral6.wav'],
+      volume: 0.5,
+    })
   }
 
   tryGainRingProgress(delta: number) {
@@ -114,14 +134,15 @@ export default class ObjectChecker {
         // at this point, the LevelManager should invoke `setState`. if not,
         // let's unset the state ourselves so we don't have a feedback loop
         if (this.state === CheckStates.CHECKING) {
-          this.setState(CheckStates.UNSET)
+          this.setState(CheckStates.UNSET, true)
         }
       }
     }
   }
 
-  setState(state: CheckStates) {
+  setState(state: CheckStates, isMuted: boolean) {
     this.state = state
+    this.checkingSound.stop()
 
     if (this.checkingIntervalId) {
       clearInterval(this.checkingIntervalId)
@@ -135,17 +156,29 @@ export default class ObjectChecker {
       case CheckStates.UNSET:
         return
       case CheckStates.CHECKING:
+        if (!isMuted) {
+          this.checkingSound.play()
+        }
+
         this.setRingProgress(0)
         this.ringMesh.material = this.validatingMaterial
         this.parent.mesh.add(this.ringMesh)
         return
       case CheckStates.INVALID:
+        if (!isMuted) {
+          this.failureSound.play()
+        }
+
         this.setRingProgress(1)
         this.ringMesh.material = this.invalidMaterial
         this.parent.mesh.add(this.xMesh)
         this.parent.mesh.add(this.ringMesh)
         return
       case CheckStates.VALID:
+        if (!isMuted) {
+          this.successSound.play()
+        }
+
         this.setRingProgress(1)
         this.ringMesh.material = this.validMaterial
         this.parent.mesh.add(this.checkMesh)
