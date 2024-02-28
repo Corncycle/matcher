@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import * as CANNON from 'cannon-es'
 import {
   TestColors,
@@ -36,24 +37,28 @@ export enum PredefinedObjects {
 }
 
 const loader = new GLTFLoader()
+const dracoLoader = new DRACOLoader()
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
+loader.setDRACOLoader(dracoLoader)
+
 export let watermelonGroup: THREE.Group | undefined
 export let appleGroup: THREE.Group | undefined
 export let orangeGroup: THREE.Group | undefined
 export let bananaGroup: THREE.Group | undefined
 export let mangoGroup: THREE.Group | undefined
-loader.load('assets/models/watermelon-new.glb', (gltf) => {
+loader.load('assets/models/watermelon-webp.glb', (gltf) => {
   watermelonGroup = gltfLoaderHelper(gltf, 0, 0.56)
 })
-loader.load('assets/models/apple-new.glb', (gltf) => {
+loader.load('assets/models/apple-webp.glb', (gltf) => {
   appleGroup = gltfLoaderHelper(gltf, 2, 0.8)
 })
-loader.load('assets/models/orange-new.glb', (gltf) => {
+loader.load('assets/models/orange-webp.glb', (gltf) => {
   orangeGroup = gltfLoaderHelper(gltf, 0, 0.6)
 })
-loader.load('assets/models/banana-new.glb', (gltf) => {
+loader.load('assets/models/banana-webp.glb', (gltf) => {
   bananaGroup = gltfLoaderHelper(gltf, 0, 0.7)
 })
-loader.load('assets/models/mango-new.glb', (gltf) => {
+loader.load('assets/models/mango-webp.glb', (gltf) => {
   mangoGroup = gltfLoaderHelper(gltf, 0, 0.7)
   // yeah this is definitely how you should do this.
   mangoGroup.children[0].rotateX(Math.PI / 2)

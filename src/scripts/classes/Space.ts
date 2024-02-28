@@ -31,10 +31,21 @@ export default class SpaceManager {
 
   canRequestPointerLock: boolean
 
+  matcherContainer?: HTMLDivElement
+
   constructor() {
+    this.matcherContainer =
+      document.querySelector('.matcher-container') ?? undefined
+
     this.renderer = new THREE.WebGLRenderer()
-    this.renderer.setSize(window.innerWidth, window.innerHeight)
-    document.body.appendChild(this.renderer.domElement)
+    this.renderer.setSize(
+      this.matcherContainer!.offsetWidth,
+      this.matcherContainer!.offsetHeight
+    )
+
+    document
+      .querySelector('.matcher-container')
+      ?.appendChild(this.renderer.domElement)
 
     this.initialize()
 
@@ -148,7 +159,7 @@ export default class SpaceManager {
   }
 
   deleteCanvas() {
-    document.body.replaceChildren()
+    document.querySelector('.matcher-container')?.replaceChildren()
   }
 
   initialize() {
@@ -158,22 +169,32 @@ export default class SpaceManager {
     this.scene = new THREE.Scene()
     this.camera = new THREE.PerspectiveCamera(
       75,
-      window.innerWidth / window.innerHeight,
+      this.matcherContainer!.offsetWidth / this.matcherContainer!.offsetHeight,
       0.01,
       1000
     )
     this.menuCamera = new THREE.PerspectiveCamera(
       75,
-      window.innerWidth / window.innerHeight,
+      this.matcherContainer!.offsetWidth / this.matcherContainer!.offsetHeight,
       0.01,
       1000
     )
     window.addEventListener('resize', () => {
-      this.camera.aspect = window.innerWidth / window.innerHeight
+      this.camera.aspect =
+        this.matcherContainer!.offsetWidth / this.matcherContainer!.offsetHeight
       this.camera.updateProjectionMatrix()
-      this.menuCamera.aspect = window.innerWidth / window.innerHeight
+      this.menuCamera.aspect =
+        this.matcherContainer!.offsetWidth / this.matcherContainer!.offsetHeight
       this.menuCamera.updateProjectionMatrix()
-      this.renderer.setSize(window.innerWidth, window.innerHeight)
+      this.renderer.setSize(
+        this.matcherContainer!.offsetWidth,
+        this.matcherContainer!.offsetHeight
+      )
+      console.log(
+        `!! CTEST: size: ${this.matcherContainer!.offsetWidth}, ${
+          this.matcherContainer!.offsetHeight
+        }`
+      )
     })
     this.scene.add(this.camera)
     this.scene.add(this.menuCamera)
@@ -200,13 +221,13 @@ export default class SpaceManager {
     this.scene = new THREE.Scene()
     this.camera = new THREE.PerspectiveCamera(
       75,
-      window.innerWidth / window.innerHeight,
+      this.matcherContainer!.offsetWidth / this.matcherContainer!.offsetHeight,
       0.01,
       1000
     )
     this.menuCamera = new THREE.PerspectiveCamera(
       75,
-      window.innerWidth / window.innerHeight,
+      this.matcherContainer!.offsetWidth / this.matcherContainer!.offsetHeight,
       0.01,
       1000
     )

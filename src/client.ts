@@ -1,6 +1,5 @@
 import CannonDebugRenderer from './scripts/util/cannonDebugRenderer'
 import SpaceManager from './scripts/classes/Space'
-import { appleGroup } from './scripts/util/objects'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import LevelManager from './scripts/classes/LevelManager'
 import { wrapWithTransition } from './scripts/util/util'
@@ -13,8 +12,7 @@ const levelManager = new LevelManager(space)
 
 let cannonDebugRenderer: CannonDebugRenderer | null = null
 
-const stats = new Stats()
-document.body.appendChild(stats.dom)
+let stats: any
 
 levelManager.loadMenu()
 
@@ -61,6 +59,11 @@ window.DEV_COMMANDS = () => {
       space.levelManager?.overlayManager.slideOut()
     } else if (e.key === 'y') {
       space.levelManager?.overlayManager.fadeIn()
+    } else if (e.key === 'z') {
+      if (!stats) {
+        stats = new Stats()
+        document.querySelector('.matcher-container')?.appendChild(stats.dom)
+      }
     }
   })
 }
@@ -87,7 +90,9 @@ function animate() {
   space.physicsStep(1)
   space.render()
 
-  stats.update()
+  if (stats) {
+    stats.update()
+  }
 
   if (cannonDebugRenderer) {
     cannonDebugRenderer.update()

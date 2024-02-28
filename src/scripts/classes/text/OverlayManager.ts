@@ -58,12 +58,15 @@ export default class OverlayManager {
     this.canvas.style.width = '100%'
     this.canvas.style.zIndex = '0'
     this.canvas.style.pointerEvents = 'none'
-    this.canvas.style.height = document.body.clientHeight + 'px'
+
+    this.canvas.style.height =
+      document.querySelector('.matcher-container')?.clientHeight + 'px'
     window.addEventListener('resize', () => {
-      this.canvas.style.height = document.body.clientHeight + 'px'
+      this.canvas.style.height =
+        document.querySelector('.matcher-container')?.clientHeight + 'px'
     })
 
-    document.body.appendChild(this.canvas)
+    document.querySelector('.matcher-container')?.appendChild(this.canvas)
 
     const headerCnt = this.initializeElement(
       true,
@@ -171,7 +174,7 @@ export default class OverlayManager {
       userSelect: 'none',
     })
 
-    this.volumeElm.classList.add('material-symbols-outlined')
+    this.volumeElm.classList.add('material-symbols-rounded')
     this.volumeElm.innerText = 'volume_up'
     this.volumeElm.style.visibility = 'visible'
     this.volumeElm.addEventListener('click', () => {
