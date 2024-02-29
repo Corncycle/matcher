@@ -190,11 +190,6 @@ export default class SpaceManager {
         this.matcherContainer!.offsetWidth,
         this.matcherContainer!.offsetHeight
       )
-      console.log(
-        `!! CTEST: size: ${this.matcherContainer!.offsetWidth}, ${
-          this.matcherContainer!.offsetHeight
-        }`
-      )
     })
     this.scene.add(this.camera)
     this.scene.add(this.menuCamera)

@@ -315,7 +315,7 @@ export default class OverlayManager {
     } else {
       imgElm.style.height = '50%'
     }
-    imgElm.src = '/assets/icons/' + img
+    imgElm.src = 'assets/icons/' + img
 
     root.append(imgElm, textElm)
     return root

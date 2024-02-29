@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { createStaticBox } from './objects'
 import {
   c_basicMaterial,
@@ -12,6 +13,9 @@ import {
 // this file is for loading in models for props
 
 const loader = new GLTFLoader()
+const dracoLoader = new DRACOLoader()
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
+loader.setDRACOLoader(dracoLoader)
 
 export let statue2: THREE.Group | undefined
 export let armchair: THREE.Group | undefined
@@ -26,60 +30,60 @@ export let armchairPink: THREE.Group | undefined
 export let dresserWashed: THREE.Group | undefined
 export let nightstandWashed: THREE.Group | undefined
 
-loader.load('assets/models/mino2.glb', (gltf) => {
+loader.load('assets/models/mino2-webp.glb', (gltf) => {
   statue2 = gltf.scene
   statue2.scale.set(0.25, 0.25, 0.25)
 })
 
-loader.load('assets/models/armchair-c4.glb', (gltf) => {
+loader.load('assets/models/armchair-c4-webp.glb', (gltf) => {
   armchair = gltf.scene
   armchair.scale.set(1.05, 1.05, 1.05)
 })
 
-loader.load('assets/models/couch-c4.glb', (gltf) => {
+loader.load('assets/models/couch-c4-webp.glb', (gltf) => {
   couch = gltf.scene
   couch.scale.set(1.05, 1.05, 1.05)
 })
 
-loader.load('assets/models/dresser.glb', (gltf) => {
+loader.load('assets/models/dresser-webp.glb', (gltf) => {
   dresser = gltf.scene
   dresser.scale.set(1.05, 1.05, 1.05)
 })
 
-loader.load('assets/models/grandfather-clock.glb', (gltf) => {
+loader.load('assets/models/grandfather-clock-webp.glb', (gltf) => {
   grandfatherClock = gltf.scene
 })
 
-loader.load('assets/models/chandelier.glb', (gltf) => {
+loader.load('assets/models/chandelier-webp.glb', (gltf) => {
   chandelier = gltf.scene
 })
 
-loader.load('assets/models/armchair-blue.glb', (gltf) => {
+loader.load('assets/models/armchair-blue-webp.glb', (gltf) => {
   armchairBlue = gltf.scene
   armchairBlue.scale.set(1.05, 1.05, 1.05)
 })
 
-loader.load('assets/models/nightstand.glb', (gltf) => {
+loader.load('assets/models/nightstand-webp.glb', (gltf) => {
   nightstand = gltf.scene
   nightstand.scale.set(0.5, 0.5, 0.5)
 })
 
-loader.load('assets/models/lamp.glb', (gltf) => {
+loader.load('assets/models/lamp-webp.glb', (gltf) => {
   lamp = gltf.scene
   lamp.scale.set(0.4, 0.4, 0.4)
 })
 
-loader.load('assets/models/armchair-pink.glb', (gltf) => {
+loader.load('assets/models/armchair-pink-webp.glb', (gltf) => {
   armchairPink = gltf.scene
   armchairPink.scale.set(1.05, 1.05, 1.05)
 })
 
-loader.load('assets/models/dresser-washed.glb', (gltf) => {
+loader.load('assets/models/dresser-washed-webp.glb', (gltf) => {
   dresserWashed = gltf.scene
   dresserWashed.scale.set(1.05, 1.05, 1.05)
 })
 
-loader.load('assets/models/nightstand-washed.glb', (gltf) => {
+loader.load('assets/models/nightstand-washed-webp.glb', (gltf) => {
   nightstandWashed = gltf.scene
   nightstandWashed.scale.set(0.5, 0.5, 0.5)
 })

@@ -156,7 +156,7 @@ export default class MenuManager {
     aa.style.position = 'absolute'
     aa.style.width = '100%'
     aa.style.height = '100%'
-    aa.src = 'assets/help-aa.png'
+    aa.src = 'assets/help-aa.webp'
     aa.style.pointerEvents = 'none'
     aa.draggable = false
 
