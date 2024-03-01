@@ -42,13 +42,13 @@ export const testColoredMaterials = {
   cyan: new THREE.MeshLambertMaterial({ color: 0x00ffff }),
 }
 
-export const t_tabletopMaterial = new THREE.MeshStandardMaterial({
+export const t_tabletopMaterial = new THREE.MeshLambertMaterial({
   map: tabletopTexture,
 })
-export const t_tableLegMaterial = new THREE.MeshStandardMaterial({
+export const t_tableLegMaterial = new THREE.MeshLambertMaterial({
   map: tableLegTexture,
 })
-export const t_woodTrimMaterial = new THREE.MeshStandardMaterial({
+export const t_woodTrimMaterial = new THREE.MeshLambertMaterial({
   map: woodTrimTexture,
 })
 export const t_carpetMaterial = new THREE.MeshLambertMaterial({

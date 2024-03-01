@@ -471,7 +471,7 @@ export function createPredefinedDynamicObject(
       body = new CANNON.Body({ mass: 7, material: c_basicMaterial })
       addCannonSphereToBody(body, 0, 0.01, 0, 0.11)
       addCannonSphereToBody(body, 0.01, 0.118, 0, 0.01)
-      addCannonBoxToBody(body, 0.16, 0.03, 0.16, 0, -0.09, 0)
+      addCannonBoxToBody(body, 0.16, 0.13, 0.16, 0, -0.04, 0)
       body.position = new CANNON.Vec3(x, y, z)
       body.angularDamping = 0.96
       return new DynamicObject(
