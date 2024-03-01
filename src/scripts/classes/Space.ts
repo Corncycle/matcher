@@ -171,13 +171,13 @@ export default class SpaceManager {
       75,
       this.matcherContainer!.offsetWidth / this.matcherContainer!.offsetHeight,
       0.01,
-      15
+      65
     )
     this.menuCamera = new THREE.PerspectiveCamera(
       75,
       this.matcherContainer!.offsetWidth / this.matcherContainer!.offsetHeight,
       0.01,
-      15
+      65
     )
     window.addEventListener('resize', () => {
       this.camera.aspect =
@@ -218,13 +218,13 @@ export default class SpaceManager {
       75,
       this.matcherContainer!.offsetWidth / this.matcherContainer!.offsetHeight,
       0.01,
-      15
+      65
     )
     this.menuCamera = new THREE.PerspectiveCamera(
       75,
       this.matcherContainer!.offsetWidth / this.matcherContainer!.offsetHeight,
       0.01,
-      15
+      65
     )
     this.scene.add(this.camera)
     this.scene.add(this.menuCamera)
