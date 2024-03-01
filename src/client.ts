@@ -4,6 +4,12 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 import LevelManager from './scripts/classes/LevelManager'
 import { wrapWithTransition } from './scripts/util/util'
 import { modelLoadingScreen } from './scripts/util/modelLoading'
+import {
+  createProps,
+  createPuzzleObjects,
+  objectSpec,
+} from './scripts/util/level'
+import { PropTypes } from './scripts/util/props'
 
 // ***** BEGIN SETUP *****
 
@@ -64,6 +70,8 @@ window.DEV_COMMANDS = () => {
         stats = new Stats()
         document.querySelector('.matcher-container')?.appendChild(stats.dom)
       }
+    } else if (e.key === ']') {
+      space.menuCamera.position.set(1, 0.75, -5)
     }
   })
 }
@@ -71,6 +79,24 @@ window.DEV_COMMANDS = () => {
 window.DEV_COMMANDS()
 
 modelLoadingScreen(() => {
+  createProps(space, 0, [
+    { type: PropTypes.LAMP, x: 5, z: -5, rotation: 0 },
+    { type: PropTypes.DRESSER, x: 5, z: -5, rotation: 0 },
+    { type: PropTypes.DRESSER, x: 5, z: -5, rotation: 0, color: 'washed' },
+    { type: PropTypes.ARMCHAIR, x: 5, z: -5, rotation: 0 },
+    { type: PropTypes.ARMCHAIR, x: 5, z: -5, rotation: 0, color: 'blue' },
+    { type: PropTypes.ARMCHAIR, x: 5, z: -5, rotation: 0, color: 'pink' },
+    { type: PropTypes.CHANDELIER, x: 5, z: -5, rotation: 0 },
+    { type: PropTypes.RUG, x: 5, z: -5, rotation: 0, color: 'red' },
+    { type: PropTypes.RUG, x: 5, z: -5, rotation: 0, color: 'blue' },
+    { type: PropTypes.NIGHTSTAND, x: 5, z: -5, rotation: 0 },
+    { type: PropTypes.NIGHTSTAND, x: 5, z: -5, rotation: 0, color: 'washed' },
+    { type: PropTypes.GRANDFATHER_CLOCK, x: 5, z: -5, rotation: 0 },
+  ])
+  const testObj = createPuzzleObjects(space, 100, true, objectSpec[100])
+  for (const obj of testObj) {
+    space.addDynamicObject(obj)
+  }
   levelManager.overlayManager.endLoading()
 })
 

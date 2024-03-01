@@ -115,6 +115,13 @@ const floorSpec = {
 
 // specify the position/rotation of the tables in the level
 export const tableSpec = {
+  100: [
+    [3, -3, 0],
+    [4, -3, 0],
+    [5, -3, 0],
+    [6, -3, 0],
+    [7, -3, 0],
+  ],
   1: [
     [1.5, 6.5 + TABLE_FIXER, 0],
     [2.5, 1.5 - TABLE_FIXER, Math.PI],
@@ -137,6 +144,13 @@ export const tableSpec = {
 
 // specify the objects to be used in the level. must have the same length as the corresponding tableSpec
 export const objectSpec = {
+  100: [
+    PredefinedObjects.WATERMELON,
+    PredefinedObjects.APPLE,
+    PredefinedObjects.MANGO,
+    PredefinedObjects.BANANA,
+    PredefinedObjects.ORANGE,
+  ],
   1: [
     PredefinedObjects.WATERMELON,
     PredefinedObjects.APPLE,
@@ -363,8 +377,19 @@ function createTables(
   return tables
 }
 
-function createProps(space: SpaceManager, levelNumber: number = 1) {
-  for (const prop of propSpec[levelNumber as 1]) {
+export function createProps(
+  space: SpaceManager,
+  levelNumber: number = 1,
+  source?: any
+) {
+  let s
+  if (source) {
+    s = source
+  } else {
+    s = propSpec[levelNumber as 1]
+  }
+
+  for (const prop of s) {
     let meshGroup, body
     switch (prop.type) {
       case PropTypes.MINO_STATUE:
@@ -444,11 +469,11 @@ function createProps(space: SpaceManager, levelNumber: number = 1) {
         ))
         body = null
     }
-    space.addObject({ body, meshGroup })
+    space.addObject({ body: body as any, meshGroup })
   }
 }
 
-function createPuzzleObjects(
+export function createPuzzleObjects(
   space: SpaceManager,
   levelNumber: number = 1,
   isPreview: boolean = false,
