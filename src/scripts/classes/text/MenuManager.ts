@@ -7,8 +7,9 @@ export default class MenuManager {
   root: HTMLDivElement
   menuContainer: HTMLDivElement
 
-  optionsRoot: HTMLDivElement
   helpRoot!: HTMLDivElement
+
+  aboutRoot: HTMLDivElement
 
   constructor(overlayManager: OverlayManager) {
     this.overlayManager = overlayManager
@@ -27,7 +28,6 @@ export default class MenuManager {
     this.menuContainer = initializeDivElement(
       false,
       {
-        // background: 'red',
         userSelect: 'none',
         paddingLeft: '40px',
         paddingRight: '40px',
@@ -45,13 +45,27 @@ export default class MenuManager {
     this.initializeMenuElements()
     this.initializeHelpElements()
 
-    this.optionsRoot = initializeDivElement(
+    this.aboutRoot = initializeDivElement(
       true,
       {
-        inset: '0px',
+        fontSizeFillHeight: '1',
+        height: '5%',
+        right: '1%',
+        bottom: '2%',
       },
       this.root
     )
+    this.aboutRoot.style.visibility = 'inherit'
+
+    const aboutLink = document.createElement('a')
+    aboutLink.href = 'https://github.com/Corncycle/matcher'
+    aboutLink.target = '_blank'
+    aboutLink.rel = 'noopener'
+    aboutLink.innerText = 'About'
+    aboutLink.classList.add('aboutLink')
+    aboutLink.style.pointerEvents = 'auto'
+    aboutLink.style.cursor = 'pointer'
+    this.aboutRoot.appendChild(aboutLink)
   }
 
   initializeMenuElements() {
@@ -127,7 +141,6 @@ export default class MenuManager {
 
     const imgContainer = document.createElement('div')
     imgContainer.style.backgroundImage = "url('assets/help-bg.png')"
-    // imgContainer.style.background = 'grey'
     imgContainer.style.pointerEvents = 'auto'
     imgContainer.style.cursor = 'auto'
     imgContainer.style.height = '100%'

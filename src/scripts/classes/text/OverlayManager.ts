@@ -21,6 +21,8 @@ export default class OverlayManager {
 
   canvas: HTMLDivElement
 
+  vignetteElm: HTMLDivElement
+
   headerWT: WiggleableText
   headerElm: HTMLDivElement
   countdownElm: HTMLDivElement
@@ -48,6 +50,8 @@ export default class OverlayManager {
 
   // used to block mouse interactions
   blockerElm: HTMLDivElement
+
+  countdownSound: Howl
 
   constructor(levelManager: LevelManager) {
     this.levelManager = levelManager
@@ -143,7 +147,7 @@ export default class OverlayManager {
       fontSizeFillHeight: '1',
     })
     this.setText(this.countdownElm, '10')
-    this.countdownElm.classList.add('textOutlineSmall')
+    this.countdownElm.classList.add('textOutlineMedium')
 
     this.grabElm = this.initializeInputSuggestionElement(
       'Grab',
@@ -183,6 +187,12 @@ export default class OverlayManager {
 
     this.menuManager = new MenuManager(this)
     this.menuElm = this.menuManager.root
+
+    this.vignetteElm = this.initializeElement(true, {
+      inset: '0',
+      boxShadow: 'inset 0 0 40px 10px rgb(0, 0, 0, 0.3)',
+    })
+    this.showElm(this.vignetteElm)
 
     this.slideTransElm = initializeTransitionElement(
       {},
@@ -224,6 +234,11 @@ export default class OverlayManager {
       pointerEvents: 'auto',
     })
     this.showElm(this.blockerElm)
+
+    this.countdownSound = new Howl({
+      src: ['assets/audio/neutral6.wav'],
+      volume: 0.5,
+    })
   }
 
   setMode(mode: OverlayModes) {
@@ -363,6 +378,9 @@ export default class OverlayManager {
   }
 
   splashCountdown(time: number) {
+    if (!this.levelManager.muted) {
+      this.countdownSound.play()
+    }
     this.showElm(this.countdownElm)
     this.setText(this.countdownElm, time.toString())
     this.countdownElm.classList.remove('splash')
