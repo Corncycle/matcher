@@ -95,6 +95,10 @@
     -webkit-text-stroke: 20px var(--charcoal);
 }
 
+.howToPlay {
+    border-radius: 30px;
+}
+
 @media screen and (max-width: 900px), screen and (max-height: 450px) {
     .textOutlineMedium::before {
         -webkit-text-stroke: 5px var(--charcoal);
@@ -102,6 +106,10 @@
 
     .textOutlineLarge::before {
         -webkit-text-stroke: 10px var(--charcoal);
+    }
+    
+    .howToPlay {
+        border-radius: 20px;
     }
 }
 

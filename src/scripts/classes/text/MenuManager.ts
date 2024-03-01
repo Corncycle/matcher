@@ -150,7 +150,7 @@ export default class MenuManager {
     imgContainer.style.justifyContent = 'center'
     imgContainer.style.userSelect = 'none'
     imgContainer.style.border = '4px solid var(--charcoal)'
-    imgContainer.style.borderRadius = '30px'
+    imgContainer.classList.add('howToPlay')
     imgContainer.addEventListener('click', (e) => {
       e.stopPropagation()
     })
