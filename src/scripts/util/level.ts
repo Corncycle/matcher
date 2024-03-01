@@ -504,21 +504,30 @@ export function createPuzzleObjects(
         )
       )
     } else {
+      const step = 0.08 * 2 * Math.PI
+      const ii = parseInt(permuteArray[i])
+      const offset = Math.PI + (spec.length - 1) * (step / 2)
+      const radius = 1.2
       objects.push(
         createPredefinedDynamicObject(
           spawnSpec[levelNumber as 1][0] +
-            Math.sin(
-              (0.3 * 2 * Math.PI * parseInt(permuteArray[i])) / spec.length +
-                0.8 * Math.PI
-            ) *
-              1.5,
+            radius * Math.sin(step * ii - offset),
           0.25,
           spawnSpec[levelNumber as 1][1] +
-            Math.cos(
-              (0.3 * 2 * Math.PI * parseInt(permuteArray[i])) / spec.length +
-                0.8 * Math.PI
-            ) *
-              1.5,
+            radius * Math.cos(step * ii - offset),
+          // spawnSpec[levelNumber as 1][0] +
+          //   Math.sin(
+          //     (0.3 * 2 * Math.PI * parseInt(permuteArray[i])) / spec.length +
+          //       0.8 * Math.PI
+          //   ) *
+          //     1.5,
+          // 0.25,
+          // spawnSpec[levelNumber as 1][1] +
+          //   Math.cos(
+          //     (0.3 * 2 * Math.PI * parseInt(permuteArray[i])) / spec.length +
+          //       0.8 * Math.PI
+          //   ) *
+          //     1.5,
           spec[i] as PredefinedObjects,
           parseInt(i),
           !isPreview

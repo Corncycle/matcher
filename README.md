@@ -4,7 +4,7 @@
 
 This is the repo for my game "A Memory Assessment" ([live](https://corncycle.com/a-memory-assessment)). This game was created using [three.js](https://threejs.org/) for rendering, [cannon.js](https://schteppe.github.io/cannon.js/) for physics, and [howler.js](https://howlerjs.com/) for audio. This project was built using Typescript (with appropriate forks of the previously mentioned libraries), and the directory structure was scaffolded by following some of the [three.js Typescript tutorials](https://sbcode.net/threejs/) at [sbcode.net](https://sbcode.net/).
 
-By entering `window.DEV_COMMANDS()` into the console of your browser, you can enable dev commands for the game. These commands are as follows:
+By entering `window.DEV_COMMANDS()` into the console of your browser, you can enable dev commands by pressing some new keys. These commands are as follows:
 
 `1, 2, 3` - Load the respective level (timers may get misconfigured by forcibly loading levels)
 

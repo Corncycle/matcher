@@ -70,13 +70,12 @@ window.DEV_COMMANDS = () => {
         stats = new Stats()
         document.querySelector('.matcher-container')?.appendChild(stats.dom)
       }
-    } else if (e.key === ']') {
-      space.menuCamera.position.set(1, 0.75, -5)
     }
   })
+  return 'Dev commands enabled'
 }
 
-window.DEV_COMMANDS()
+// window.DEV_COMMANDS()
 
 modelLoadingScreen(() => {
   createProps(space, 0, [

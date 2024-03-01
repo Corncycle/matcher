@@ -58,7 +58,8 @@ export default class MenuManager {
     this.aboutRoot.style.visibility = 'inherit'
 
     const aboutLink = document.createElement('a')
-    aboutLink.href = 'https://github.com/Corncycle/matcher'
+    aboutLink.href =
+      'https://github.com/Corncycle/matcher?tab=readme-ov-file#matcher'
     aboutLink.target = '_blank'
     aboutLink.rel = 'noopener'
     aboutLink.innerText = 'About'
