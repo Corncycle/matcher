@@ -52,6 +52,7 @@ export default class OverlayManager {
   blockerElm: HTMLDivElement
 
   countdownSound: Howl
+  urgentCountdownSound: Howl
 
   constructor(levelManager: LevelManager) {
     this.levelManager = levelManager
@@ -236,8 +237,14 @@ export default class OverlayManager {
     this.showElm(this.blockerElm)
 
     this.countdownSound = new Howl({
-      src: ['assets/audio/neutral6.wav'],
-      volume: 0.5,
+      src: ['assets/audio/sfx_sounds_damage1.wav'],
+      volume: 0.14,
+      rate: 0.9,
+    })
+
+    this.urgentCountdownSound = new Howl({
+      src: ['assets/audio/sfx_sounds_interaction12.wav'],
+      volume: 0.12,
     })
   }
 
@@ -379,7 +386,11 @@ export default class OverlayManager {
 
   splashCountdown(time: number) {
     if (!this.levelManager.muted) {
-      this.countdownSound.play()
+      if (time <= 3) {
+        this.urgentCountdownSound.play()
+      } else {
+        this.countdownSound.play()
+      }
     }
     this.showElm(this.countdownElm)
     this.setText(this.countdownElm, time.toString())

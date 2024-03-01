@@ -106,18 +106,19 @@ export default class ObjectChecker {
 
     this.checkingSound = new Howl({
       src: ['assets/audio/loop6.wav'],
-      volume: 0.5,
-      rate: 0.5,
+      volume: 0.15,
+      rate: 0.85,
+      loop: true,
     })
 
     this.successSound = new Howl({
-      src: ['assets/audio/neutral6.wav'],
-      volume: 0.5,
+      src: ['assets/audio/sfx_sounds_powerup6.wav'],
+      volume: 0.12,
     })
 
     this.failureSound = new Howl({
-      src: ['assets/audio/neutral6.wav'],
-      volume: 0.5,
+      src: ['assets/audio/sfx_sound_nagger2.wav'],
+      volume: 0.25,
     })
   }
 

@@ -140,7 +140,7 @@ export default class MenuManager {
     )
 
     const imgContainer = document.createElement('div')
-    imgContainer.style.backgroundImage = "url('assets/help-bg.png')"
+    imgContainer.style.backgroundImage = "url('assets/help-bg-2.png')"
     imgContainer.style.pointerEvents = 'auto'
     imgContainer.style.cursor = 'auto'
     imgContainer.style.height = '100%'
