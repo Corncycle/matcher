@@ -462,7 +462,7 @@ export function createProps(
       case PropTypes.RUG:
         ;({ meshGroup } = createRugProp(
           prop.x,
-          0.01,
+          0.001,
           prop.z,
           (prop as any).color ?? 'red',
           prop.rotation ?? 0
