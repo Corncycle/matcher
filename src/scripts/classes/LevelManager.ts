@@ -345,6 +345,9 @@ export default class LevelManager {
     this.overlayManager.setMode(OverlayModes.INCORRECT)
     setTimeout(() => {
       wrapWithTransition(this, () => {
+        for (const obj of this.space.dynamicObjects) {
+          obj.setCheckerState(CheckStates.UNSET)
+        }
         this.loadMenu()
       })
     }, 2000)
