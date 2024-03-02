@@ -403,7 +403,7 @@ export function createProps(
       case PropTypes.ARMCHAIR:
         ;({ meshGroup, body } = createArmchairProp(
           prop.x,
-          0,
+          -0.01,
           prop.z,
           prop.rotation ?? 0,
           prop.color! as any
@@ -515,19 +515,6 @@ export function createPuzzleObjects(
           0.25,
           spawnSpec[levelNumber as 1][1] +
             radius * Math.cos(step * ii - offset),
-          // spawnSpec[levelNumber as 1][0] +
-          //   Math.sin(
-          //     (0.3 * 2 * Math.PI * parseInt(permuteArray[i])) / spec.length +
-          //       0.8 * Math.PI
-          //   ) *
-          //     1.5,
-          // 0.25,
-          // spawnSpec[levelNumber as 1][1] +
-          //   Math.cos(
-          //     (0.3 * 2 * Math.PI * parseInt(permuteArray[i])) / spec.length +
-          //       0.8 * Math.PI
-          //   ) *
-          //     1.5,
           spec[i] as PredefinedObjects,
           parseInt(i),
           !isPreview

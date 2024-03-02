@@ -2,7 +2,7 @@
 
 ## A Memory Assessment
 
-This is the repo for my game "A Memory Assessment" ([live](https://corncycle.com/a-memory-assessment)). This game was created using [three.js](https://threejs.org/) for rendering, [cannon.js](https://schteppe.github.io/cannon.js/) for physics, and [howler.js](https://howlerjs.com/) for audio. This project was built using Typescript (with appropriate forks of the previously mentioned libraries), and the directory structure was scaffolded by following some of the [three.js Typescript tutorials](https://sbcode.net/threejs/) at [sbcode.net](https://sbcode.net/).
+This is the repo for my game "A Memory Assessment" ([live](https://corncycle.com/a-memory-assessment)), build on [three.js](https://threejs.org/) for rendering, [cannon.js](https://schteppe.github.io/cannon.js/) for physics, and [howler.js](https://howlerjs.com/) for audio. This project was built using Typescript (with Typescript-relevant forks of the previously mentioned libraries), and the directory structure was scaffolded by following some of the [three.js Typescript tutorials](https://sbcode.net/threejs/) at [sbcode.net](https://sbcode.net/).
 
 By entering `window.DEV_COMMANDS()` into the console of your browser, you can enable dev commands by pressing some new keys. These commands are as follows:
 
@@ -74,7 +74,7 @@ Various sound effects from [The Essential Retro Video Game Sound Effects Collect
 
 # Building Locally
 
-To build and edit this game locally, first make sure to have npm and a Node.js runtime installed. Then clone this repository and run `npm install` in the root directory.
+To build and edit this game locally, first make sure to have npm and a Node.js runtime installed. You will probably also need Typescript globally installed in npm. Then clone this repository and run `npm install` in the root directory.
 
 Run `npm run dev` to host the game at `http://localhost:8080/`, and files will be live-reloaded upon saving.
 
