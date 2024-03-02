@@ -75,7 +75,7 @@ window.DEV_COMMANDS = () => {
   return 'Dev commands enabled'
 }
 
-window.DEV_COMMANDS()
+// window.DEV_COMMANDS()
 
 modelLoadingScreen(() => {
   createProps(space, 0, [

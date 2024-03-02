@@ -73,9 +73,9 @@ export default class LevelManager {
     this.countdownAmount = -1
 
     this.audioPlayer = new Howl({
-      src: ['assets/audio/jersey-bounce-compressed.mp3'],
+      src: ['assets/audio/compressed-64.aac'],
       loop: true,
-      volume: 0.2,
+      volume: 0.25,
     })
 
     this.audioPlayer.play()
