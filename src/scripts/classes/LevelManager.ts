@@ -93,6 +93,11 @@ export default class LevelManager {
     this.inMenu = true
     document.exitPointerLock()
     this.overlayManager.setMode(OverlayModes.MAIN_MENU)
+
+    // there's probably a better way to detect when we can compile shaders but this somewhat works
+    setTimeout(() => {
+      this.space.renderer.compile(this.space.scene, this.space.camera)
+    }, 300)
   }
 
   // load the preview on a timer, then load the main level

@@ -20,8 +20,6 @@ let cannonDebugRenderer: CannonDebugRenderer | null = null
 
 let stats: any
 
-levelManager.loadMenu()
-
 declare global {
   interface Window {
     DEV_COMMANDS: any
@@ -61,6 +59,8 @@ window.DEV_COMMANDS = () => {
       console.log(space.cameraControls.currentInput)
     } else if (e.key === '[') {
       cannonDebugRenderer = new CannonDebugRenderer(space.scene, space.world)
+    } else if (e.key === ']') {
+      space.menuCamera.position.set(-2, 1.5, -5)
     } else if (e.key === 't') {
       space.levelManager?.overlayManager.slideOut()
     } else if (e.key === 'y') {
@@ -76,9 +76,12 @@ window.DEV_COMMANDS = () => {
 }
 
 // window.DEV_COMMANDS()
+// space.levelManager?.overlayManager.toggleVolume()
 
 modelLoadingScreen(() => {
+  levelManager.loadMenu()
   createProps(space, 0, [
+    { type: PropTypes.MINO_STATUE, x: 5, z: -5, rotation: 0 },
     { type: PropTypes.LAMP, x: 5, z: -5, rotation: 0 },
     { type: PropTypes.DRESSER, x: 5, z: -5, rotation: 0 },
     { type: PropTypes.DRESSER, x: 5, z: -5, rotation: 0, color: 'washed' },

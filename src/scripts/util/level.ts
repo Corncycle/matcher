@@ -70,6 +70,9 @@ const wallSpec = {
     [1, CEIL_HEIGHT, 6, 7.5, CEIL_HEIGHT / 2, 4],
     [6, CEIL_HEIGHT, 1, 4, CEIL_HEIGHT / 2, 0.5],
     [6, CEIL_HEIGHT, 1, 4, CEIL_HEIGHT / 2, 7.5],
+    [1, CEIL_HEIGHT / 2, 1, 7, CEIL_HEIGHT / 4, -8],
+    [1, CEIL_HEIGHT / 2, 1, 5, CEIL_HEIGHT / 4, -8],
+    [1, CEIL_HEIGHT / 2, 1, 3, CEIL_HEIGHT / 4, -8],
   ],
   1: [
     [1, CEIL_HEIGHT, 6, 0.5, CEIL_HEIGHT / 2, 4],
@@ -266,6 +269,7 @@ export function loadLevel(
   }
   setCameraPosition(space, levelNumber)
 
+  // return { tables: [] as { trigger: any }[] }
   // space.cameraControls.body.position = new CANNON.Vec3(4, 2, 6)
 
   return { walls, floor, lights, tables, puzzleObjects }
@@ -281,6 +285,27 @@ function createWalls(space: SpaceManager, levelNumber: number = 1) {
     )
     space.addObject({ meshGroup, body })
     walls.push({ meshGroup, body })
+  }
+
+  // load walls of all colors on menu level so shaders can be compiled
+  if (levelNumber === 0) {
+    const len = wallSpec[0].length
+    for (let i = 1; i <= 3; i++) {
+      const { meshGroup, body } = createStaticWall(
+        ...(wallSpec[0][len - i] as [
+          number,
+          number,
+          number,
+          number,
+          number,
+          number
+        ]),
+        true,
+        wallMaterialSpec[i as 1]
+      )
+      space.addObject({ meshGroup, body })
+      walls.push({ meshGroup, body })
+    }
   }
 
   return walls
