@@ -12,6 +12,8 @@ By entering `window.DEV_COMMANDS()` into the console of your browser, you can en
 
 `[` - Show `cannon.js` bodies
 
+`]` - Move the camera outside of the room (only when viewing the menu)
+
 `t` - Trigger the slide-out animation
 
 `y` - Trigger the fade-in animation
