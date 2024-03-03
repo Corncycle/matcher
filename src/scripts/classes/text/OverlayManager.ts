@@ -306,9 +306,9 @@ export default class OverlayManager {
       false,
       {
         position: 'absolute',
-        bottom: '0',
-        left: '1%',
-        height: '18%',
+        bottom: '2%',
+        left: '1.2%',
+        height: '10%',
         // background: 'Red',
         display: 'flex',
         alignItems: 'center',
@@ -321,7 +321,7 @@ export default class OverlayManager {
     const textElm = initializeDivElement(
       false,
       {
-        height: '40%',
+        height: '80%',
         fontSizeFillHeight: '1',
         color: 'white',
       },
@@ -332,10 +332,11 @@ export default class OverlayManager {
     this.setText(textElm, text)
 
     const imgElm = document.createElement('img')
+    // imgElm.style.background = 'blue'
     if (text === 'Skip') {
-      imgElm.style.height = '100%'
+      imgElm.style.height = '150%'
     } else {
-      imgElm.style.height = '50%'
+      imgElm.style.height = '100%'
     }
     imgElm.src = 'assets/icons/' + img
 
