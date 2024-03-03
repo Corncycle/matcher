@@ -6,8 +6,6 @@ This is the repo for my game "A Memory Assessment" ([live](https://corncycle.com
 
 By entering `window.DEV_COMMANDS()` into the console of your browser, you can enable dev commands by pressing some new keys. These commands are as follows:
 
-`1, 2, 3` - Load the respective level (timers may get misconfigured by forcibly loading levels)
-
 `m` - Load the menu
 
 `[` - Show `cannon.js` bodies
@@ -19,6 +17,8 @@ By entering `window.DEV_COMMANDS()` into the console of your browser, you can en
 `y` - Trigger the fade-in animation
 
 `z` - Show `three.js` stats panel
+
+`1, 2, etc...` - Load the level for the given number (timers may get misconfigured by forcibly loading levels in quick succession)
 
 # Assets
 
