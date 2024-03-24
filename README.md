@@ -2,7 +2,7 @@
 
 ## A Memory Assessment
 
-This is the repo for my game "A Memory Assessment" ([live](https://corncycle.com/a-memory-assessment)), build on [three.js](https://threejs.org/) for rendering, [cannon.js](https://schteppe.github.io/cannon.js/) for physics, and [howler.js](https://howlerjs.com/) for audio. This project was built using Typescript (with Typescript-relevant forks of the previously mentioned libraries), and the directory structure was scaffolded by following some of the [three.js Typescript tutorials](https://sbcode.net/threejs/) at [sbcode.net](https://sbcode.net/).
+This is the repo for my game "A Memory Assessment" ([live](https://corncycle.com/a-memory-assessment)), built using [three.js](https://threejs.org/) for rendering, [cannon.js](https://schteppe.github.io/cannon.js/) for physics, and [howler.js](https://howlerjs.com/) for audio. This project was built in Typescript (with Typescript-relevant forks of the previously mentioned libraries), with a directory structure scaffolded by following some of the [three.js Typescript tutorials](https://sbcode.net/threejs/) at [sbcode.net](https://sbcode.net/).
 
 By entering `window.DEV_COMMANDS()` into the console of your browser, you can enable dev commands by pressing some new keys. These commands are as follows:
 
